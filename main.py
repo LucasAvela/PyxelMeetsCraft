@@ -26,13 +26,36 @@ class Inputs:
     def ShowMouseCoordinates():
         pyxel.text(5, 5, f"Mouse: {pyxel.mouse_x + camera_diff[0]}, {pyxel.mouse_y + camera_diff[1]}", 7)
 
-class WorldGen():
-    def WorldGenerations(x, y):
-        print(x)
-        
+class WorldGen:
+    @staticmethod
+    def initialize_grass_blocks():
+        # Preenche a tela inicial com blocos de grama
+        for x in range(0, screen_size[0], 8):  # Cada bloco assume uma largura de 8 pixels
+            for y in range(0, screen_size[1], 8):  # Cada bloco assume uma altura de 8 pixels
+                World[(x, y)] = {
+                    "Pos": [x, y],
+                    "Block": "Grass_block"
+                }
+
+    @staticmethod
+    def generate_nearby_grass_blocks():
+        # Definir a área ao redor da câmera para gerar blocos adicionais
+        start_x = (camera_diff[0] // 8 - screen_size[0] // 8) * 8
+        end_x = (camera_diff[0] // 8 + screen_size[0] // 8) * 8
+        start_y = (camera_diff[1] // 8 - screen_size[1] // 8) * 8
+        end_y = (camera_diff[1] // 8 + screen_size[1] // 8) * 8
+
+        for x in range(start_x, end_x, 8):
+            for y in range(start_y, end_y, 8):
+                if (x, y) not in World:
+                    World[(x, y)] = {
+                        "Pos": [x, y],
+                        "Block": "Grass_block"
+                    }
+
 class Renderer:
     def RenderBlocks():
-        for i, v in World.items():
+        for v in World.values():
             block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
     
             block_x = block['local']['x']
@@ -49,6 +72,10 @@ class App:
     def __init__(self):
         pyxel.init(screen_size[0], screen_size[1], title=window_title, display_scale=display_scale, fps=frames_per_second)
         App.StorageImages()
+
+        # Gera blocos de grama na tela inicial
+        WorldGen.initialize_grass_blocks()
+
         pyxel.run(self.update, self.draw)
 
     def update(self):
@@ -56,10 +83,22 @@ class App:
             pyxel.quit()
             
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            World[len(World)] = {"Pos": [pyxel.mouse_x - (pyxel.mouse_x % 8) + camera_diff[0], pyxel.mouse_y - (pyxel.mouse_y % 8) + camera_diff[1]], "Block": "Grass_block"}
-            
+            World[(pyxel.mouse_x + camera_diff[0]) // 8 * 8, (pyxel.mouse_y + camera_diff[1]) // 8 * 8] = {
+                "Pos": [
+                    (pyxel.mouse_x + camera_diff[0]) // 8 * 8,
+                    (pyxel.mouse_y + camera_diff[1]) // 8 * 8
+                ],
+                "Block": "Grass_block"
+            }
+
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
-            World[len(World)] = {"Pos": [pyxel.mouse_x - (pyxel.mouse_x % 8) + camera_diff[0], pyxel.mouse_y - (pyxel.mouse_y % 8) + camera_diff[1]], "Block": "Stone_block"}
+            World[(pyxel.mouse_x + camera_diff[0]) // 8 * 8, (pyxel.mouse_y + camera_diff[1]) // 8 * 8] = {
+                "Pos": [
+                    (pyxel.mouse_x + camera_diff[0]) // 8 * 8,
+                    (pyxel.mouse_y + camera_diff[1]) // 8 * 8
+                ],
+                "Block": "Stone_block"
+            }
 
         if pyxel.btnp(pyxel.MOUSE_BUTTON_MIDDLE):
             print(World)
@@ -73,6 +112,9 @@ class App:
             camera_diff[1] -= 1
         if pyxel.btn(pyxel.KEY_DOWN):
             camera_diff[1] += 1
+
+        # Gerar blocos de grama nas áreas próximas ao jogador
+        WorldGen.generate_nearby_grass_blocks()
 
         # Fazendo a câmera seguir o jogador
         pyxel.camera(camera_diff[0], camera_diff[1])
