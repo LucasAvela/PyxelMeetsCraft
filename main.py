@@ -13,6 +13,11 @@ camera_diff = [0, 0]
 # World Gen
 World = {}
 
+# Blocks
+SelectedBlock = 0
+Blocks = ["Grass_block", "Dirt_block", "Stone_block", "Bedrock_block", "Coal_Ore_block", "Iron_Ore_block", "Gold_Ore_block", "Diamond_Ore_block", "Emerald_Ore_block",
+          "Wood_Log_block_Bottom", "Wood_Log_block_Top", "Wood_Plank_block", "Leaves_block", "Chest_block", "Furnace_block", "Bed_block_Top", "Bed_block_Bottom"]
+
 # Carregar dados do arquivo JSON
 with open('blocks_id.json') as f:
     block_data = json.load(f)
@@ -25,6 +30,7 @@ class Inputs:
         
     def ShowMouseCoordinates():
         pyxel.text(5, 5, f"Mouse: {pyxel.mouse_x + camera_diff[0]}, {pyxel.mouse_y + camera_diff[1]}", 7)
+        pyxel.text(5, 13, Blocks[SelectedBlock], 7)
 
 class WorldGen:
     @staticmethod
@@ -63,7 +69,7 @@ class Renderer:
             block_w = block['size']['w']
             block_h = block['size']['h']
 
-            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h)
+            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
 
 class App:
     def StorageImages():
@@ -79,6 +85,8 @@ class App:
         pyxel.run(self.update, self.draw)
 
     def update(self):
+        global SelectedBlock
+        
         if pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
             
@@ -88,17 +96,11 @@ class App:
                     (pyxel.mouse_x + camera_diff[0]) // 8 * 8,
                     (pyxel.mouse_y + camera_diff[1]) // 8 * 8
                 ],
-                "Block": "Grass_block"
+                "Block": Blocks[SelectedBlock]
             }
 
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
-            World[(pyxel.mouse_x + camera_diff[0]) // 8 * 8, (pyxel.mouse_y + camera_diff[1]) // 8 * 8] = {
-                "Pos": [
-                    (pyxel.mouse_x + camera_diff[0]) // 8 * 8,
-                    (pyxel.mouse_y + camera_diff[1]) // 8 * 8
-                ],
-                "Block": "Stone_block"
-            }
+            SelectedBlock = (SelectedBlock + 1) % len(Blocks)
 
         if pyxel.btnp(pyxel.MOUSE_BUTTON_MIDDLE):
             print(World)
