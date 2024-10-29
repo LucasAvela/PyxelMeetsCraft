@@ -45,8 +45,8 @@ class WorldGen:
         start_y = (camera_diff[1] // 8 - screen_size[1] // 8) * 8
         end_y = (camera_diff[1] // 8 + screen_size[1] // 8) * 8
 
-        for x in range(start_x, end_x, 8):
-            for y in range(start_y, end_y, 8):
+        for x in range(start_x, end_x + 1, 8):
+            for y in range(start_y, end_y + 1, 8):
                 if (x, y) not in World:
                     World[(x, y)] = {
                         "Pos": [x, y],
