@@ -1,0 +1,113 @@
+{
+    "Blocks":
+    [
+        {
+            "name": "Grass_block",
+            "local": {"x": 0, "y": 0},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Dirt_block",
+            "local": {"x": 0, "y": 8},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Stone_block",
+            "local": {"x": 0, "y": 16},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Bedrock_block",
+            "local": {"x": 8, "y": 40},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Coal_Ore_block",
+            "local": {"x": 8, "y": 0},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Iron_Ore_block",
+            "local": {"x": 8, "y": 8},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Gold_Ore_block",
+            "local": {"x": 8, "y": 16},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Diamond_Ore_block",
+            "local": {"x": 8, "y": 24},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Emerald_Ore_block",
+            "local": {"x": 8, "y": 32},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Wood_Log_block_Top",
+            "local": {"x": 16, "y": 8},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        },
+        {
+            "name": "Wood_Log_block_Bottom",
+            "local": {"x": 16, "y": 16},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        },
+        {
+            "name": "Wood_Plank_block",
+            "local": {"x": 16, "y": 24},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        },
+        {
+            "name": "Leaves_block",
+            "local": {"x": 16, "y": 0},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        },
+        {
+            "name": "Workbench_block",
+            "local": {"x": 24, "y": 0},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        },
+        {
+            "name": "Chest_block",
+            "local": {"x": 24, "y": 8},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        },
+        {
+            "name": "Furnace_block",
+            "local": {"x": 24, "y": 16},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        },
+        {
+            "name": "Bed_block_Top",
+            "local": {"x": 24, "y": 24},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        },
+        {
+            "name": "Bed_block_Bottom",
+            "local": {"x": 24, "y": 32},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
+        }
+    ]
+}
