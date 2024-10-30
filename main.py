@@ -16,7 +16,16 @@ total_blocks = len(block_data['Blocks'])
 camera_diff = [0, 0]
 
 # UI
-Show_F3 = False
+Hotbar_Slots_pos = [17, 29, 41, 53, 65, 77, 89, 101]
+Hotbar_Items_pos = [18, 30, 42, 54, 66, 78, 90, 102]
+Hotbar_Items = [
+    ["Grass_block", "Dirt_block", "Water_block", "Stone_block", "Cobblestone_block", "Wood_Log_block_Top", "Wood_Log_block_Bottom", "Wood_Plank_block"],
+    ["Bedrock_block", "Coal_Ore_block", "Iron_Ore_block", "Gold_Ore_block", "Diamond_Ore_block", "Emerald_Ore_block", "Leaves_block", "Empty"],
+    ["Workbench_block", "Chest_block", "Furnace_block", "Bed_block_Top", "Bed_block_Bottom", "Empty", "Empty", "Empty"]
+]
+Actual_Hotbar = 0
+Hotbar_Selected_slot = 0
+Selected_Item = Hotbar_Items[Actual_Hotbar][Hotbar_Selected_slot]
 
 # World Layers
 World_layer_0 = {} # Bedrock
@@ -36,18 +45,15 @@ Show_Layer_3 = True
 Show_Layer_4 = True
 Show_Layer_5 = True
 
-# Gameplay
-Selected_block = 0
-
 class InputManager:
     def CameraController():
-        if pyxel.btn(pyxel.KEY_LEFT):
+        if pyxel.btn(pyxel.KEY_A):
             camera_diff[0] -= 1
-        if pyxel.btn(pyxel.KEY_RIGHT):
+        if pyxel.btn(pyxel.KEY_D):
             camera_diff[0] += 1
-        if pyxel.btn(pyxel.KEY_UP):
+        if pyxel.btn(pyxel.KEY_W):
             camera_diff[1] -= 1
-        if pyxel.btn(pyxel.KEY_DOWN):
+        if pyxel.btn(pyxel.KEY_S):
             camera_diff[1] += 1
         
         pyxel.camera(camera_diff[0], camera_diff[1])
@@ -58,11 +64,6 @@ class InputManager:
         pyxel.rect(mouse_x, mouse_y, 1, 1, 7)
         
     def BreakBlock():
-        global Selected_block
-        
-        if pyxel.btnp(pyxel.KEY_EQUALS): Selected_block = (Selected_block + 1) % total_blocks
-        if pyxel.btnp(pyxel.KEY_MINUS): Selected_block = (Selected_block - 1) % total_blocks
-        
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             BlockPosition = [(pyxel.mouse_x + camera_diff[0]) // 8 * 8, (pyxel.mouse_y + camera_diff[1]) // 8 * 8]
             LastLayer = len(World_Layers) - 1
@@ -90,12 +91,28 @@ class InputManager:
                 else:
                     World_Layers[ActualLayer][BlockPosition[0],BlockPosition[1]] = {
                         "Pos": [BlockPosition[0],BlockPosition[1]],
-                        "Block": block_data['Blocks'][Selected_block]['name']
+                        "Block": Selected_Item
                     }
                     return
     
+    def ChangeHotbar():
+        global Actual_Hotbar, Selected_Item, Hotbar_Selected_slot
+        
+        if pyxel.btnp(pyxel.KEY_Q): Actual_Hotbar = (Actual_Hotbar + 1) % (len(Hotbar_Items))
+        
+        if pyxel.btnp(pyxel.KEY_1): Hotbar_Selected_slot = 0
+        if pyxel.btnp(pyxel.KEY_2): Hotbar_Selected_slot = 1
+        if pyxel.btnp(pyxel.KEY_3): Hotbar_Selected_slot = 2
+        if pyxel.btnp(pyxel.KEY_4): Hotbar_Selected_slot = 3
+        if pyxel.btnp(pyxel.KEY_5): Hotbar_Selected_slot = 4
+        if pyxel.btnp(pyxel.KEY_6): Hotbar_Selected_slot = 5
+        if pyxel.btnp(pyxel.KEY_7): Hotbar_Selected_slot = 6
+        if pyxel.btnp(pyxel.KEY_8): Hotbar_Selected_slot = 7
+        
+        Selected_Item = Hotbar_Items[Actual_Hotbar][Hotbar_Selected_slot]
+    
     def DebugKeys():
-        global Show_Layer_0, Show_Layer_1, Show_Layer_2, Show_Layer_3, Show_Layer_4, Show_Layer_5, Show_F3
+        global Show_Layer_0, Show_Layer_1, Show_Layer_2, Show_Layer_3, Show_Layer_4, Show_Layer_5
         
         if pyxel.btnp(pyxel.KEY_KP_0): Show_Layer_0 = not Show_Layer_0
         if pyxel.btnp(pyxel.KEY_KP_1): Show_Layer_1 = not Show_Layer_1
@@ -103,29 +120,28 @@ class InputManager:
         if pyxel.btnp(pyxel.KEY_KP_3): Show_Layer_3 = not Show_Layer_3
         if pyxel.btnp(pyxel.KEY_KP_4): Show_Layer_4 = not Show_Layer_4
         if pyxel.btnp(pyxel.KEY_KP_5): Show_Layer_5 = not Show_Layer_5
-        
-        if pyxel.btnp(pyxel.KEY_F3): Show_F3 = not Show_F3
 
 class UI:
     def UIDebugger():
         pyxel.text(5, 5, f"FPS: {pyxel.frame_count}", 7)
         
-    def ItemSlot():
-        global Selected_block
+    def ItemHotbar():
+        global Hotbar_Selected_slot
+        pyxel.rect(Hotbar_Slots_pos[Hotbar_Selected_slot] - 1, 115, 12, 12, 10)
         
-        pyxel.rect(1, 1, 10, 10, 7)
-        pyxel.rect(2, 2, 8, 8, 13)
+        for slot in Hotbar_Slots_pos:
+            pyxel.rect(slot, 116, 10, 10, 7)
+            pyxel.rect(slot + 1, 117, 8, 8, 13)
         
-        selected_block = block_data['Blocks'][Selected_block]['name']
         
-        block = next(block for block in block_data['Blocks'] if block['name'] == selected_block)
-        block_x = block['local']['x']
-        block_y = block['local']['y']
-        block_w = block['size']['w']
-        block_h = block['size']['h']
-
-        pyxel.blt(2, 2, 0, block_x, block_y, block_w, block_h, 2)
-
+        for i, item in enumerate(Hotbar_Items[Actual_Hotbar]):
+            block = next(block for block in block_data['Blocks'] if block['name'] == item)
+            block_x = block['local']['x']
+            block_y = block['local']['y']
+            block_w = block['size']['w']
+            block_h = block['size']['h']
+            pyxel.blt(Hotbar_Items_pos[i], 117, 0, block_x, block_y, block_w, block_h, 2)
+            
 class Optife:
     def GetGenerationArea():
         start_x = ((camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) - 4) * 8
@@ -308,6 +324,7 @@ class App:
         
         InputManager.CameraController()
         InputManager.DebugKeys()
+        InputManager.ChangeHotbar()
         InputManager.PlaceBlock()
         InputManager.BreakBlock()
     
@@ -324,7 +341,6 @@ class App:
         InputManager.MousePosition()
         
         pyxel.camera(0, 0)
-        if Show_F3: UI.UIDebugger()
-        UI.ItemSlot()
+        UI.ItemHotbar()
         
 App()
