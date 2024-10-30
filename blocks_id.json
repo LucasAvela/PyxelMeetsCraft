@@ -144,6 +144,12 @@
             "local": {"x": 24, "y": 32},
             "size": {"w": 8, "h": 8},
             "Colision": true
+        },
+        {
+            "name": "Door_block",
+            "local": {"x": 24, "y": 40},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
         }
     ]
 }

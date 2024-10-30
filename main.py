@@ -21,7 +21,7 @@ Hotbar_Items_pos = [18, 30, 42, 54, 66, 78, 90, 102]
 Hotbar_Items = [
     ["Grass_block", "Dirt_block", "Grass_Dirty_block", "Stone_block", "Cobblestone_block", "Wood_Log_block_Top", "Wood_Log_block_Bottom", "Wood_Plank_block"],
     ["Bedrock_block", "Coal_Ore_block", "Iron_Ore_block", "Gold_Ore_block", "Diamond_Ore_block", "Emerald_Ore_block", "Leaves_block", "Empty"],
-    ["Workbench_block", "Chest_block", "Furnace_block", "Bed_block_Top", "Bed_block_Bottom", "Water_block_0", "Water_block_1", "Empty"]
+    ["Workbench_block", "Chest_block", "Furnace_block", "Bed_block_Top", "Bed_block_Bottom", "Door_block", "Water_block_0", "Water_block_1"]
 ]
 Actual_Hotbar = 0
 Hotbar_Selected_slot = 0
