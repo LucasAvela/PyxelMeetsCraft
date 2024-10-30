@@ -146,13 +146,9 @@ class WorldRandomGen:
         else: return "Stone_block"
     
     def RandomGrassDirtDefine():
-        rolldice = random.randint(1, 1000)
-        if rolldice > 999:
-            return "Water_block"
-        else:
-            rolldice = random.randint(1, 100)
-            if rolldice > 99: return "Dirt_block"
-            else: return "Grass_block"
+        rolldice = random.randint(1, 100)
+        if rolldice > 99: return "Dirt_block"
+        else: return "Grass_block"
     
     def RandomTreePositionDefine():
         rolldice = random.randint(1, 100)
