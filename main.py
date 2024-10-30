@@ -1,67 +1,271 @@
 import pyxel
 import json
+import random
 
 # Config Section
-screen_size = [128, 128]
-window_title = 'PyxelCraft'
-display_scale = 7
-frames_per_second = 60
+SECREEN_SIZE = [128, 128]
+WINDOW_TITLE = 'PyxelCraft'
+DISPLAY_SCALE = 7
+FPS = 60
+
+# Carregar JSON file data
+with open('blocks_id.json') as f:
+    block_data = json.load(f)
 
 # Camera
 camera_diff = [0, 0]
 
-# World Gen
-World = {}
+# World Layers
+World_layer_0 = {} # Bedrock
+World_layer_1 = {} # Stone & Ores
+World_layer_2 = {} # Stone & Dirt
+World_layer_3 = {} # Grass & Dirt
+World_layer_4 = {} # Player Level
+World_layer_5 = {} # Above Player Level
 
-# Blocks
-SelectedBlock = 0
-Blocks = ["Grass_block", "Dirt_block", "Stone_block", "Bedrock_block", "Coal_Ore_block", "Iron_Ore_block", "Gold_Ore_block", "Diamond_Ore_block", "Emerald_Ore_block",
-          "Wood_Log_block_Bottom", "Wood_Log_block_Top", "Wood_Plank_block", "Leaves_block", "Chest_block", "Furnace_block", "Bed_block_Top", "Bed_block_Bottom"]
+# Show Layers Debug
+Show_Layer_0 = True
+Show_Layer_1 = True
+Show_Layer_2 = True
+Show_Layer_3 = True
+Show_Layer_4 = True
+Show_Layer_5 = True
 
-# Carregar dados do arquivo JSON
-with open('blocks_id.json') as f:
-    block_data = json.load(f)
-
-class Inputs:
+class InputManager:
+    def CameraController():
+        if pyxel.btn(pyxel.KEY_LEFT):
+            camera_diff[0] -= 1
+        if pyxel.btn(pyxel.KEY_RIGHT):
+            camera_diff[0] += 1
+        if pyxel.btn(pyxel.KEY_UP):
+            camera_diff[1] -= 1
+        if pyxel.btn(pyxel.KEY_DOWN):
+            camera_diff[1] += 1
+        
+        pyxel.camera(camera_diff[0], camera_diff[1])
+    
     def MousePosition():
         mouse_x = pyxel.mouse_x + camera_diff[0]
         mouse_y = pyxel.mouse_y + camera_diff[1]
         pyxel.rect(mouse_x, mouse_y, 1, 1, 7)
         
-    def ShowMouseCoordinates():
-        pyxel.text(5, 5, f"Mouse: {pyxel.mouse_x + camera_diff[0]}, {pyxel.mouse_y + camera_diff[1]}", 7)
-        pyxel.text(5, 13, Blocks[SelectedBlock], 7)
+    def DebugKeys():
+        global Show_Layer_0, Show_Layer_1, Show_Layer_2, Show_Layer_3, Show_Layer_4, Show_Layer_5
+        
+        if pyxel.btnp(pyxel.KEY_KP_0): Show_Layer_0 = not Show_Layer_0
+        if pyxel.btnp(pyxel.KEY_KP_1): Show_Layer_1 = not Show_Layer_1
+        if pyxel.btnp(pyxel.KEY_KP_2): Show_Layer_2 = not Show_Layer_2
+        if pyxel.btnp(pyxel.KEY_KP_3): Show_Layer_3 = not Show_Layer_3
+        if pyxel.btnp(pyxel.KEY_KP_4): Show_Layer_4 = not Show_Layer_4
+        if pyxel.btnp(pyxel.KEY_KP_5): Show_Layer_5 = not Show_Layer_5
+
+class WorldRandomGen:
+    def RandomOresDefine():
+        rolldice = random.randint(1, 10)
+        if rolldice > 9:
+            rolldice = random.randint(1, 10)
+            if rolldice > 5:
+                rolldice = random.randint(1, 10)
+                if rolldice <= 5: return "Iron_Ore_block"
+                elif rolldice > 5 and rolldice <= 7: return "Gold_Ore_block"
+                elif rolldice > 7  and rolldice < 10: return "Diamond_Ore_block"
+                elif rolldice == 10: return "Emerald_Ore_block"
+            else:
+                return "Coal_Ore_block"
+        else:
+            return "Stone_block"
+        
+    def RandomStoneDirtDefine():
+        rolldice = random.randint(1, 10)
+        if rolldice > 5: return "Dirt_block"
+        else: return "Stone_block"
+    
+    def RandomGrassDirtDefine():
+        rolldice = random.randint(1, 100)
+        if rolldice > 99: return "Dirt_block"
+        else: return "Grass_block"
+    
+    def RandomTreePositionDefine():
+        rolldice = random.randint(1, 100)
+        if rolldice > 99: return "Wood_Log_block_Bottom"
+        else: return "Air"
 
 class WorldGen:
     @staticmethod
-    def initialize_grass_blocks():
-        # Preenche a tela inicial com blocos de grama
-        for x in range(0, screen_size[0], 8):  # Cada bloco assume uma largura de 8 pixels
-            for y in range(0, screen_size[1], 8):  # Cada bloco assume uma altura de 8 pixels
-                World[(x, y)] = {
-                    "Pos": [x, y],
-                    "Block": "Grass_block"
-                }
-
-    @staticmethod
-    def generate_nearby_grass_blocks():
-        # Definir a área ao redor da câmera para gerar blocos adicionais
-        start_x = (camera_diff[0] // 8 - screen_size[0] // 8) * 8
-        end_x = (camera_diff[0] // 8 + screen_size[0] // 8) * 8
-        start_y = (camera_diff[1] // 8 - screen_size[1] // 8) * 8
-        end_y = (camera_diff[1] // 8 + screen_size[1] // 8) * 8
+    def WorldGenLayer0():
+        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
+        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
+        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
+        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
 
         for x in range(start_x, end_x + 1, 8):
             for y in range(start_y, end_y + 1, 8):
-                if (x, y) not in World:
-                    World[(x, y)] = {
+                if (x, y) not in World_layer_0:
+                    World_layer_0[(x, y)] = {
                         "Pos": [x, y],
-                        "Block": "Grass_block"
+                        "Block": "Bedrock_block"
+                    }
+    
+    def WorldGenLayer1():
+        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
+        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
+        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
+        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+
+        for x in range(start_x, end_x + 1, 8):
+            for y in range(start_y, end_y + 1, 8):
+                if (x, y) not in World_layer_1:
+                    
+                    blockselection = WorldRandomGen.RandomOresDefine()
+                    
+                    World_layer_1[(x, y)] = {
+                        "Pos": [x, y],
+                        "Block": blockselection
+                    }
+    
+    def WorldGenLayer2():
+        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
+        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
+        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
+        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+
+        for x in range(start_x, end_x + 1, 8):
+            for y in range(start_y, end_y + 1, 8):
+                if (x, y) not in World_layer_2:
+                    
+                    blockselection = WorldRandomGen.RandomStoneDirtDefine()
+                    
+                    World_layer_2[(x, y)] = {
+                        "Pos": [x, y],
+                        "Block": blockselection
+                    }
+    
+    def WorldGenLayer3():
+        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
+        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
+        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
+        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+
+        for x in range(start_x, end_x + 1, 8):
+            for y in range(start_y, end_y + 1, 8):
+                if (x, y) not in World_layer_3:
+                    
+                    blockselection = WorldRandomGen.RandomGrassDirtDefine()
+                    
+                    World_layer_3[(x, y)] = {
+                        "Pos": [x, y],
+                        "Block": blockselection
+                    }
+    
+    def WorldGenLayer4():
+        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
+        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
+        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
+        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+
+        for x in range(start_x, end_x + 1, 8):
+            for y in range(start_y, end_y + 1, 8):
+                if (x, y) not in World_layer_4:
+                    
+                    blockselection = WorldRandomGen.RandomTreePositionDefine()
+                    
+                    World_layer_4[(x, y)] = {
+                        "Pos": [x, y],
+                        "Block": blockselection
                     }
 
+                    if blockselection == "Wood_Log_block_Bottom":
+                        for dx in range(-4, 5):
+                            for dy in range(-4, 5):
+                                if dx * dx + dy * dy <= 16:
+                                    if (x + dx * 8, y + dy * 8) not in World_layer_4:
+                                        World_layer_4[(x + dx * 8, y + dy * 8)] = {
+                                            "Pos": [x + dx * 8, y + dy * 8],
+                                            "Block": "Air"
+                                        }
+                        
+                        World_layer_4[(x, y - 8)] = {
+                            "Pos": [x, y - 8],
+                            "Block": "Wood_Log_block_Bottom"
+                        }
+                        
+                        World_layer_4[(x, y - 8 * 2)] = {
+                            "Pos": [x, y - 8 * 2],
+                            "Block": "Wood_Log_block_Top"
+                        }
+    
+    def WorldGenLayer5():
+        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
+        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
+        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
+        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+
+        for x in range(start_x, end_x + 1, 8):
+            for y in range(start_y, end_y + 1, 8):
+                if World_layer_4[(x, y)]["Block"] == "Wood_Log_block_Top":
+                    World_layer_5[(x, y)] = {"Pos": [x, y],"Block": "Leaves_block"}
+                    World_layer_5[(x + 8, y)] = {"Pos": [x + 8, y],"Block": "Leaves_block"}
+                    World_layer_5[(x - 8, y)] = {"Pos": [x - 8, y],"Block": "Leaves_block"}
+                    World_layer_5[(x, y - 8)] = {"Pos": [x, y - 8],"Block": "Leaves_block"}
+
 class Renderer:
-    def RenderBlocks():
-        for v in World.values():
+    def RenderLayer0():
+        for v in World_layer_0.values():
+            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
+    
+            block_x = block['local']['x']
+            block_y = block['local']['y']
+            block_w = block['size']['w']
+            block_h = block['size']['h']
+
+            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
+    
+    def RenderLayer1():
+        for v in World_layer_1.values():
+            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
+    
+            block_x = block['local']['x']
+            block_y = block['local']['y']
+            block_w = block['size']['w']
+            block_h = block['size']['h']
+
+            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
+            
+    def RenderLayer2():
+        for v in World_layer_2.values():
+            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
+    
+            block_x = block['local']['x']
+            block_y = block['local']['y']
+            block_w = block['size']['w']
+            block_h = block['size']['h']
+
+            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
+    
+    def RenderLayer3():
+        for v in World_layer_3.values():
+            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
+    
+            block_x = block['local']['x']
+            block_y = block['local']['y']
+            block_w = block['size']['w']
+            block_h = block['size']['h']
+
+            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
+    
+    def RenderLayer4():
+        for v in World_layer_4.values():
+            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
+    
+            block_x = block['local']['x']
+            block_y = block['local']['y']
+            block_w = block['size']['w']
+            block_h = block['size']['h']
+
+            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
+    
+    def RenderLayer5():
+        for v in World_layer_5.values():
             block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
     
             block_x = block['local']['x']
@@ -74,60 +278,32 @@ class Renderer:
 class App:
     def StorageImages():
         pyxel.images[0].load(0, 0, '.\\assets\\sprites\\Sprite_sheet_0.png')
-        
+    
     def __init__(self):
-        pyxel.init(screen_size[0], screen_size[1], title=window_title, display_scale=display_scale, fps=frames_per_second)
+        pyxel.init(SECREEN_SIZE[0], SECREEN_SIZE[1], title=WINDOW_TITLE, display_scale=DISPLAY_SCALE, fps=FPS)
         App.StorageImages()
-
-        # Gera blocos de grama na tela inicial
-        WorldGen.initialize_grass_blocks()
-
         pyxel.run(self.update, self.draw)
-
+    
     def update(self):
-        global SelectedBlock
+        WorldGen.WorldGenLayer0()
+        WorldGen.WorldGenLayer1()
+        WorldGen.WorldGenLayer2()
+        WorldGen.WorldGenLayer3()
+        WorldGen.WorldGenLayer4()
+        WorldGen.WorldGenLayer5()
         
-        if pyxel.btnp(pyxel.KEY_Q):
-            pyxel.quit()
-            
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            World[(pyxel.mouse_x + camera_diff[0]) // 8 * 8, (pyxel.mouse_y + camera_diff[1]) // 8 * 8] = {
-                "Pos": [
-                    (pyxel.mouse_x + camera_diff[0]) // 8 * 8,
-                    (pyxel.mouse_y + camera_diff[1]) // 8 * 8
-                ],
-                "Block": Blocks[SelectedBlock]
-            }
-
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
-            SelectedBlock = (SelectedBlock + 1) % len(Blocks)
-
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_MIDDLE):
-            print(World)
-
-        # Movendo o jogador com as teclas de seta
-        if pyxel.btn(pyxel.KEY_LEFT):
-            camera_diff[0] -= 1
-        if pyxel.btn(pyxel.KEY_RIGHT):
-            camera_diff[0] += 1
-        if pyxel.btn(pyxel.KEY_UP):
-            camera_diff[1] -= 1
-        if pyxel.btn(pyxel.KEY_DOWN):
-            camera_diff[1] += 1
-
-        # Gerar blocos de grama nas áreas próximas ao jogador
-        WorldGen.generate_nearby_grass_blocks()
-
-        # Fazendo a câmera seguir o jogador
-        pyxel.camera(camera_diff[0], camera_diff[1])
-
+        InputManager.CameraController()
+        InputManager.DebugKeys()
+    
     def draw(self):
         pyxel.cls(0)
-
-        Renderer.RenderBlocks()
-            
-        Inputs.MousePosition()
-        pyxel.camera(0, 0)
-        Inputs.ShowMouseCoordinates()
+        if Show_Layer_0: Renderer.RenderLayer0()
+        if Show_Layer_1: Renderer.RenderLayer1()
+        if Show_Layer_2: Renderer.RenderLayer2()
+        if Show_Layer_3: Renderer.RenderLayer3()
+        if Show_Layer_4: Renderer.RenderLayer4()
+        if Show_Layer_5: Renderer.RenderLayer5()
+        
+        InputManager.MousePosition()
         
 App()

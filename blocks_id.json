@@ -2,6 +2,12 @@
     "Blocks":
     [
         {
+            "name": "Air",
+            "local": {"x": 0, "y": 40},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
             "name": "Grass_block",
             "local": {"x": 0, "y": 0},
             "size": {"w": 8, "h": 8},
