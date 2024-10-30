@@ -28,6 +28,9 @@ Hotbar_Items = [
 Actual_Hotbar = 0
 Hotbar_Selected_slot = 0
 Selected_Item = Hotbar_Items[Actual_Hotbar][Hotbar_Selected_slot]
+blink = False
+blink_duration = 30
+frame_count = 0
 
 # World Layers
 World_layer_0 = {} # Bedrock
@@ -47,6 +50,11 @@ Show_Layer_3 = True
 Show_Layer_4 = True
 Show_Layer_5 = True
 
+# UI Debug
+Show_debug = False
+Show_mouse = True
+Show_mouse_area = True
+
 class InputManager:
     def CameraController():
         global camera_speed
@@ -61,10 +69,13 @@ class InputManager:
         
         pyxel.camera(camera_diff[0], camera_diff[1])
     
-    def MousePosition():
-        mouse_x = pyxel.mouse_x + camera_diff[0]
-        mouse_y = pyxel.mouse_y + camera_diff[1]
-        pyxel.rect(mouse_x, mouse_y, 1, 1, 7)
+    def MouseBlink():
+        global blink, blink_duration, frame_count
+        
+        frame_count += 1
+        if frame_count >= blink_duration:
+            frame_count = 0
+            blink = not blink
         
     def BreakBlock():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -118,7 +129,7 @@ class InputManager:
         Selected_Item = Hotbar_Items[Actual_Hotbar][Hotbar_Selected_slot]
     
     def DebugKeys():
-        global Show_Layer_0, Show_Layer_1, Show_Layer_2, Show_Layer_3, Show_Layer_4, Show_Layer_5
+        global Show_Layer_0, Show_Layer_1, Show_Layer_2, Show_Layer_3, Show_Layer_4, Show_Layer_5, Show_debug, Show_mouse, Show_mouse_area
         
         if pyxel.btnp(pyxel.KEY_KP_0): Show_Layer_0 = not Show_Layer_0
         if pyxel.btnp(pyxel.KEY_KP_1): Show_Layer_1 = not Show_Layer_1
@@ -126,10 +137,14 @@ class InputManager:
         if pyxel.btnp(pyxel.KEY_KP_3): Show_Layer_3 = not Show_Layer_3
         if pyxel.btnp(pyxel.KEY_KP_4): Show_Layer_4 = not Show_Layer_4
         if pyxel.btnp(pyxel.KEY_KP_5): Show_Layer_5 = not Show_Layer_5
+        
+        if pyxel.btnp(pyxel.KEY_F3): Show_debug = not Show_debug
+        if pyxel.btnp(pyxel.KEY_F1): Show_mouse_area = not Show_mouse_area
+        if pyxel.btnp(pyxel.KEY_F2): Show_mouse = not Show_mouse
 
 class UI:
     def UIDebugger():
-        pyxel.text(5, 5, f"FPS: {pyxel.frame_count}", 7)
+        pyxel.text(2, 1, f'x:{(pyxel.mouse_x + camera_diff[0] // 8 * 8)}\ny:{(pyxel.mouse_y + camera_diff[1] // 8 * 8)}', 7)
         
     def ItemHotbar():
         global Hotbar_Selected_slot
@@ -148,6 +163,18 @@ class UI:
             block_w = block['size']['w']
             block_h = block['size']['h']
             pyxel.blt(Hotbar_Items_pos[i], 117, 0, block_x, block_y, block_w, block_h, 2)
+            
+    def DrawMouse():
+        pyxel.rect(pyxel.mouse_x + camera_diff[0], pyxel.mouse_y + camera_diff[1], 1, 1, 7)
+        
+    def DrawMouseArea():
+        global blink
+        
+        mouse_x = (pyxel.mouse_x + camera_diff[0]) // 8 * 8
+        mouse_y = (pyxel.mouse_y + camera_diff[1]) // 8 * 8
+        
+        if blink: pyxel.blt(mouse_x, mouse_y, 0, 72, 0, 8, 8, 2)
+        else: pyxel.blt(mouse_x, mouse_y, 0, 72, 8, 8, 8, 2)
             
 class Optife:
     def GetGenerationArea():
@@ -182,7 +209,7 @@ class WorldRandomGen:
         rolldice = random.randint(1, 100)
         if rolldice > 99: return "Grass_Dirty_block"
         else: return "Grass_block"
-    
+
     def RandomTreePositionDefine():
         rolldice = random.randint(1, 100)
         if rolldice > 99: return "Wood_Log_block_Bottom"
@@ -237,11 +264,11 @@ class WorldGen:
                 if (x, y) not in World_layer_3:
                     
                     blockselection = WorldRandomGen.RandomGrassDirtDefine()
-                    
+                        
                     World_layer_3[(x, y)] = {
                         "Pos": [x, y],
                         "Block": blockselection
-                    }
+                    }                      
     
     def WorldGenLayer4():
         start_x, end_x, start_y, end_y = Optife.GetGenerationArea()
@@ -258,8 +285,8 @@ class WorldGen:
                     }
 
                     if blockselection == "Wood_Log_block_Bottom":
-                        for dx in range(-4, 5):
-                            for dy in range(-4, 5):
+                        for dx in range(-8, 8):
+                            for dy in range(-8, 8):
                                 if dx * dx + dy * dy <= 16:
                                     if (x + dx * 8, y + dy * 8) not in World_layer_4:
                                         World_layer_4[(x + dx * 8, y + dy * 8)] = {
@@ -332,6 +359,7 @@ class App:
         InputManager.CameraController()
         InputManager.DebugKeys()
         InputManager.ChangeHotbar()
+        InputManager.MouseBlink()
         InputManager.PlaceBlock()
         InputManager.BreakBlock()
     
@@ -345,9 +373,11 @@ class App:
         if Show_Layer_4: Renderer.RenderLayers(World_layer_4)
         if Show_Layer_5: Renderer.RenderLayers(World_layer_5)
         
-        InputManager.MousePosition()
+        if Show_mouse: UI.DrawMouse()
+        if Show_mouse_area: UI.DrawMouseArea()
         
         pyxel.camera(0, 0)
-        UI.ItemHotbar()
+        if Show_debug: UI.UIDebugger()
+        if Show_mouse_area: UI.ItemHotbar()
         
 App()
