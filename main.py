@@ -209,7 +209,17 @@ class WorldGen:
 
 class Renderer:
     def RenderLayers(WorldLayer):
-        start_x, end_x, start_y, end_y = Optife.GetVisibleArea()
+        center_x = (camera_diff[0] // 8) * 8 + 64
+        center_y = (camera_diff[1] // 8) * 8 + 64
+
+        half_width = 64
+        half_height = 64
+
+        start_x = center_x - half_width
+        end_x = center_x + half_width
+        start_y = center_y - half_height
+        end_y = center_y + half_height
+        
         for v in WorldLayer.values():
             if start_x <= v["Pos"][0] <= end_x and start_y <= v["Pos"][1] <= end_y:
                 block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
