@@ -3,7 +3,7 @@
     [
         {
             "name": "Air",
-            "local": {"x": 0, "y": 40},
+            "local": {"x": 16, "y": 40},
             "size": {"w": 8, "h": 8},
             "Colision": false
         },
@@ -20,8 +20,20 @@
             "Colision": false
         },
         {
+            "name": "Water_block",
+            "local": {"x": 0, "y": 32},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
             "name": "Stone_block",
             "local": {"x": 0, "y": 16},
+            "size": {"w": 8, "h": 8},
+            "Colision": false
+        },
+        {
+            "name": "Cobblestone_block",
+            "local": {"x": 0, "y": 24},
             "size": {"w": 8, "h": 8},
             "Colision": false
         },
