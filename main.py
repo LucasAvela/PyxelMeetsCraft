@@ -109,6 +109,9 @@ class InputManager:
         if pyxel.btnp(pyxel.KEY_7): Hotbar_Selected_slot = 6
         if pyxel.btnp(pyxel.KEY_8): Hotbar_Selected_slot = 7
         
+        if pyxel.btnp(pyxel.KEY_RIGHT): Hotbar_Selected_slot = (Hotbar_Selected_slot + 1) & 7
+        if pyxel.btnp(pyxel.KEY_LEFT): Hotbar_Selected_slot = (Hotbar_Selected_slot - 1) & 7
+        
         Selected_Item = Hotbar_Items[Actual_Hotbar][Hotbar_Selected_slot]
     
     def DebugKeys():
@@ -129,10 +132,11 @@ class UI:
         global Hotbar_Selected_slot
         pyxel.rect(Hotbar_Slots_pos[Hotbar_Selected_slot] - 1, 115, 12, 12, 10)
         
-        for slot in Hotbar_Slots_pos:
+        for i, slot in enumerate(Hotbar_Slots_pos):
             pyxel.rect(slot, 116, 10, 10, 7)
             pyxel.rect(slot + 1, 117, 8, 8, 13)
-        
+            pyxel.text(slot + 2, 111, str(i + 1), 1)
+            pyxel.text(slot + 1, 111, str(i + 1), 7)
         
         for i, item in enumerate(Hotbar_Items[Actual_Hotbar]):
             block = next(block for block in block_data['Blocks'] if block['name'] == item)
