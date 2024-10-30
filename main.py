@@ -14,6 +14,8 @@ total_blocks = len(block_data['Blocks'])
 
 # Camera
 camera_diff = [0, 0]
+camera_speed = 1
+camera_velocities = [1, 4]
 
 # UI
 Hotbar_Slots_pos = [17, 29, 41, 53, 65, 77, 89, 101]
@@ -47,14 +49,15 @@ Show_Layer_5 = True
 
 class InputManager:
     def CameraController():
-        if pyxel.btn(pyxel.KEY_A):
-            camera_diff[0] -= 1
-        if pyxel.btn(pyxel.KEY_D):
-            camera_diff[0] += 1
-        if pyxel.btn(pyxel.KEY_W):
-            camera_diff[1] -= 1
-        if pyxel.btn(pyxel.KEY_S):
-            camera_diff[1] += 1
+        global camera_speed
+        
+        if pyxel.btn(pyxel.KEY_A): camera_diff[0] -= camera_speed
+        if pyxel.btn(pyxel.KEY_D): camera_diff[0] += camera_speed
+        if pyxel.btn(pyxel.KEY_W): camera_diff[1] -= camera_speed
+        if pyxel.btn(pyxel.KEY_S): camera_diff[1] += camera_speed
+            
+        if pyxel.btnp(pyxel.KEY_SHIFT): camera_speed = camera_velocities[1]
+        if pyxel.btnr(pyxel.KEY_SHIFT): camera_speed = camera_velocities[0]
         
         pyxel.camera(camera_diff[0], camera_diff[1])
     
