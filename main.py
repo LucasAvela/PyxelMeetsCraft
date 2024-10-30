@@ -38,7 +38,6 @@ Show_Layer_5 = True
 
 # Gameplay
 Selected_block = 0
-Selected_Layer = 4
 
 class InputManager:
     def CameraController():
@@ -58,30 +57,42 @@ class InputManager:
         mouse_y = pyxel.mouse_y + camera_diff[1]
         pyxel.rect(mouse_x, mouse_y, 1, 1, 7)
         
-    def PlaceBlock():
-        global Selected_block, Selected_Layer
+    def BreakBlock():
+        global Selected_block
         
         if pyxel.btnp(pyxel.KEY_EQUALS): Selected_block = (Selected_block + 1) % total_blocks
         if pyxel.btnp(pyxel.KEY_MINUS): Selected_block = (Selected_block - 1) % total_blocks
         
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            World_Layers[Selected_Layer][(pyxel.mouse_x + camera_diff[0]) // 8 * 8, (pyxel.mouse_y + camera_diff[1]) // 8 * 8] = {
-                "Pos": [
-                    (pyxel.mouse_x + camera_diff[0]) // 8 * 8,
-                    (pyxel.mouse_y + camera_diff[1]) // 8 * 8
-                ],
-                "Block": block_data['Blocks'][Selected_block]['name']
-            }
-    
-    def SelectLayer():
-        global Selected_Layer
+            BlockPosition = [(pyxel.mouse_x + camera_diff[0]) // 8 * 8, (pyxel.mouse_y + camera_diff[1]) // 8 * 8]
+            LastLayer = len(World_Layers) - 1
+            ActualLayer = LastLayer
+            
+            while ActualLayer > 0:
+                if (BlockPosition[0], BlockPosition[1]) not in World_Layers[ActualLayer] or World_Layers[ActualLayer][(BlockPosition[0], BlockPosition[1])]["Block"] == "Air":
+                    ActualLayer -= 1
+                else: 
+                    World_Layers[ActualLayer][BlockPosition[0],BlockPosition[1]] = {
+                        "Pos": [BlockPosition[0],BlockPosition[1]],
+                        "Block": "Air"
+                    }
+                    return
         
-        if pyxel.btnp(pyxel.KEY_0): Selected_Layer = 0
-        if pyxel.btnp(pyxel.KEY_1): Selected_Layer = 1
-        if pyxel.btnp(pyxel.KEY_2): Selected_Layer = 2
-        if pyxel.btnp(pyxel.KEY_3): Selected_Layer = 3
-        if pyxel.btnp(pyxel.KEY_4): Selected_Layer = 4
-        if pyxel.btnp(pyxel.KEY_5): Selected_Layer = 5
+    def PlaceBlock():
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
+            BlockPosition = [(pyxel.mouse_x + camera_diff[0]) // 8 * 8, (pyxel.mouse_y + camera_diff[1]) // 8 * 8]
+            LastLayer = len(World_Layers)
+            ActualLayer = 1
+            
+            while ActualLayer < LastLayer:
+                if (BlockPosition[0], BlockPosition[1]) in World_Layers[ActualLayer] and World_Layers[ActualLayer][(BlockPosition[0], BlockPosition[1])]["Block"] != "Air":
+                    ActualLayer += 1
+                else:
+                    World_Layers[ActualLayer][BlockPosition[0],BlockPosition[1]] = {
+                        "Pos": [BlockPosition[0],BlockPosition[1]],
+                        "Block": block_data['Blocks'][Selected_block]['name']
+                    }
+                    return
     
     def DebugKeys():
         global Show_Layer_0, Show_Layer_1, Show_Layer_2, Show_Layer_3, Show_Layer_4, Show_Layer_5, Show_F3
@@ -114,7 +125,6 @@ class UI:
         block_h = block['size']['h']
 
         pyxel.blt(2, 2, 0, block_x, block_y, block_w, block_h, 2)
-        pyxel.text(13, 2, f"Layer: {Selected_Layer}" , 7)
 
 class Optife:
     def GetGenerationArea():
@@ -279,7 +289,6 @@ class Renderer:
 
                 pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
     
-
 class App:
     def StorageImages():
         pyxel.images[0].load(0, 0, '.\\assets\\sprites\\Sprite_sheet_0.png')
@@ -300,7 +309,7 @@ class App:
         InputManager.CameraController()
         InputManager.DebugKeys()
         InputManager.PlaceBlock()
-        InputManager.SelectLayer()
+        InputManager.BreakBlock()
     
     def draw(self):
         pyxel.cls(0)
