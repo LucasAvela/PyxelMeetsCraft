@@ -15,6 +15,9 @@ with open('blocks_id.json') as f:
 # Camera
 camera_diff = [0, 0]
 
+# UI
+Show_F3 = False
+
 # World Layers
 World_layer_0 = {} # Bedrock
 World_layer_1 = {} # Stone & Ores
@@ -50,7 +53,7 @@ class InputManager:
         pyxel.rect(mouse_x, mouse_y, 1, 1, 7)
         
     def DebugKeys():
-        global Show_Layer_0, Show_Layer_1, Show_Layer_2, Show_Layer_3, Show_Layer_4, Show_Layer_5
+        global Show_Layer_0, Show_Layer_1, Show_Layer_2, Show_Layer_3, Show_Layer_4, Show_Layer_5, Show_F3
         
         if pyxel.btnp(pyxel.KEY_KP_0): Show_Layer_0 = not Show_Layer_0
         if pyxel.btnp(pyxel.KEY_KP_1): Show_Layer_1 = not Show_Layer_1
@@ -58,6 +61,20 @@ class InputManager:
         if pyxel.btnp(pyxel.KEY_KP_3): Show_Layer_3 = not Show_Layer_3
         if pyxel.btnp(pyxel.KEY_KP_4): Show_Layer_4 = not Show_Layer_4
         if pyxel.btnp(pyxel.KEY_KP_5): Show_Layer_5 = not Show_Layer_5
+        
+        if pyxel.btnp(pyxel.KEY_F3): Show_F3 = not Show_F3
+
+class UI:
+    def UIDebugger():
+        pyxel.text(5, 5, f"FPS: {pyxel.frame_count}", 7)
+
+class Optife:
+    def GetVisibleArea():
+        start_x = ((camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) - 4) * 8
+        end_x = ((camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) + 4) * 8
+        start_y = ((camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) - 4) * 8
+        end_y = ((camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) + 4) * 8
+        return start_x, end_x, start_y, end_y
 
 class WorldRandomGen:
     def RandomOresDefine():
@@ -93,13 +110,10 @@ class WorldRandomGen:
 class WorldGen:
     @staticmethod
     def WorldGenLayer0():
-        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
-        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
-        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
-        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+        start_x, end_x, start_y, end_y = Optife.GetVisibleArea()
 
-        for x in range(start_x, end_x + 1, 8):
-            for y in range(start_y, end_y + 1, 8):
+        for x in range(start_x, end_x, 8):
+            for y in range(start_y, end_y, 8):
                 if (x, y) not in World_layer_0:
                     World_layer_0[(x, y)] = {
                         "Pos": [x, y],
@@ -107,13 +121,10 @@ class WorldGen:
                     }
     
     def WorldGenLayer1():
-        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
-        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
-        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
-        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+        start_x, end_x, start_y, end_y = Optife.GetVisibleArea()
 
-        for x in range(start_x, end_x + 1, 8):
-            for y in range(start_y, end_y + 1, 8):
+        for x in range(start_x, end_x, 8):
+            for y in range(start_y, end_y, 8):
                 if (x, y) not in World_layer_1:
                     
                     blockselection = WorldRandomGen.RandomOresDefine()
@@ -124,13 +135,10 @@ class WorldGen:
                     }
     
     def WorldGenLayer2():
-        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
-        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
-        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
-        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+        start_x, end_x, start_y, end_y = Optife.GetVisibleArea()
 
-        for x in range(start_x, end_x + 1, 8):
-            for y in range(start_y, end_y + 1, 8):
+        for x in range(start_x, end_x, 8):
+            for y in range(start_y, end_y, 8):
                 if (x, y) not in World_layer_2:
                     
                     blockselection = WorldRandomGen.RandomStoneDirtDefine()
@@ -141,13 +149,10 @@ class WorldGen:
                     }
     
     def WorldGenLayer3():
-        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
-        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
-        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
-        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+        start_x, end_x, start_y, end_y = Optife.GetVisibleArea()
 
-        for x in range(start_x, end_x + 1, 8):
-            for y in range(start_y, end_y + 1, 8):
+        for x in range(start_x, end_x, 8):
+            for y in range(start_y, end_y, 8):
                 if (x, y) not in World_layer_3:
                     
                     blockselection = WorldRandomGen.RandomGrassDirtDefine()
@@ -158,13 +163,10 @@ class WorldGen:
                     }
     
     def WorldGenLayer4():
-        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
-        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
-        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
-        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+        start_x, end_x, start_y, end_y = Optife.GetVisibleArea()
 
-        for x in range(start_x, end_x + 1, 8):
-            for y in range(start_y, end_y + 1, 8):
+        for x in range(start_x, end_x, 8):
+            for y in range(start_y, end_y, 8):
                 if (x, y) not in World_layer_4:
                     
                     blockselection = WorldRandomGen.RandomTreePositionDefine()
@@ -195,13 +197,10 @@ class WorldGen:
                         }
     
     def WorldGenLayer5():
-        start_x = (camera_diff[0] // 8 - SECREEN_SIZE[0] // 8) * 8
-        end_x = (camera_diff[0] // 8 + SECREEN_SIZE[0] // 8) * 8
-        start_y = (camera_diff[1] // 8 - SECREEN_SIZE[1] // 8) * 8
-        end_y = (camera_diff[1] // 8 + SECREEN_SIZE[1] // 8) * 8
+        start_x, end_x, start_y, end_y = Optife.GetVisibleArea()
 
-        for x in range(start_x, end_x + 1, 8):
-            for y in range(start_y, end_y + 1, 8):
+        for x in range(start_x, end_x, 8):
+            for y in range(start_y, end_y, 8):
                 if World_layer_4[(x, y)]["Block"] == "Wood_Log_block_Top":
                     World_layer_5[(x, y)] = {"Pos": [x, y],"Block": "Leaves_block"}
                     World_layer_5[(x + 8, y)] = {"Pos": [x + 8, y],"Block": "Leaves_block"}
@@ -209,71 +208,19 @@ class WorldGen:
                     World_layer_5[(x, y - 8)] = {"Pos": [x, y - 8],"Block": "Leaves_block"}
 
 class Renderer:
-    def RenderLayer0():
-        for v in World_layer_0.values():
-            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
-    
-            block_x = block['local']['x']
-            block_y = block['local']['y']
-            block_w = block['size']['w']
-            block_h = block['size']['h']
+    def RenderLayers(WorldLayer):
+        start_x, end_x, start_y, end_y = Optife.GetVisibleArea()
+        for v in WorldLayer.values():
+            if start_x <= v["Pos"][0] <= end_x and start_y <= v["Pos"][1] <= end_y:
+                block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
+        
+                block_x = block['local']['x']
+                block_y = block['local']['y']
+                block_w = block['size']['w']
+                block_h = block['size']['h']
 
-            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
+                pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
     
-    def RenderLayer1():
-        for v in World_layer_1.values():
-            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
-    
-            block_x = block['local']['x']
-            block_y = block['local']['y']
-            block_w = block['size']['w']
-            block_h = block['size']['h']
-
-            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
-            
-    def RenderLayer2():
-        for v in World_layer_2.values():
-            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
-    
-            block_x = block['local']['x']
-            block_y = block['local']['y']
-            block_w = block['size']['w']
-            block_h = block['size']['h']
-
-            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
-    
-    def RenderLayer3():
-        for v in World_layer_3.values():
-            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
-    
-            block_x = block['local']['x']
-            block_y = block['local']['y']
-            block_w = block['size']['w']
-            block_h = block['size']['h']
-
-            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
-    
-    def RenderLayer4():
-        for v in World_layer_4.values():
-            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
-    
-            block_x = block['local']['x']
-            block_y = block['local']['y']
-            block_w = block['size']['w']
-            block_h = block['size']['h']
-
-            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
-    
-    def RenderLayer5():
-        for v in World_layer_5.values():
-            block = next(block for block in block_data['Blocks'] if block['name'] == v["Block"])
-    
-            block_x = block['local']['x']
-            block_y = block['local']['y']
-            block_w = block['size']['w']
-            block_h = block['size']['h']
-
-            pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
 
 class App:
     def StorageImages():
@@ -297,13 +244,14 @@ class App:
     
     def draw(self):
         pyxel.cls(0)
-        if Show_Layer_0: Renderer.RenderLayer0()
-        if Show_Layer_1: Renderer.RenderLayer1()
-        if Show_Layer_2: Renderer.RenderLayer2()
-        if Show_Layer_3: Renderer.RenderLayer3()
-        if Show_Layer_4: Renderer.RenderLayer4()
-        if Show_Layer_5: Renderer.RenderLayer5()
+        if Show_Layer_0: Renderer.RenderLayers(World_layer_0)
+        if Show_Layer_1: Renderer.RenderLayers(World_layer_1)
+        if Show_Layer_2: Renderer.RenderLayers(World_layer_2)
+        if Show_Layer_3: Renderer.RenderLayers(World_layer_3)
+        if Show_Layer_4: Renderer.RenderLayers(World_layer_4)
+        if Show_Layer_5: Renderer.RenderLayers(World_layer_5)
         
         InputManager.MousePosition()
+        if Show_F3: UI.UIDebugger()
         
 App()
