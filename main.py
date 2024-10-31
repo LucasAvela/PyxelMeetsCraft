@@ -324,6 +324,9 @@ class WorldGen:
                     World_layer_5[(x + 8, y)] = {"Pos": [x + 8, y],"Block": "Leaves_block"}
                     World_layer_5[(x - 8, y)] = {"Pos": [x - 8, y],"Block": "Leaves_block"}
                     World_layer_5[(x, y - 8)] = {"Pos": [x, y - 8],"Block": "Leaves_block"}
+                elif (x, y) not in World_layer_5:
+                    World_layer_5[(x, y)] = {"Pos": [x, y],"Block": "Air"}
+                
 
 class Renderer:
     def RenderLayers(WorldLayer):
