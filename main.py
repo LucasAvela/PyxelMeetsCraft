@@ -17,6 +17,7 @@ MainMenu_buttons = {
     'Play': {'Pos': [8, 75], 'Font': [129, 1]},
     'Load': {'Pos': [72, 75], 'Font': [178, 1]}
 }
+playpkanimation = False
 
 # Gameplay
 In_game = False
@@ -358,8 +359,8 @@ class MainMenu:
                 dy = pyxel.mouse_y - button['Pos'][1]
                     
                 if 0 <= dx < 48 and 0 <= dy < 16:
-                    if key == "Play":
-                        In_game = True
+                    if key == "Play": 
+                        In_game = True     
     
     def draw():
         pyxel.blt(0, 0, 1, 0, 0, 128, 128)
