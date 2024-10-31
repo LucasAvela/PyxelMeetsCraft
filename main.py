@@ -12,6 +12,15 @@ FPS = 60
 with open('blocks_id.json') as f: block_data = json.load(f)
 total_blocks = len(block_data['Blocks'])
 
+# Main Menu
+MainMenu_buttons = {
+    'Play': {'Pos': [8, 75], 'Font': [129, 1]},
+    'Load': {'Pos': [72, 75], 'Font': [178, 1]}
+}
+
+# Gameplay
+In_game = False
+
 # Camera
 camera_diff = [0, 0]
 camera_speed = 1
@@ -144,7 +153,7 @@ class InputManager:
 
 class UI:
     def UIDebugger():
-        pyxel.text(2, 1, f'x:{(pyxel.mouse_x + camera_diff[0] // 8 * 8)}\ny:{(pyxel.mouse_y + camera_diff[1] // 8 * 8)}', 7)
+        pyxel.text(2, 1, f'x:{(pyxel.mouse_x + camera_diff[0]) // 8 * 8}\ny:{(pyxel.mouse_y + camera_diff[1]) // 8 * 8}', 7)
         
     def ItemHotbar():
         global Hotbar_Selected_slot
@@ -268,8 +277,8 @@ class WorldGen:
                     World_layer_3[(x, y)] = {
                         "Pos": [x, y],
                         "Block": blockselection
-                    }                      
-    
+                    }
+                    
     def WorldGenLayer4():
         start_x, end_x, start_y, end_y = Optife.GetGenerationArea()
 
@@ -338,17 +347,33 @@ class Renderer:
                 block_h = block['size']['h']
 
                 pyxel.blt(v["Pos"][0], v["Pos"][1], 0, block_x, block_y, block_w, block_h, 2)
+
+class MainMenu:
+    def update():
+        global In_game
+        
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            for key, button in MainMenu_buttons.items():
+                dx = pyxel.mouse_x - button['Pos'][0]
+                dy = pyxel.mouse_y - button['Pos'][1]
+                    
+                if 0 <= dx < 48 and 0 <= dy < 16:
+                    if key == "Play":
+                        In_game = True
     
-class App:
-    def StorageImages():
-        pyxel.images[0].load(0, 0, '.\\assets\\sprites\\Sprite_sheet_0.png')
-    
-    def __init__(self):
-        pyxel.init(SECREEN_SIZE[0], SECREEN_SIZE[1], title=WINDOW_TITLE, display_scale=DISPLAY_SCALE, fps=FPS)
-        App.StorageImages()
-        pyxel.run(self.update, self.draw)
-    
-    def update(self):
+    def draw():
+        pyxel.blt(0, 0, 1, 0, 0, 128, 128)
+        
+        for key, button in MainMenu_buttons.items():
+            pos_x, pos_y = button['Pos']
+            font_x, font_y = button['Font']
+            pyxel.blt(pos_x, pos_y, 1, font_x, font_y, 48, 18, 8)
+        
+        
+        pyxel.blt(pyxel.mouse_x + camera_diff[0], pyxel.mouse_y + camera_diff[1], 1, 248, 120, 8, 8, 8)
+
+class Gameplay:
+    def update():
         WorldGen.WorldGenLayer0()
         WorldGen.WorldGenLayer1()
         WorldGen.WorldGenLayer2()
@@ -362,10 +387,8 @@ class App:
         InputManager.MouseBlink()
         InputManager.PlaceBlock()
         InputManager.BreakBlock()
-    
-    def draw(self):
-        pyxel.cls(0)
         
+    def draw():
         if Show_Layer_0: Renderer.RenderLayers(World_layer_0)
         if Show_Layer_1: Renderer.RenderLayers(World_layer_1)
         if Show_Layer_2: Renderer.RenderLayers(World_layer_2)
@@ -379,5 +402,24 @@ class App:
         pyxel.camera(0, 0)
         if Show_debug: UI.UIDebugger()
         if Show_mouse_area: UI.ItemHotbar()
+        
+class App:
+    def StorageImages():
+        pyxel.images[0].load(0, 0, '.\\assets\\sprites\\Sprite_sheet_0.png') # blocks, items and player
+        pyxel.images[1].load(0, 0, '.\\assets\\sprites\\Background_MainMenu.png') # main menu bg
+    
+    def __init__(self):
+        pyxel.init(SECREEN_SIZE[0], SECREEN_SIZE[1], title=WINDOW_TITLE, display_scale=DISPLAY_SCALE, fps=FPS)
+        App.StorageImages()
+        pyxel.run(self.update, self.draw)
+    
+    def update(self):
+        if In_game: Gameplay.update()
+        else: MainMenu.update()
+    
+    def draw(self):
+        pyxel.cls(0)
+        if In_game: Gameplay.draw() 
+        else: MainMenu.draw()
         
 App()
