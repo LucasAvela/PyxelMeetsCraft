@@ -156,7 +156,7 @@ class Gameplay:
             start_x = (Gameplay.Camera.diff[0] // BLOCK_SIZE) * BLOCK_SIZE - BLOCK_SIZE
             end_x = (Gameplay.Camera.diff[0] // BLOCK_SIZE + SCREEN_SIZE[0] // BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE
             start_y = (Gameplay.Camera.diff[1] // BLOCK_SIZE) * BLOCK_SIZE - BLOCK_SIZE
-            end_y = (Gameplay.Camera.diff[1] // BLOCK_SIZE + SCREEN_SIZE[1] // BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE
+            end_y = (Gameplay.Camera.diff[1] // BLOCK_SIZE + SCREEN_SIZE[1] // BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE * 4
             return start_x, end_x, start_y, end_y
         
     class Atlas:
@@ -301,6 +301,8 @@ class Gameplay:
             if pyxel.btnr(pyxel.MOUSE_BUTTON_LEFT): Gameplay.Player.break_progress = 0; Gameplay.Player.hold_break = False
             
             if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT): Gameplay.Player.PlaceBlock()
+            
+            if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Pause')
         
         def Update():
             Gameplay.Player.Inputs()
@@ -329,11 +331,37 @@ class Gameplay:
         Gameplay.Player.SelectionArea()
         
         Gameplay.UI.Draw()
+
+class Inventory:
+    Inventory_items_Position = [
+        [18, 66], [30, 66], [42, 66], [54, 66], [66, 66], [78, 66], [90, 66], [102, 66],
+        [18, 78], [30, 78], [42, 78], [54, 78], [66, 78], [78, 78], [90, 78], [102, 78],
+        [18, 90], [30, 90], [42, 90], [54, 90], [66, 90], [78, 90], [90, 90], [102, 90],
         
+        [18, 110], [30, 110], [42, 110], [54, 110], [66, 110], [78, 110], [90, 110], [102, 110]
+    ]
+    
+    def DrawItemsOnInventory():
+        for ItemSlot in Inventory.Inventory_items_Position:
+            pyxel.blt(ItemSlot[0], ItemSlot[1], 1, 96, 00, 8, 8, 2)
+    
+    def Update():
+        if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Gameplay')
+    
+    def Draw():
+        Gameplay.Atlas.RendererLayer()
+        
+        Gameplay.Camera.UICamera()
+        pyxel.blt(0, 0, 0, 0, 128, 128, 128, 8)
+        Inventory.DrawItemsOnInventory()
+        pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
+
 class StateMachine:
     def ChangeGameState(newState):
         global GAME_STATE
         GAME_STATE = newState
+        
+        print('Game state changed to:', GAME_STATE)
 
 class Data:
     def Images():
@@ -352,11 +380,13 @@ class App:
         
     def update(self):
         if GAME_STATE == 'MainMenu': MainMenu.Update()
-        if GAME_STATE == 'Gameplay': Gameplay.Update()
+        elif GAME_STATE == 'Gameplay': Gameplay.Update()
+        elif GAME_STATE == 'Pause': Inventory.Update()
     
     def draw(self):
         pyxel.cls(0)
         if GAME_STATE == 'MainMenu': MainMenu.Draw()
-        if GAME_STATE == 'Gameplay': Gameplay.Draw()
+        elif GAME_STATE == 'Gameplay': Gameplay.Draw()
+        elif GAME_STATE == 'Pause': Inventory.Draw()
 
 App()
