@@ -2,12 +2,6 @@
     "Blocks":
     [
         {
-            "name": "Empty",
-            "local": {"x": 72, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "Colision": false
-        },
-        {
             "name": "Air",
             "local": {"x": 72, "y": 24},
             "size": {"w": 8, "h": 8},
@@ -90,6 +84,12 @@
             "local": {"x": 8, "y": 32},
             "size": {"w": 8, "h": 8},
             "Colision": false
+        },
+        {
+            "name": "Tree_block",
+            "local": {"x": 0, "y": 40},
+            "size": {"w": 8, "h": 8},
+            "Colision": true
         },
         {
             "name": "Wood_Log_block_Top",
