@@ -354,7 +354,7 @@ class Inventory:
         10: {'Pos': [42, 78], 'Item': 'Empty', 'amount': 0},
         11: {'Pos': [54, 78], 'Item': 'Empty', 'amount': 0},
         12: {'Pos': [66, 78], 'Item': 'Chest_block', 'amount': 1},
-        13: {'Pos': [78, 78], 'Item': 'Workbench_block', 'amount': 1},
+        13: {'Pos': [78, 78], 'Item': 'Workbench_block', 'amount': 8},
         14: {'Pos': [90, 78], 'Item': 'Empty', 'amount': 0},
         15: {'Pos': [102, 78], 'Item': 'Empty', 'amount': 0},
         16: {'Pos': [18, 90], 'Item': 'Empty', 'amount': 0},
@@ -377,6 +377,27 @@ class Inventory:
         6: {'Pos': [90, 110], 'Item': 'Empty', 'amount': 0},
         7: {'Pos': [102, 110], 'Item': 'Empty', 'amount': 0}
     }
+    
+    def AddItem(Item, amount):
+        for key, slot in Inventory.Hotbar.items():
+            if slot['Item'] == "Empty" or (slot['Item'] == Item and slot['amount'] < 8):
+                Inventory.Hotbar[key]['Item'] = Item
+                Inventory.Hotbar[key]['amount'] += amount
+                return
+        else:
+            for key, slot in Inventory.Inventory.items():
+                if slot['Item'] == "Empty" or (slot['Item'] == Item and slot['amount'] < 8):
+                    Inventory.Inventory[key]['Item'] = Item
+                    Inventory.Inventory[key]['amount'] += amount
+                    return
+    
+    def RemoveItem(Key, amount, inventory):
+        if inventory == "Hotbar" and Inventory.Hotbar[Key]['amount'] > 0:
+            Inventory.Hotbar[Key]['amount'] -= amount
+            if Inventory.Hotbar[Key]['amount'] <= 0: Inventory.Hotbar[Key]['Item'] = "Empty"
+        elif inventory == "Inventory" and Inventory.Inventory[Key]['amount'] > 0:
+            Inventory.Inventory[Key]['amount'] -= amount
+            if Inventory.Inventory[Key]['amount'] <= 0: Inventory.Inventory[Key]['Item'] = "Empty"
     
     def ClickOnInvetory():
         for key, Item in Inventory.Inventory.items():
@@ -414,11 +435,15 @@ class Inventory:
                 pyxel.text(pos[0] + 6, pos[1] + 10, f'{Inventory.Hotbar[key]['amount']}', 0)
         
     
+    def Debug():
+        if pyxel.btnp(pyxel.KEY_Z):Inventory.AddItem("Diamond", 1)
+        if pyxel.btnp(pyxel.KEY_X):Inventory.RemoveItem(13, 1, "Inventory")
+    
     def Update():
         if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Gameplay')
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):Inventory.ClickOnInvetory()
         
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            Inventory.ClickOnInvetory()
+        Inventory.Debug()
     
     def Draw():
         Gameplay.Atlas.RendererLayer()
