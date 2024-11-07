@@ -11,7 +11,7 @@ FPS = 60
 #-------------------------------- Game
 BLOCK_SIZE = 8
 GAME_STATE = 'MainMenu'
-GAME_STATE_LIST = ['MainMenu', 'Gameplay', 'Pause']
+GAME_STATE_LIST = ['MainMenu', 'Gameplay', 'Inventory']
 BLOCKSBYLAYER = [
     {'Bedrock_block': 100},
     {'Cobblestone_block': 90, 'Coal_Ore_block': 5, 'Iron_Ore_block': 2, 'Gold_Ore_block': 1.5, 'Diamond_Ore_block': 1, 'Emerald_Ore_block': 0.5},
@@ -90,7 +90,7 @@ class Gameplay:
     class Camera:
         diff = [0, 0]
         speed = 1
-        velocities = [1, 4]
+        velocities = [1, 1000]
         
         def CamController():
             if pyxel.btn(pyxel.KEY_A): Gameplay.Camera.diff[0] -= Gameplay.Camera.speed
@@ -110,6 +110,7 @@ class Gameplay:
         Show_Debug = False
         Hotbar_Slots_pos = [17, 29, 41, 53, 65, 77, 89, 101]
         Hotbar_Items_pos = [18, 30, 42, 54, 66, 78, 90, 102]
+        Horbar_ItemsAmount_pos = [23, 35, 47, 59, 71, 83, 95, 107]
         Hotbar_Selected_slot = 0
         
         def DrawMouse():
@@ -131,14 +132,20 @@ class Gameplay:
             if pyxel.btnv(pyxel.mouse_wheel < 0): Gameplay.UI.Hotbar_Selected_slot = (Gameplay.UI.Hotbar_Selected_slot - 1) & 7   
                 
         def Hotbar():
-            pyxel.rect(Gameplay.UI.Hotbar_Slots_pos[Gameplay.UI.Hotbar_Selected_slot] -1, 115, 12, 12, 10)
+            pyxel.rect(Gameplay.UI.Hotbar_Slots_pos[Gameplay.UI.Hotbar_Selected_slot] -1, 114, 12, 12, 10)
             
             for i, slot in enumerate(Gameplay.UI.Hotbar_Slots_pos):
-                pyxel.rect(slot, 116, 10, 10, 7)
-                pyxel.rect(slot + 1, 117, 8, 8, 13)
-                pyxel.text(slot + 2, 111, str(i + 1), 1)
-                pyxel.text(slot + 1, 111, str(i + 1), 7)
-        
+                pyxel.rect(slot, 115, 10, 10, 7)
+                pyxel.rect(slot + 1, 116, 8, 8, 13)
+                pyxel.text(slot + 2, 110, str(i + 1), 1)
+                pyxel.text(slot + 1, 110, str(i + 1), 7)
+                
+                if Inventory.Hotbar[i]['Item'] != 'Empty':
+                    j = next(j for j in Data.item_data['Items'] if j['name'] == Inventory.Hotbar[i]['Item'])
+                    pyxel.blt(Gameplay.UI.Hotbar_Items_pos[i], 116, 1, j['local']['x'], j['local']['y'], 8, 8, 2)
+                    pyxel.rect(Gameplay.UI.Horbar_ItemsAmount_pos[i], 122, 4, 5, 7)
+                    pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Inventory.Hotbar[i]['amount']}', 0)
+                            
         def Debug():
             pyxel.text(2, 1, f'x:{(pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8}\ny:{(pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8}', 7)
         
@@ -302,7 +309,7 @@ class Gameplay:
             
             if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT): Gameplay.Player.PlaceBlock()
             
-            if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Pause')
+            if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Inventory')
         
         def Update():
             Gameplay.Player.Inputs()
@@ -333,27 +340,95 @@ class Gameplay:
         Gameplay.UI.Draw()
 
 class Inventory:
-    Inventory_items_Position = [
-        [18, 66], [30, 66], [42, 66], [54, 66], [66, 66], [78, 66], [90, 66], [102, 66],
-        [18, 78], [30, 78], [42, 78], [54, 78], [66, 78], [78, 78], [90, 78], [102, 78],
-        [18, 90], [30, 90], [42, 90], [54, 90], [66, 90], [78, 90], [90, 90], [102, 90],
+    Inventory = {
+        0: {'Pos': [18, 66], 'Item': 'Diamond_Pickaxe', 'amount': 1},
+        1: {'Pos': [30, 66], 'Item': 'Empty', 'amount': 0},
+        2: {'Pos': [42, 66], 'Item': 'Empty', 'amount': 0},
+        3: {'Pos': [54, 66], 'Item': 'Empty', 'amount': 0},
+        4: {'Pos': [66, 66], 'Item': 'Empty', 'amount': 0},
+        5: {'Pos': [78, 66], 'Item': 'Empty', 'amount': 0},
+        6: {'Pos': [90, 66], 'Item': 'Empty', 'amount': 0},
+        7: {'Pos': [102, 66], 'Item': 'Empty', 'amount': 0},
+        8: {'Pos': [18, 78], 'Item': 'Empty', 'amount': 0},
+        9: {'Pos': [30, 78], 'Item': 'Empty', 'amount': 0},
+        10: {'Pos': [42, 78], 'Item': 'Empty', 'amount': 0},
+        11: {'Pos': [54, 78], 'Item': 'Empty', 'amount': 0},
+        12: {'Pos': [66, 78], 'Item': 'Chest_block', 'amount': 1},
+        13: {'Pos': [78, 78], 'Item': 'Workbench_block', 'amount': 1},
+        14: {'Pos': [90, 78], 'Item': 'Empty', 'amount': 0},
+        15: {'Pos': [102, 78], 'Item': 'Empty', 'amount': 0},
+        16: {'Pos': [18, 90], 'Item': 'Empty', 'amount': 0},
+        17: {'Pos': [30, 90], 'Item': 'Empty', 'amount': 0},
+        18: {'Pos': [42, 90], 'Item': 'Empty', 'amount': 0},
+        19: {'Pos': [54, 90], 'Item': 'Empty', 'amount': 0},
+        20: {'Pos': [66, 90], 'Item': 'Empty', 'amount': 0},
+        21: {'Pos': [78, 90], 'Item': 'Empty', 'amount': 0},
+        22: {'Pos': [90, 90], 'Item': 'Empty', 'amount': 0},
+        23: {'Pos': [102, 90], 'Item': 'Empty', 'amount': 0}
+    }
+    
+    Hotbar = {
+        0: {'Pos': [18, 110], 'Item': 'Iron_Sword', 'amount': 1},
+        1: {'Pos': [30, 110], 'Item': 'Empty', 'amount': 0},
+        2: {'Pos': [42, 110], 'Item': 'Empty', 'amount': 0},
+        3: {'Pos': [54, 110], 'Item': 'Diamond_Hoe', 'amount': 1},
+        4: {'Pos': [66, 110], 'Item': 'Empty', 'amount': 0},
+        5: {'Pos': [78, 110], 'Item': 'Empty', 'amount': 0},
+        6: {'Pos': [90, 110], 'Item': 'Empty', 'amount': 0},
+        7: {'Pos': [102, 110], 'Item': 'Empty', 'amount': 0}
+    }
+    
+    def ClickOnInvetory():
+        for key, Item in Inventory.Inventory.items():
+                dx = pyxel.mouse_x - Inventory.Inventory[key]['Pos'][0]
+                dy = pyxel.mouse_y - Inventory.Inventory[key]['Pos'][1]
+                if 0 <= dx < 8 and 0 <= dy < 8:
+                    print(key, Item['Item'])
+                    return
         
-        [18, 110], [30, 110], [42, 110], [54, 110], [66, 110], [78, 110], [90, 110], [102, 110]
-    ]
+        for key, Item in Inventory.Hotbar.items():
+                dx = pyxel.mouse_x - Inventory.Hotbar[key]['Pos'][0]
+                dy = pyxel.mouse_y - Inventory.Hotbar[key]['Pos'][1]                  
+                if 0 <= dx < 8 and 0 <= dy < 8:
+                    print(key, Item['Item'])
+                    return
     
     def DrawItemsOnInventory():
-        for ItemSlot in Inventory.Inventory_items_Position:
-            pyxel.blt(ItemSlot[0], ItemSlot[1], 1, 96, 00, 8, 8, 2)
+        for key, Item in Inventory.Inventory.items():
+            if Item['Item'] != 'Empty':
+                i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
+                pos = Inventory.Inventory[key]['Pos']
+                
+                pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
+                pyxel.rect(pos[0] + 6, pos[1] + 4, 3, 5, 7)
+                pyxel.text(pos[0] + 7, pos[1] + 5, f'{Inventory.Inventory[key]['amount']}', 0)
+                
+        for key, Item in Inventory.Hotbar.items():
+            if Item['Item'] != 'Empty':
+                i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
+                pos = Inventory.Hotbar[key]['Pos']
+                
+                pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
+                pyxel.rect(pos[0] + 4, pos[1] + 10, 7, 7, 0)
+                pyxel.rect(pos[0] + 5, pos[1] + 10, 5, 6, 7)
+                pyxel.text(pos[0] + 6, pos[1] + 10, f'{Inventory.Hotbar[key]['amount']}', 0)
+        
     
     def Update():
         if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Gameplay')
+        
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            Inventory.ClickOnInvetory()
     
     def Draw():
         Gameplay.Atlas.RendererLayer()
         
         Gameplay.Camera.UICamera()
+        
         pyxel.blt(0, 0, 0, 0, 128, 128, 128, 8)
         Inventory.DrawItemsOnInventory()
+        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 8)
+        
         pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
 
 class StateMachine:
@@ -369,6 +444,7 @@ class Data:
         pyxel.images[1].load(0, 0, './assets/sprites/Sprite_sheet_0.png')       # blocks, items, and player
 
     with open('blocks_id.json') as f: block_data = json.load(f)
+    with open('Items_id.json') as g: item_data = json.load(g)
 
 class App:
     def __init__(self):
@@ -381,12 +457,12 @@ class App:
     def update(self):
         if GAME_STATE == 'MainMenu': MainMenu.Update()
         elif GAME_STATE == 'Gameplay': Gameplay.Update()
-        elif GAME_STATE == 'Pause': Inventory.Update()
+        elif GAME_STATE == 'Inventory': Inventory.Update()
     
     def draw(self):
         pyxel.cls(0)
         if GAME_STATE == 'MainMenu': MainMenu.Draw()
         elif GAME_STATE == 'Gameplay': Gameplay.Draw()
-        elif GAME_STATE == 'Pause': Inventory.Draw()
+        elif GAME_STATE == 'Inventory': Inventory.Draw()
 
 App()
