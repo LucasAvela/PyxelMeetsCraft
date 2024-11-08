@@ -409,18 +409,25 @@ class Inventory:
                             if Inventory.Holding_item_amount + Item['amount'] <= 8:
                                 Inventory.AddItem(Inventory.Holding_item_name, Amount, key)
                                 Inventory.RemoveItem(Inventory.Holding_key, Amount)
-                                Inventory.Holding_item_amount -= Amount#0
+                                Inventory.Holding_item_amount -= Amount
                                 if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
                                 return
                             elif Item['amount'] < 8:
                                 quant = 8 - Item['amount']
                                 if quant < 0: quant = quant * -1
-                                print('quant', quant)
                                 Inventory.AddItem(Inventory.Holding_item_name, quant, key)
                                 Inventory.RemoveItem(Inventory.Holding_key, quant)
-                                Inventory.Holding_item_amount -= Amount#quant
+                                Inventory.Holding_item_amount -= Amount
                                 return
     
+    def DeleteItem(Amount):
+        if Inventory.Holding_key != None:
+            dx = pyxel.mouse_x - 100
+            dy = pyxel.mouse_y - 44
+            if 0 <= dx < 13 and 0 <= dy < 13:
+                Inventory.RemoveItem(Inventory.Holding_key, Amount)
+                Inventory.Holding_item_amount -= Amount
+                if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
     
     def DrawItemsOnInventory():
         for key, Item in Inventory.Inventory.items():
@@ -438,7 +445,7 @@ class Inventory:
             i = next(i for i in Data.item_data['Items'] if i['name'] == Inventory.Holding_item_name)
             pos = [pyxel.mouse_x + 4, pyxel.mouse_y + 8]
             pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
-            pyxel.rect(pos[0] + 6, pos[1] + 4, 3, 5, 7)
+            pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
             pyxel.text(pos[0] + 7, pos[1] + 5, f'{Inventory.Inventory[Inventory.Holding_key]['amount']}', 0)
             
     def Debug():
@@ -446,8 +453,8 @@ class Inventory:
     
     def Update():
         if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Gameplay')
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):Inventory.MoveItem(Inventory.Holding_item_amount)
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):Inventory.MoveItem(1)
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):Inventory.MoveItem(Inventory.Holding_item_amount); Inventory.DeleteItem(Inventory.Holding_item_amount)
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):Inventory.MoveItem(1); Inventory.DeleteItem(1)
         
         Inventory.Debug()
     
