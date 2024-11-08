@@ -336,10 +336,10 @@ class Inventory:
         1: {'Pos': [30, 110], 'Item': 'Apple', 'amount': 4},
         2: {'Pos': [42, 110], 'Item': 'Apple', 'amount': 2},
         3: {'Pos': [54, 110], 'Item': 'Apple', 'amount': 5},
-        4: {'Pos': [66, 110], 'Item': 'Empty', 'amount': 0},
-        5: {'Pos': [78, 110], 'Item': 'Empty', 'amount': 0},
-        6: {'Pos': [90, 110], 'Item': 'Empty', 'amount': 0},
-        7: {'Pos': [102, 110], 'Item': 'Empty', 'amount': 0},
+        4: {'Pos': [66, 110], 'Item': 'Apple', 'amount': 6},
+        5: {'Pos': [78, 110], 'Item': 'Apple', 'amount': 7},
+        6: {'Pos': [90, 110], 'Item': 'Apple', 'amount': 1},
+        7: {'Pos': [102, 110], 'Item': 'Apple', 'amount': 3},
         8: {'Pos': [18, 66], 'Item': 'Empty', 'amount': 0},
         9: {'Pos': [30, 66], 'Item': 'Empty', 'amount': 0},
         10: {'Pos': [42, 66], 'Item': 'Empty', 'amount': 0},
@@ -387,39 +387,40 @@ class Inventory:
             Inventory.Inventory[Key]['amount'] -= amount
             if Inventory.Inventory[Key]['amount'] <= 0: Inventory.Inventory[Key]['Item'] = "Empty"
     
-    def MoveItem():
+    def MoveItem(Amount):
         for key, Item in Inventory.Inventory.items():
                 dx = pyxel.mouse_x - Inventory.Inventory[key]['Pos'][0]
                 dy = pyxel.mouse_y - Inventory.Inventory[key]['Pos'][1]
                 
-                if 0 <= dx < 8 and 0 <= dy < 8 and Item['Item'] != "Empty" and Inventory.Holding_key == None:
-                    Inventory.Holding_item_name = Item['Item']
-                    Inventory.Holding_item_amount = Item['amount']
-                    Inventory.Holding_key = key
-                    print(Inventory.Holding_key, Inventory.Holding_item_name, Inventory.Holding_item_amount)
-                    return
-                elif 0 <= dx < 8 and 0 <= dy < 8 and key == Inventory.Holding_key:
-                    Inventory.Holding_item_name = None
-                    Inventory.Holding_item_amount = 0
-                    Inventory.Holding_key = None
-                elif 0 <= dx < 8 and 0 <= dy < 8 and (Item['Item'] == "Empty" or Item['Item'] == Inventory.Holding_item_name) and Inventory.Holding_key != None:
-                    if Inventory.Holding_item_amount + Item['amount'] <= 8:
-                        Inventory.AddItem(Inventory.Holding_item_name, Inventory.Holding_item_amount, key)
-                        Inventory.RemoveItem(Inventory.Holding_key, Inventory.Holding_item_amount)
-                        Inventory.Holding_item_name = None
-                        Inventory.Holding_item_amount = 0
-                        Inventory.Holding_key = None
-                        print(Inventory.Holding_key, Inventory.Holding_item_name, Inventory.Holding_item_amount)
-                        return
-                    elif Item['amount'] < 8:
-                        quant = Item['amount'] - Inventory.Holding_item_amount
-                        if Item['amount'] < Inventory.Holding_item_amount: quant = quant * -1
-                        print('quant', quant)
-                        Inventory.AddItem(Inventory.Holding_item_name, quant, key)
-                        Inventory.RemoveItem(Inventory.Holding_key, quant)
-                        Inventory.Holding_item_amount -= quant
-                        print(Inventory.Holding_key, Inventory.Holding_item_name, Inventory.Holding_item_amount)
-                        return
+                if 0 <= dx < 8 and 0 <= dy < 8:
+                    if Inventory.Holding_key == None:
+                        if Item['Item'] != "Empty":
+                            Inventory.Holding_item_name = Item['Item']
+                            Inventory.Holding_item_amount = Item['amount']
+                            Inventory.Holding_key = key
+                            return
+                    else:
+                        if key == Inventory.Holding_key:
+                            Inventory.Holding_item_name = None
+                            Inventory.Holding_item_amount = 0
+                            Inventory.Holding_key = None
+                            return
+                        elif Item['Item'] == "Empty" or Item['Item'] == Inventory.Holding_item_name:
+                            if Inventory.Holding_item_amount + Item['amount'] <= 8:
+                                Inventory.AddItem(Inventory.Holding_item_name, Amount, key)
+                                Inventory.RemoveItem(Inventory.Holding_key, Amount)
+                                Inventory.Holding_item_amount -= Amount#0
+                                if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
+                                return
+                            elif Item['amount'] < 8:
+                                quant = 8 - Item['amount']
+                                if quant < 0: quant = quant * -1
+                                print('quant', quant)
+                                Inventory.AddItem(Inventory.Holding_item_name, quant, key)
+                                Inventory.RemoveItem(Inventory.Holding_key, quant)
+                                Inventory.Holding_item_amount -= Amount#quant
+                                return
+    
     
     def DrawItemsOnInventory():
         for key, Item in Inventory.Inventory.items():
@@ -445,7 +446,8 @@ class Inventory:
     
     def Update():
         if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Gameplay')
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):Inventory.MoveItem()
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):Inventory.MoveItem(Inventory.Holding_item_amount)
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):Inventory.MoveItem(1)
         
         Inventory.Debug()
     
