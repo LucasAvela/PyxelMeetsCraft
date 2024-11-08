@@ -47,7 +47,7 @@ class MainMenu:
                     StateMachine.ChangeGameState(GAME_STATE_LIST[1])
 
     def MouseDraw():
-        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 8)
+        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 2)
         
     def Canvas():
         pyxel.blt(0, 0, 0, 0, 0, 128, 128)  # Background
@@ -422,9 +422,9 @@ class Inventory:
     
     def DeleteItem(Amount):
         if Inventory.Holding_key != None:
-            dx = pyxel.mouse_x - 100
-            dy = pyxel.mouse_y - 44
-            if 0 <= dx < 13 and 0 <= dy < 13:
+            dx = pyxel.mouse_x - 101
+            dy = pyxel.mouse_y - 45
+            if 0 <= dx < 10 and 0 <= dy < 10:
                 Inventory.RemoveItem(Inventory.Holding_key, Amount)
                 Inventory.Holding_item_amount -= Amount
                 if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
@@ -463,10 +463,10 @@ class Inventory:
         
         Gameplay.Camera.UICamera()
         
-        pyxel.blt(0, 0, 0, 0, 128, 128, 128, 8)
+        pyxel.blt(0, 0, 0, 0, 128, 128, 128, 2)
         Inventory.DrawItemsOnInventory()
         Inventory.DrawHoldingItemOnMouse()
-        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 8)
+        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 2)
         
         pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
 
