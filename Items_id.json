@@ -1,335 +1,214 @@
 {
-    "Items":
-    [
+    "Items": [
         {
             "name": "Grass_block",
             "local": {"x": 0, "y": 0},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Grass_block"
         },
         {
             "name": "Grass_Dirty_block",
             "local": {"x": 0, "y": 8},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Dirt_block"
         },
         {
             "name": "Dirt_block",
             "local": {"x": 0, "y": 16},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Dirt_block"
         },
         {
             "name": "Stone_block",
             "local": {"x": 0, "y": 24},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Cobblestone_block"
         },
         {
             "name": "Cobblestone_block",
             "local": {"x": 0, "y": 32},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Cobblestone_block"
         },
         {
             "name": "Bedrock_block",
             "local": {"x": 8, "y": 40},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Bedrock_block"
         },
         {
             "name": "Coal_Ore_block",
             "local": {"x": 8, "y": 0},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Coal"
         },
         {
             "name": "Iron_Ore_block",
             "local": {"x": 8, "y": 8},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Iron_raw"
         },
         {
             "name": "Gold_Ore_block",
             "local": {"x": 8, "y": 16},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Gold_raw"
         },
         {
             "name": "Diamond_Ore_block",
             "local": {"x": 8, "y": 24},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Diamond"
         },
         {
             "name": "Emerald_Ore_block",
             "local": {"x": 8, "y": 32},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Emerald"
         },
         {
             "name": "Wood_Log_block_Top",
             "local": {"x": 16, "y": 8},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Wood_Log_block_Top"
         },
         {
             "name": "Wood_Log_block_Bottom",
             "local": {"x": 16, "y": 16},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Wood_Log_block_Bottom"
         },
         {
             "name": "Wood_Plank_block",
             "local": {"x": 16, "y": 24},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Wood_Plank_block"
         },
         {
             "name": "Leaves_block",
             "local": {"x": 16, "y": 0},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Leaves_block"
         },
         {
             "name": "Workbench_block",
             "local": {"x": 24, "y": 0},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Workbench_block"
         },
         {
             "name": "Chest_block",
             "local": {"x": 24, "y": 8},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Chest_block"
         },
         {
             "name": "Furnace_block",
             "local": {"x": 24, "y": 16},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Furnace_block"
         },
         {
             "name": "Door_block",
             "local": {"x": 24, "y": 40},
             "size": {"w": 8, "h": 8},
-            "Type": "Block"
+            "type": "Block",
+            "drop": "Door_block"
         },
         {
             "name": "Coal",
             "local": {"x": 32, "y": 0},
             "size": {"w": 8, "h": 8},
-            "Type": "Item"
+            "type": "Item",
+            "drop": "Coal"
         },
         {
             "name": "Iron_raw",
             "local": {"x": 32, "y": 8},
             "size": {"w": 8, "h": 8},
-            "Type": "Item"
+            "type": "Item",
+            "drop": "Iron_raw"
         },
         {
             "name": "Iron_ingot",
             "local": {"x": 40, "y": 8},
             "size": {"w": 8, "h": 8},
-            "Type": "Item"
+            "type": "Item",
+            "drop": "Iron_ingot"
         },
         {
             "name": "Gold_raw",
             "local": {"x": 32, "y": 16},
             "size": {"w": 8, "h": 8},
-            "Type": "Item"
+            "type": "Item",
+            "drop": "Gold_raw"
         },
         {
             "name": "Gold_ingot",
             "local": {"x": 40, "y": 16},
             "size": {"w": 8, "h": 8},
-            "Type": "Item"
+            "type": "Item",
+            "drop": "Gold_ingot"
         },
         {
             "name": "Diamond",
             "local": {"x": 32, "y": 24},
             "size": {"w": 8, "h": 8},
-            "Type": "Item"
+            "type": "Item",
+            "drop": "Diamond"
         },
         {
             "name": "Emerald",
             "local": {"x": 32, "y": 32},
             "size": {"w": 8, "h": 8},
-            "Type": "Item"
+            "type": "Item",
+            "drop": "Emerald"
         },
         {
             "name": "Apple",
             "local": {"x": 48, "y": 0},
             "size": {"w": 8, "h": 8},
-            "Type": "Food"
+            "type": "Food",
+            "drop": "Apple"
         },
         {
             "name": "Golden_Apple",
             "local": {"x": 48, "y": 8},
             "size": {"w": 8, "h": 8},
-            "Type": "Food"
+            "type": "Food",
+            "drop": "Golden_Apple"
         },
         {
             "name": "Porkchop_Raw",
             "local": {"x": 48, "y": 16},
             "size": {"w": 8, "h": 8},
-            "Type": "Food"
+            "type": "Food",
+            "drop": "Porkchop_Raw"
         },
         {
             "name": "Porkchop_Cooked",
             "local": {"x": 48, "y": 24},
             "size": {"w": 8, "h": 8},
-            "Type": "Food"
-        },
-        {
-            "name": "Wooden_Pickaxe",
-            "local": {"x": 80, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Stone_Pickaxe",
-            "local": {"x": 88, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Iron_Pickaxe",
-            "local": {"x": 96, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Golden_Pickaxe",
-            "local": {"x": 104, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Diamond_Pickaxe",
-            "local": {"x": 112, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Wooden_Axe",
-            "local": {"x": 80, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Stone_Axe",
-            "local": {"x": 88, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Iron_Axe",
-            "local": {"x": 96, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Golden_Axe",
-            "local": {"x": 104, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Diamond_Axe",
-            "local": {"x": 112, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Wooden_Shovel",
-            "local": {"x": 80, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Stone_Shovel",
-            "local": {"x": 88, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Iron_Shovel",
-            "local": {"x": 96, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Golden_Shovel",
-            "local": {"x": 104, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Diamond_Shovel",
-            "local": {"x": 112, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Wooden_Hoe",
-            "local": {"x": 80, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Stone_Hoe",
-            "local": {"x": 88, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Iron_Hoe",
-            "local": {"x": 96, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Golden_Hoe",
-            "local": {"x": 104, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Diamond_Hoe",
-            "local": {"x": 112, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Wooden_Sword",
-            "local": {"x": 80, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Stone_Sword",
-            "local": {"x": 88, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Iron_Sword",
-            "local": {"x": 96, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Golden_Sword",
-            "local": {"x": 104, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
-        },
-        {
-            "name": "Diamond_Sword",
-            "local": {"x": 112, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "Type": "Tool"
+            "type": "Food",
+            "drop": "Porkchop_Cooked"
         }
     ]
 }

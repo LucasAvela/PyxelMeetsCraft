@@ -66,7 +66,7 @@ class MainMenu:
         if button == "Play":
             MainMenu.Transition.transition_active = True
         elif button == "Load":
-            Gameplay.Atlas.SaveLoad.LoadWorld()
+            Data.SaveLoad.LoadWorld()
             MainMenu.Transition.transition_active = True
     
     def Inputs():
@@ -90,7 +90,7 @@ class Gameplay:
     class Camera:
         diff = [0, 0]
         speed = 1
-        velocities = [1, 1000]
+        velocities = [1, 4]
         
         def CamController():
             if pyxel.btn(pyxel.KEY_A): Gameplay.Camera.diff[0] -= Gameplay.Camera.speed
@@ -140,11 +140,11 @@ class Gameplay:
                 pyxel.text(slot + 2, 110, str(i + 1), 1)
                 pyxel.text(slot + 1, 110, str(i + 1), 7)
                 
-                if Inventory.Hotbar[i]['Item'] != 'Empty':
-                    j = next(j for j in Data.item_data['Items'] if j['name'] == Inventory.Hotbar[i]['Item'])
+                if Inventory.Inventory[i]['Item'] != 'Empty':
+                    j = next(j for j in Data.item_data['Items'] if j['name'] == Inventory.Inventory[i]['Item'])
                     pyxel.blt(Gameplay.UI.Hotbar_Items_pos[i], 116, 1, j['local']['x'], j['local']['y'], 8, 8, 2)
                     pyxel.rect(Gameplay.UI.Horbar_ItemsAmount_pos[i], 122, 4, 5, 7)
-                    pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Inventory.Hotbar[i]['amount']}', 0)
+                    pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Inventory.Inventory[i]['amount']}', 0)
                             
         def Debug():
             pyxel.text(2, 1, f'x:{(pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8}\ny:{(pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8}', 7)
@@ -161,7 +161,7 @@ class Gameplay:
     class Optfine:
         def GetGenerationArea():
             start_x = (Gameplay.Camera.diff[0] // BLOCK_SIZE) * BLOCK_SIZE - BLOCK_SIZE
-            end_x = (Gameplay.Camera.diff[0] // BLOCK_SIZE + SCREEN_SIZE[0] // BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE
+            end_x = (Gameplay.Camera.diff[0] // BLOCK_SIZE + SCREEN_SIZE[0] // BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE * 4
             start_y = (Gameplay.Camera.diff[1] // BLOCK_SIZE) * BLOCK_SIZE - BLOCK_SIZE
             end_y = (Gameplay.Camera.diff[1] // BLOCK_SIZE + SCREEN_SIZE[1] // BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE * 4
             return start_x, end_x, start_y, end_y
@@ -226,24 +226,6 @@ class Gameplay:
                 Gameplay.Atlas.World[(x, y - 24, layer + 1)] = {'Block': "Leaves_block"}
                 Gameplay.Atlas.World[(x - 8, y - 16, layer + 1)] = {'Block': "Leaves_block"}
                 Gameplay.Atlas.World[(x + 8, y - 16, layer + 1)] = {'Block': "Leaves_block"}
-        
-        class SaveLoad:
-            def SaveWorld():
-                world_data = {str(key): value for key, value in Gameplay.Atlas.World.items()}
-                with open("world_data.json", "w") as file:
-                    json.dump(world_data, file)
-                print("World saved to world_data.json")
-                
-            def LoadWorld():
-                try:
-                    with open("world_data.json", "r") as file:
-                        loaded_data = json.load(file)
-                        Gameplay.Atlas.World = {eval(key): value for key, value in loaded_data.items()}
-                    print("World loaded from world_data.json")
-                except FileNotFoundError:
-                    print("No saved world file found. Starting with a new world.")
-                except json.JSONDecodeError:
-                    print("Error decoding the saved world file. Starting with a new world.")
 
     class Player:
         frame_count = 0
@@ -284,6 +266,8 @@ class Gameplay:
                     layer -= 1
                 else:
                     if Gameplay.Player.break_progress > 64:
+                        block = next(block for block in Data.item_data['Items'] if block['name'] == Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'])
+                        Inventory.AddItem(block['drop'], 1)
                         Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': 'Air'}
                         Gameplay.Player.break_progress = 0
                         Gameplay.Player.hold_break = True
@@ -296,10 +280,17 @@ class Gameplay:
             target_x = (pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8
             target_y = (pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8
             layer = 0
+            selected_block = Inventory.Inventory[Gameplay.UI.Hotbar_Selected_slot]['Item']
+            block = next((block for block in Data.item_data['Items'] if block['name'] == selected_block), None)
+            
+            if selected_block == 'Empty' or block['type'] != "Block":
+                return
             
             while layer < Gameplay.Atlas.MaxLayerValue:
                 if (target_x, target_y, layer) not in Gameplay.Atlas.World or Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'] == 'Air':
-                    Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': 'Chest_block'}
+                    Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': selected_block}
+                    Inventory.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
+                    return
                 else:
                     layer += 1
         
@@ -322,7 +313,7 @@ class Gameplay:
             Gameplay.Atlas.LayerVisibility -= 1
             
         if pyxel.btnp(pyxel.KEY_0):
-            Gameplay.Atlas.SaveLoad.SaveWorld()
+            Data.SaveLoad.SaveWorld()
     
     def Update():
         Gameplay.Camera.CamController()
@@ -341,61 +332,49 @@ class Gameplay:
 
 class Inventory:
     Inventory = {
-        0: {'Pos': [18, 66], 'Item': 'Diamond_Pickaxe', 'amount': 1},
-        1: {'Pos': [30, 66], 'Item': 'Empty', 'amount': 0},
-        2: {'Pos': [42, 66], 'Item': 'Empty', 'amount': 0},
-        3: {'Pos': [54, 66], 'Item': 'Empty', 'amount': 0},
-        4: {'Pos': [66, 66], 'Item': 'Empty', 'amount': 0},
-        5: {'Pos': [78, 66], 'Item': 'Empty', 'amount': 0},
-        6: {'Pos': [90, 66], 'Item': 'Empty', 'amount': 0},
-        7: {'Pos': [102, 66], 'Item': 'Empty', 'amount': 0},
-        8: {'Pos': [18, 78], 'Item': 'Empty', 'amount': 0},
-        9: {'Pos': [30, 78], 'Item': 'Empty', 'amount': 0},
-        10: {'Pos': [42, 78], 'Item': 'Empty', 'amount': 0},
-        11: {'Pos': [54, 78], 'Item': 'Empty', 'amount': 0},
-        12: {'Pos': [66, 78], 'Item': 'Chest_block', 'amount': 1},
-        13: {'Pos': [78, 78], 'Item': 'Workbench_block', 'amount': 8},
-        14: {'Pos': [90, 78], 'Item': 'Empty', 'amount': 0},
-        15: {'Pos': [102, 78], 'Item': 'Empty', 'amount': 0},
-        16: {'Pos': [18, 90], 'Item': 'Empty', 'amount': 0},
-        17: {'Pos': [30, 90], 'Item': 'Empty', 'amount': 0},
-        18: {'Pos': [42, 90], 'Item': 'Empty', 'amount': 0},
-        19: {'Pos': [54, 90], 'Item': 'Empty', 'amount': 0},
-        20: {'Pos': [66, 90], 'Item': 'Empty', 'amount': 0},
-        21: {'Pos': [78, 90], 'Item': 'Empty', 'amount': 0},
-        22: {'Pos': [90, 90], 'Item': 'Empty', 'amount': 0},
-        23: {'Pos': [102, 90], 'Item': 'Empty', 'amount': 0}
-    }
-    
-    Hotbar = {
-        0: {'Pos': [18, 110], 'Item': 'Iron_Sword', 'amount': 1},
+        0: {'Pos': [18, 110], 'Item': 'Empty', 'amount': 0},
         1: {'Pos': [30, 110], 'Item': 'Empty', 'amount': 0},
         2: {'Pos': [42, 110], 'Item': 'Empty', 'amount': 0},
-        3: {'Pos': [54, 110], 'Item': 'Diamond_Hoe', 'amount': 1},
+        3: {'Pos': [54, 110], 'Item': 'Empty', 'amount': 0},
         4: {'Pos': [66, 110], 'Item': 'Empty', 'amount': 0},
         5: {'Pos': [78, 110], 'Item': 'Empty', 'amount': 0},
         6: {'Pos': [90, 110], 'Item': 'Empty', 'amount': 0},
-        7: {'Pos': [102, 110], 'Item': 'Empty', 'amount': 0}
+        7: {'Pos': [102, 110], 'Item': 'Empty', 'amount': 0},
+        8: {'Pos': [18, 66], 'Item': 'Empty', 'amount': 0},
+        9: {'Pos': [30, 66], 'Item': 'Empty', 'amount': 0},
+        10: {'Pos': [42, 66], 'Item': 'Empty', 'amount': 0},
+        11: {'Pos': [54, 66], 'Item': 'Empty', 'amount': 0},
+        12: {'Pos': [66, 66], 'Item': 'Empty', 'amount': 0},
+        13: {'Pos': [78, 66], 'Item': 'Empty', 'amount': 0},
+        14: {'Pos': [90, 66], 'Item': 'Empty', 'amount': 0},
+        15: {'Pos': [102, 66], 'Item': 'Empty', 'amount': 0},
+        16: {'Pos': [18, 78], 'Item': 'Empty', 'amount': 0},
+        17: {'Pos': [30, 78], 'Item': 'Empty', 'amount': 0},
+        18: {'Pos': [42, 78], 'Item': 'Empty', 'amount': 0},
+        19: {'Pos': [54, 78], 'Item': 'Empty', 'amount': 0},
+        20: {'Pos': [66, 78], 'Item': 'Empty', 'amount': 0},
+        21: {'Pos': [78, 78], 'Item': 'Empty', 'amount': 0},
+        22: {'Pos': [90, 78], 'Item': 'Empty', 'amount': 0},
+        23: {'Pos': [102, 78], 'Item': 'Empty', 'amount': 0},
+        24: {'Pos': [18, 90], 'Item': 'Empty', 'amount': 0},
+        25: {'Pos': [30, 90], 'Item': 'Empty', 'amount': 0},
+        26: {'Pos': [42, 90], 'Item': 'Empty', 'amount': 0},
+        27: {'Pos': [54, 90], 'Item': 'Empty', 'amount': 0},
+        28: {'Pos': [66, 90], 'Item': 'Empty', 'amount': 0},
+        29: {'Pos': [78, 90], 'Item': 'Empty', 'amount': 0},
+        30: {'Pos': [90, 90], 'Item': 'Empty', 'amount': 0},
+        31: {'Pos': [102, 90], 'Item': 'Empty', 'amount': 0}
     }
     
     def AddItem(Item, amount):
-        for key, slot in Inventory.Hotbar.items():
+        for key, slot in Inventory.Inventory.items():
             if slot['Item'] == "Empty" or (slot['Item'] == Item and slot['amount'] < 8):
-                Inventory.Hotbar[key]['Item'] = Item
-                Inventory.Hotbar[key]['amount'] += amount
+                Inventory.Inventory[key]['Item'] = Item
+                Inventory.Inventory[key]['amount'] += amount
                 return
-        else:
-            for key, slot in Inventory.Inventory.items():
-                if slot['Item'] == "Empty" or (slot['Item'] == Item and slot['amount'] < 8):
-                    Inventory.Inventory[key]['Item'] = Item
-                    Inventory.Inventory[key]['amount'] += amount
-                    return
     
-    def RemoveItem(Key, amount, inventory):
-        if inventory == "Hotbar" and Inventory.Hotbar[Key]['amount'] > 0:
-            Inventory.Hotbar[Key]['amount'] -= amount
-            if Inventory.Hotbar[Key]['amount'] <= 0: Inventory.Hotbar[Key]['Item'] = "Empty"
-        elif inventory == "Inventory" and Inventory.Inventory[Key]['amount'] > 0:
+    def RemoveItem(Key, amount):
+        if Inventory.Inventory[Key]['amount'] > 0:
             Inventory.Inventory[Key]['amount'] -= amount
             if Inventory.Inventory[Key]['amount'] <= 0: Inventory.Inventory[Key]['Item'] = "Empty"
     
@@ -403,13 +382,6 @@ class Inventory:
         for key, Item in Inventory.Inventory.items():
                 dx = pyxel.mouse_x - Inventory.Inventory[key]['Pos'][0]
                 dy = pyxel.mouse_y - Inventory.Inventory[key]['Pos'][1]
-                if 0 <= dx < 8 and 0 <= dy < 8:
-                    print(key, Item['Item'])
-                    return
-        
-        for key, Item in Inventory.Hotbar.items():
-                dx = pyxel.mouse_x - Inventory.Hotbar[key]['Pos'][0]
-                dy = pyxel.mouse_y - Inventory.Hotbar[key]['Pos'][1]                  
                 if 0 <= dx < 8 and 0 <= dy < 8:
                     print(key, Item['Item'])
                     return
@@ -423,21 +395,9 @@ class Inventory:
                 pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
                 pyxel.rect(pos[0] + 6, pos[1] + 4, 3, 5, 7)
                 pyxel.text(pos[0] + 7, pos[1] + 5, f'{Inventory.Inventory[key]['amount']}', 0)
-                
-        for key, Item in Inventory.Hotbar.items():
-            if Item['Item'] != 'Empty':
-                i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
-                pos = Inventory.Hotbar[key]['Pos']
-                
-                pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
-                pyxel.rect(pos[0] + 4, pos[1] + 10, 7, 7, 0)
-                pyxel.rect(pos[0] + 5, pos[1] + 10, 5, 6, 7)
-                pyxel.text(pos[0] + 6, pos[1] + 10, f'{Inventory.Hotbar[key]['amount']}', 0)
-        
     
     def Debug():
-        if pyxel.btnp(pyxel.KEY_Z):Inventory.AddItem("Diamond", 1)
-        if pyxel.btnp(pyxel.KEY_X):Inventory.RemoveItem(13, 1, "Inventory")
+        pass
     
     def Update():
         if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Gameplay')
@@ -470,6 +430,37 @@ class Data:
 
     with open('blocks_id.json') as f: block_data = json.load(f)
     with open('Items_id.json') as g: item_data = json.load(g)
+    
+    class SaveLoad:
+            def SaveWorld():
+                world_data = {str(key): value for key, value in Gameplay.Atlas.World.items()}
+                inventory_data = {str(key): value for key, value in Inventory.Inventory.items()}
+                
+                save_data = {
+                    'world': world_data,
+                    'inventory': inventory_data
+                }
+                
+                with open("save_data.json", "w") as file:
+                    json.dump(save_data, file)
+                print("Game saved to save_data.json")
+                
+            def LoadWorld():
+                try:
+                    with open("save_data.json", "r") as file:
+                        save_data = json.load(file)
+                        
+                        world_data = save_data.get('world', {})
+                        Gameplay.Atlas.World = {eval(key): value for key, value in world_data.items()}
+                        
+                        inventory_data = save_data.get('inventory', {})
+                        Inventory.Inventory = {int(key): value for key, value in inventory_data.items()}
+                        
+                    print("Game loaded from save_data.json")
+                except FileNotFoundError:
+                    print("No saved game file found. Starting with a new game.")
+                except json.JSONDecodeError:
+                    print("Error decoding the saved game file. Starting with a new game.")
 
 class App:
     def __init__(self):
