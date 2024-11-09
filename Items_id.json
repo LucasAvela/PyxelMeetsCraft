@@ -281,7 +281,7 @@
             "stack": 1
         },        {
             "name": "Wooden_Axe",
-            "local": {"x": 80, "y": 0},
+            "local": {"x": 80, "y": 8},
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Wooden_Axe",

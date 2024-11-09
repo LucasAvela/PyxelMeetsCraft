@@ -444,7 +444,8 @@ class Inventory:
                         tempgrid = []
             
             if CheckGrid != []:
-                grid_size = [max_pos_x // min_pos_x, max_pos_y // min_pos_y]
+                grid_size = [(max_pos_x + min_pos_x - 1)// min_pos_x, (max_pos_y + min_pos_y - 1) // min_pos_y]
+                print(max_pos_x ,'/', min_pos_x, '=', grid_size[0])
 
             for recipe in Data.crafting_data['recipes']:
                 if recipe['shaped'] == True:
@@ -465,7 +466,7 @@ class Inventory:
                 dx = pyxel.mouse_x - Inventory.Crafiting.CraftSlot[0]
                 dy = pyxel.mouse_y - Inventory.Crafiting.CraftSlot[1]
                 if 0 <= dx < 8 and 0 <= dy < 8:
-                    Inventory.Crafiting.grid = [[None, None, None],[None, None, None],[None, None, None]]
+                    Inventory.Crafiting.grid = [[None, None, None], [None, None, None], [None, None, None]]
                     Inventory.AddItem(Inventory.Crafiting.ItemOnCraft['item'], Inventory.Crafiting.ItemOnCraft['amount'], None)
         
         def DrawItemsOnCraft():
