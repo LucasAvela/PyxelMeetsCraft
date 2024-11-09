@@ -1,6 +1,15 @@
 {
     "recipes": [
         {
+            "result": {"item": "Grass_Dirty_block", "amount": 2},
+            "size": [2, 1],
+            "shaped": false,
+            "craft": [
+                ["Dirt_block"],
+                ["Grass_block"]
+            ]
+        },
+        {
             "result": {"item": "Wood_Plank_block", "amount": 4},
             "size": [1, 1],
             "shaped": false,
