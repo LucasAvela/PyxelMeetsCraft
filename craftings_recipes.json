@@ -3,6 +3,7 @@
         {
             "result": {"item": "Wood_Plank_block", "amount": 4},
             "size": [1, 1],
+            "shaped": false,
             "craft": [
                 ["Wood_Log_block_Bottom"]
             ]
@@ -10,6 +11,7 @@
         {
             "result": {"item": "Wood_Plank_block", "amount": 4},
             "size": [1, 1],
+            "shaped": false,
             "craft": [
                 ["Wood_Log_block_Top"]
             ]
@@ -17,9 +19,29 @@
         {
             "result": {"item": "Workbench_block", "amount": 1},
             "size": [2, 2],
+            "shaped": false,
             "craft": [
                 ["Wood_Plank_block", "Wood_Plank_block"],
                 ["Wood_Plank_block", "Wood_Plank_block"]
+            ]
+        },
+        {
+            "result": {"item": "Stick", "amount": 4},
+            "size": [2, 1],
+            "shaped": false,
+            "craft": [
+                ["Wood_Plank_block"],
+                ["Wood_Plank_block"]
+            ]
+        },
+        {
+            "result": {"item": "Wooden_Pickaxe", "amount": 1},
+            "size": [3, 3],
+            "shaped": true,
+            "craft": [
+                ["Wood_Plank_block", "Wood_Plank_block", "Wood_Plank_block"],
+                [null, "Stick", null],
+                [null, "Stick", null]
             ]
         }
     ]

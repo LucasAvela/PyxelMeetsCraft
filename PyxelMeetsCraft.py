@@ -374,13 +374,19 @@ class Inventory:
         grid_pos = {
             (0, 0): {'grid': [0, 0], 'x': 18, 'y': 10},
             (0, 1): {'grid': [0, 1], 'x': 30, 'y': 10},
+            (0, 2): {'grid': [0, 2], 'x': 30 + 12, 'y': 10},
             (1, 0): {'grid': [1, 0], 'x': 18, 'y': 22},
             (1, 1): {'grid': [1, 1], 'x': 30, 'y': 22},
+            (1, 2): {'grid': [1, 2], 'x': 30 + 12, 'y': 22},
+            (2, 0): {'grid': [2, 0], 'x': 18, 'y': 22 + 12},
+            (2, 1): {'grid': [2, 1], 'x': 30, 'y': 22 + 12},
+            (2, 2): {'grid': [2, 2], 'x': 30 + 12, 'y': 22 + 12},
         }
         
         grid = [
-            [None, None],
-            [None, None]
+            [None, None, None],
+            [None, None, None],
+            [None, None, None]
         ]
         
         ItemOnCraft = None
@@ -393,16 +399,43 @@ class Inventory:
                 
                 if 0 <= dx < 8 and 0 <= dy < 8:
                     if Inventory.Holding_key != None:
-                        Inventory.Crafiting.grid[slot['grid'][0]][slot['grid'][1]] = Inventory.Holding_item_name
-                    else:
+                        if Inventory.Crafiting.grid[slot['grid'][0]][slot['grid'][1]] == None:
+                            Inventory.Crafiting.grid[slot['grid'][0]][slot['grid'][1]] = Inventory.Holding_item_name
+                            Inventory.Holding_item_amount -= 1
+                            Inventory.RemoveItem(Inventory.Holding_key, 1)
+                            if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
+                    elif Inventory.Crafiting.grid[Inventory.Crafiting.grid_pos[key]['grid'][0]][Inventory.Crafiting.grid_pos[key]['grid'][1]] != None:
+                        Inventory.AddItem(Inventory.Crafiting.grid[Inventory.Crafiting.grid_pos[key]['grid'][0]][Inventory.Crafiting.grid_pos[key]['grid'][1]], 1, None)
                         Inventory.Crafiting.grid[Inventory.Crafiting.grid_pos[key]['grid'][0]][Inventory.Crafiting.grid_pos[key]['grid'][1]] = None
         
         def CheckCrafting():
             CheckGrid = []
             tempgrid = []
             
-            for  x in Inventory.Crafiting.grid:
-                for  y in x:
+            min_pos_x = None; max_pos_x = None; min_pos_y = None; max_pos_y = None
+            for i, x in enumerate(Inventory.Crafiting.grid):
+                for j, y in enumerate(x):
+                    if y != None:
+                        holdX = i + 1
+                        holdY = j + 1
+                        if min_pos_x == None: min_pos_x = holdX
+                        if min_pos_y == None: min_pos_y = holdY
+                        if min_pos_y != None and min_pos_y > holdY: min_pos_y = holdY
+                        break
+            
+            max_pos_x = min_pos_x
+            max_pos_y = min_pos_y
+            
+            for i, x in enumerate(Inventory.Crafiting.grid):
+                for j, y in enumerate(x):
+                    if y != None:
+                        holdX = i + 1
+                        holdY = j + 1
+                        max_pos_x = holdX if holdX > max_pos_x else max_pos_x
+                        max_pos_y = holdY if holdY > max_pos_y else max_pos_y
+            
+            for x in Inventory.Crafiting.grid:
+                for y in x:
                     if y != None:
                         tempgrid.append(y)
                 else:
@@ -410,18 +443,29 @@ class Inventory:
                         CheckGrid.append(tempgrid)
                         tempgrid = []
             
+            if CheckGrid != []:
+                grid_size = [max_pos_x // min_pos_x, max_pos_y // min_pos_y]
+
             for recipe in Data.crafting_data['recipes']:
-                if CheckGrid == recipe['craft']:
-                    Inventory.Crafiting.ItemOnCraft = recipe['result']
-                    return
+                if recipe['shaped'] == True:
+                    if Inventory.Crafiting.grid == recipe['craft']:
+                        Inventory.Crafiting.ItemOnCraft = recipe['result']
+                        return
+                    else:
+                        Inventory.Crafiting.ItemOnCraft = None
                 else:
-                    Inventory.Crafiting.ItemOnCraft = None
+                    if CheckGrid == recipe['craft'] and grid_size == recipe['size']:
+                        Inventory.Crafiting.ItemOnCraft = recipe['result']
+                        return
+                    else:
+                        Inventory.Crafiting.ItemOnCraft = None
         
         def ExecuteCraft():
+            if Inventory.Crafiting.ItemOnCraft != None:
                 dx = pyxel.mouse_x - Inventory.Crafiting.CraftSlot[0]
                 dy = pyxel.mouse_y - Inventory.Crafiting.CraftSlot[1]
                 if 0 <= dx < 8 and 0 <= dy < 8:
-                    Inventory.Crafiting.grid = [[None, None],[None, None]]
+                    Inventory.Crafiting.grid = [[None, None, None],[None, None, None],[None, None, None]]
                     Inventory.AddItem(Inventory.Crafiting.ItemOnCraft['item'], Inventory.Crafiting.ItemOnCraft['amount'], None)
         
         def DrawItemsOnCraft():
@@ -435,6 +479,8 @@ class Inventory:
             if Inventory.Crafiting.ItemOnCraft != None:
                 item = next(item for item in Data.item_data['Items'] if item['name'] == Inventory.Crafiting.ItemOnCraft['item'])
                 pyxel.blt(Inventory.Crafiting.CraftSlot[0], Inventory.Crafiting.CraftSlot[1], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
+                pyxel.rect(Inventory.Crafiting.CraftSlot[0] + 6, Inventory.Crafiting.CraftSlot[1] + 4, 3, 5, 7)
+                pyxel.text(Inventory.Crafiting.CraftSlot[0] + 7, Inventory.Crafiting.CraftSlot[1] + 5, f'{Inventory.Crafiting.ItemOnCraft['amount']}', 0)
     
     def AddItem(Item, amount, KEY):
         i = next(i for i in Data.item_data['Items'] if i['name'] == Item)
@@ -451,7 +497,8 @@ class Inventory:
     def RemoveItem(Key, amount):
         if Inventory.Inventory[Key]['amount'] > 0:
             Inventory.Inventory[Key]['amount'] -= amount
-            if Inventory.Inventory[Key]['amount'] <= 0: Inventory.Inventory[Key]['Item'] = "Empty"
+            if Inventory.Inventory[Key]['amount'] <= 0:
+                Inventory.Inventory[Key]['Item'] = "Empty"
     
     def MoveItem(Amount):
         for key, Item in Inventory.Inventory.items():

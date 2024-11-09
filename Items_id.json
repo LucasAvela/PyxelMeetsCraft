@@ -438,6 +438,14 @@
             "type": "Tool",
             "drop": "Diamond_Sword",
             "stack": 1
+        },
+        {
+            "name": "Stick",
+            "local": {"x": 80, "y": 40},
+            "size": {"w": 8, "h": 8},
+            "type": "Item",
+            "drop": "Stick",
+            "stack": 8
         }
     ]
 }
