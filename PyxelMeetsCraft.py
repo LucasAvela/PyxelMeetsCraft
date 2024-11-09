@@ -143,8 +143,9 @@ class Gameplay:
                 if Inventory.Inventory[i]['Item'] != 'Empty':
                     j = next(j for j in Data.item_data['Items'] if j['name'] == Inventory.Inventory[i]['Item'])
                     pyxel.blt(Gameplay.UI.Hotbar_Items_pos[i], 116, 1, j['local']['x'], j['local']['y'], 8, 8, 2)
-                    pyxel.rect(Gameplay.UI.Horbar_ItemsAmount_pos[i], 122, 4, 5, 7)
-                    pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Inventory.Inventory[i]['amount']}', 0)
+                    if Inventory.Inventory[i]['amount'] > 1:
+                        pyxel.rect(Gameplay.UI.Horbar_ItemsAmount_pos[i], 122, 4, 5, 7)
+                        pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Inventory.Inventory[i]['amount']}', 0)
                             
         def Debug():
             pyxel.text(2, 1, f'x:{(pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8}\ny:{(pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8}', 7)
@@ -374,19 +375,13 @@ class Inventory:
         grid_pos = {
             (0, 0): {'grid': [0, 0], 'x': 18, 'y': 10},
             (0, 1): {'grid': [0, 1], 'x': 30, 'y': 10},
-            (0, 2): {'grid': [0, 2], 'x': 30 + 12, 'y': 10},
             (1, 0): {'grid': [1, 0], 'x': 18, 'y': 22},
             (1, 1): {'grid': [1, 1], 'x': 30, 'y': 22},
-            (1, 2): {'grid': [1, 2], 'x': 30 + 12, 'y': 22},
-            (2, 0): {'grid': [2, 0], 'x': 18, 'y': 22 + 12},
-            (2, 1): {'grid': [2, 1], 'x': 30, 'y': 22 + 12},
-            (2, 2): {'grid': [2, 2], 'x': 30 + 12, 'y': 22 + 12},
         }
         
         grid = [
-            [None, None, None],
-            [None, None, None],
-            [None, None, None]
+            [None, None],
+            [None, None],
         ]
         
         ItemOnCraft = None
@@ -445,7 +440,6 @@ class Inventory:
             
             if CheckGrid != []:
                 grid_size = [(max_pos_x + min_pos_x - 1)// min_pos_x, (max_pos_y + min_pos_y - 1) // min_pos_y]
-                print(max_pos_x ,'/', min_pos_x, '=', grid_size[0])
 
             for recipe in Data.crafting_data['recipes']:
                 if recipe['shaped'] == True:
@@ -466,7 +460,7 @@ class Inventory:
                 dx = pyxel.mouse_x - Inventory.Crafiting.CraftSlot[0]
                 dy = pyxel.mouse_y - Inventory.Crafiting.CraftSlot[1]
                 if 0 <= dx < 8 and 0 <= dy < 8:
-                    Inventory.Crafiting.grid = [[None, None, None], [None, None, None], [None, None, None]]
+                    Inventory.Crafiting.grid = [[None, None], [None, None]]
                     Inventory.AddItem(Inventory.Crafiting.ItemOnCraft['item'], Inventory.Crafiting.ItemOnCraft['amount'], None)
         
         def DrawItemsOnCraft():
@@ -552,8 +546,9 @@ class Inventory:
                 
                 if key != Inventory.Holding_key:
                     pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
-                    pyxel.rect(pos[0] + 6, pos[1] + 4, 3, 5, 7)
-                    pyxel.text(pos[0] + 7, pos[1] + 5, f'{Inventory.Inventory[key]['amount']}', 0)
+                    if Inventory.Inventory[key]['amount'] > 1:
+                        pyxel.rect(pos[0] + 6, pos[1] + 4, 3, 5, 7)
+                        pyxel.text(pos[0] + 7, pos[1] + 5, f'{Inventory.Inventory[key]['amount']}', 0)
     
     def DrawHoldingItemOnMouse():
         if Inventory.Holding_item_name != None:

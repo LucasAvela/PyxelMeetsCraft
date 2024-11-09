@@ -321,7 +321,7 @@
         },
         {
             "name": "Wooden_Shovel",
-            "local": {"x": 80, "y": 0},
+            "local": {"x": 80, "y": 16},
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Wooden_Shovel",
