@@ -605,13 +605,13 @@ class StateMachine:
 
 class Data:
     def Images():
-        pyxel.images[0].load(0, 0, './assets/sprites/Background_MainMenu.png')  # main menu bg
-        pyxel.images[1].load(0, 0, './assets/sprites/Sprite_sheet_0.png')       # blocks, items, and player
-        pyxel.images[2].load(0, 0, './assets/sprites/Background_Menus_ingame.png')
+        pyxel.images[0].load(0, 0, 'assets/sprites/Background_MainMenu.png')  # main menu bg
+        pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet_0.png')       # blocks, items, and player
+        pyxel.images[2].load(0, 0, 'assets/sprites/Background_Menus_ingame.png')
 
-    with open('blocks_id.json') as f: block_data = json.load(f)
-    with open('Items_id.json') as g: item_data = json.load(g)
-    with open('craftings_recipes.json') as h: crafting_data = json.load(h)
+    with open('assets/data/blocks_id.json') as f: block_data = json.load(f)
+    with open('assets/data/Items_id.json') as g: item_data = json.load(g)
+    with open('assets/data/craftings_recipes.json') as h: crafting_data = json.load(h)
     
     class SaveLoad:
             def SaveWorld():
