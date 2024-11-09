@@ -57,7 +57,7 @@ class MainMenu:
             font_u, font_v = button['Font']
             size_w, size_h = button['Size']
             
-            pyxel.blt(pos_x, pos_y, 0, font_u, font_v, size_w, size_h, 8)
+            pyxel.blt(pos_x, pos_y, 0, font_u, font_v, size_w, size_h, 2)
         
         for e in MainMenu.Transition.Animation_blocks:
             pyxel.rect(e[0], e[1], BLOCK_SIZE * 2, BLOCK_SIZE * 2, 0)
@@ -312,9 +312,6 @@ class Gameplay:
         
         if pyxel.btnp(pyxel.KEY_MINUS) and Gameplay.Atlas.LayerVisibility > 0:
             Gameplay.Atlas.LayerVisibility -= 1
-            
-        if pyxel.btnp(pyxel.KEY_0):
-            Data.SaveLoad.SaveWorld()
     
     def Update():
         Gameplay.Camera.CamController()
@@ -526,13 +523,16 @@ class Inventory:
                                 Inventory.AddItem(Inventory.Holding_item_name, quant, key)
                                 Inventory.RemoveItem(Inventory.Holding_key, quant)
                                 Inventory.Holding_item_amount -= Amount
+                                Inventory.Holding_item_name = None
+                                Inventory.Holding_item_amount = 0
+                                Inventory.Holding_key = None
                                 return
     
     def DeleteItem(Amount):
         if Inventory.Holding_key != None:
-            dx = pyxel.mouse_x - 104
-            dy = pyxel.mouse_y - 46
-            if 0 <= dx < 7 and 0 <= dy < 9:
+            dx = pyxel.mouse_x - 98
+            dy = pyxel.mouse_y - 44
+            if 0 <= dx < 15 and 0 <= dy < 15:
                 Inventory.RemoveItem(Inventory.Holding_key, Amount)
                 Inventory.Holding_item_amount -= Amount
                 if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
@@ -557,6 +557,13 @@ class Inventory:
             pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
             pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
             pyxel.text(pos[0] + 7, pos[1] + 5, f'{Inventory.Inventory[Inventory.Holding_key]['amount']}', 0)
+    
+    def Save():
+        dx = pyxel.mouse_x - 96
+        dy = pyxel.mouse_y - 6
+        
+        if 0 <= dx < 20 and 0 <= dy < 11:
+            Data.SaveLoad.SaveWorld()
             
     def Inputs():
         if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Gameplay')
@@ -565,6 +572,7 @@ class Inventory:
             Inventory.DeleteItem(Inventory.Holding_item_amount)
             Inventory.Crafiting.MoveItemsToCraft()
             Inventory.Crafiting.ExecuteCraft()
+            Inventory.Save()
             
         Inventory.Crafiting.CheckCrafting()
             
@@ -580,7 +588,7 @@ class Inventory:
         
         Gameplay.Camera.UICamera()
         
-        pyxel.blt(0, 0, 0, 0, 128, 128, 128, 2)
+        pyxel.blt(0, 0, 2, 0, 0, 128, 128, 2)
         Inventory.DrawItemsOnInventory()
         Inventory.Crafiting.DrawItemsOnCraft()
         Inventory.DrawHoldingItemOnMouse()
@@ -599,6 +607,7 @@ class Data:
     def Images():
         pyxel.images[0].load(0, 0, './assets/sprites/Background_MainMenu.png')  # main menu bg
         pyxel.images[1].load(0, 0, './assets/sprites/Sprite_sheet_0.png')       # blocks, items, and player
+        pyxel.images[2].load(0, 0, './assets/sprites/Background_Menus_ingame.png')
 
     with open('blocks_id.json') as f: block_data = json.load(f)
     with open('Items_id.json') as g: item_data = json.load(g)
