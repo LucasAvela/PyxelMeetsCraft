@@ -11,7 +11,7 @@ FPS = 60
 #-------------------------------- Game
 BLOCK_SIZE = 8
 GAME_STATE = 'MainMenu'
-GAME_STATE_LIST = ['MainMenu', 'Gameplay', 'Inventory']
+GAME_STATE_LIST = ['MainMenu', 'Gameplay', 'Menu']
 BLOCKSBYLAYER = [
     {'Bedrock_block': 100},
     {'Cobblestone_block': 90, 'Coal_Ore_block': 5, 'Iron_Ore_block': 2, 'Gold_Ore_block': 1.5, 'Diamond_Ore_block': 1, 'Emerald_Ore_block': 0.5},
@@ -140,12 +140,12 @@ class Gameplay:
                 pyxel.text(slot + 2, 110, str(i + 1), 1)
                 pyxel.text(slot + 1, 110, str(i + 1), 7)
                 
-                if Inventory.Inventory[i]['Item'] != 'Empty':
-                    j = next(j for j in Data.item_data['Items'] if j['name'] == Inventory.Inventory[i]['Item'])
+                if Menu.Inventory[i]['Item'] != None:
+                    j = next(j for j in Data.item_data['Items'] if j['name'] == Menu.Inventory[i]['Item'])
                     pyxel.blt(Gameplay.UI.Hotbar_Items_pos[i], 116, 1, j['local']['x'], j['local']['y'], 8, 8, 2)
-                    if Inventory.Inventory[i]['amount'] > 1:
+                    if Menu.Inventory[i]['amount'] > 1:
                         pyxel.rect(Gameplay.UI.Horbar_ItemsAmount_pos[i], 122, 4, 5, 7)
-                        pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Inventory.Inventory[i]['amount']}', 0)
+                        pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Menu.Inventory[i]['amount']}', 0)
                             
         def Debug():
             pyxel.text(2, 1, f'x:{(pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8}\ny:{(pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8}', 7)
@@ -268,7 +268,7 @@ class Gameplay:
                 else:
                     if Gameplay.Player.break_progress > 64:
                         block = next(block for block in Data.item_data['Items'] if block['name'] == Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'])
-                        Inventory.AddItem(block['drop'], 1, None)
+                        Menu.AddItem(block['drop'], 1, None)
                         Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': 'Air'}
                         Gameplay.Player.break_progress = 0
                         Gameplay.Player.hold_break = True
@@ -281,16 +281,16 @@ class Gameplay:
             target_x = (pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8
             target_y = (pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8
             layer = 0
-            selected_block = Inventory.Inventory[Gameplay.UI.Hotbar_Selected_slot]['Item']
+            selected_block = Menu.Inventory[Gameplay.UI.Hotbar_Selected_slot]['Item']
             block = next((block for block in Data.item_data['Items'] if block['name'] == selected_block), None)
             
-            if selected_block == 'Empty' or block['type'] != "Block":
+            if selected_block == None or block['type'] != "Block":
                 return
             
             while layer < Gameplay.Atlas.MaxLayerValue:
                 if (target_x, target_y, layer) not in Gameplay.Atlas.World or Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'] == 'Air':
                     Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': selected_block}
-                    Inventory.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
+                    Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
                     return
                 else:
                     layer += 1
@@ -299,15 +299,16 @@ class Gameplay:
             target_x = (pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8
             target_y = (pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8
             layer = 0
-            selected_block = Inventory.Inventory[Gameplay.UI.Hotbar_Selected_slot]['Item']
+            selected_block = Menu.Inventory[Gameplay.UI.Hotbar_Selected_slot]['Item']
             block = next((block for block in Data.item_data['Items'] if block['name'] == selected_block), None)
             
-            if selected_block != 'Empty':
+            if selected_block != None:
                 return
 
             while layer < Gameplay.Atlas.MaxLayerValue:
                 if Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'] == 'Workbench_block':
-                    print("menuuu")
+                    Menu.Actual_Menu = "Workbench"
+                    StateMachine.ChangeGameState("Menu")
                     return
                 else:
                     layer += 1
@@ -321,7 +322,7 @@ class Gameplay:
                 Gameplay.Player.AccessMenu()
                 Gameplay.Player.PlaceBlock()
             
-            if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Inventory')
+            if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Menu')
         
         def Update():
             Gameplay.Player.Inputs()
@@ -348,47 +349,50 @@ class Gameplay:
         
         Gameplay.UI.Draw()
 
-class Inventory:
+class Menu:
     Inventory = {
-        0: {'Pos': [18, 110], 'Item': 'Empty', 'amount': 0},
-        1: {'Pos': [30, 110], 'Item': 'Empty', 'amount': 0},
-        2: {'Pos': [42, 110], 'Item': 'Empty', 'amount': 0},
-        3: {'Pos': [54, 110], 'Item': 'Empty', 'amount': 0},
-        4: {'Pos': [66, 110], 'Item': 'Empty', 'amount': 0},
-        5: {'Pos': [78, 110], 'Item': 'Empty', 'amount': 0},
-        6: {'Pos': [90, 110], 'Item': 'Empty', 'amount': 0},
-        7: {'Pos': [102, 110], 'Item': 'Empty', 'amount': 0},
-        8: {'Pos': [18, 66], 'Item': 'Empty', 'amount': 0},
-        9: {'Pos': [30, 66], 'Item': 'Empty', 'amount': 0},
-        10: {'Pos': [42, 66], 'Item': 'Empty', 'amount': 0},
-        11: {'Pos': [54, 66], 'Item': 'Empty', 'amount': 0},
-        12: {'Pos': [66, 66], 'Item': 'Empty', 'amount': 0},
-        13: {'Pos': [78, 66], 'Item': 'Empty', 'amount': 0},
-        14: {'Pos': [90, 66], 'Item': 'Empty', 'amount': 0},
-        15: {'Pos': [102, 66], 'Item': 'Empty', 'amount': 0},
-        16: {'Pos': [18, 78], 'Item': 'Empty', 'amount': 0},
-        17: {'Pos': [30, 78], 'Item': 'Empty', 'amount': 0},
-        18: {'Pos': [42, 78], 'Item': 'Empty', 'amount': 0},
-        19: {'Pos': [54, 78], 'Item': 'Empty', 'amount': 0},
-        20: {'Pos': [66, 78], 'Item': 'Empty', 'amount': 0},
-        21: {'Pos': [78, 78], 'Item': 'Empty', 'amount': 0},
-        22: {'Pos': [90, 78], 'Item': 'Empty', 'amount': 0},
-        23: {'Pos': [102, 78], 'Item': 'Empty', 'amount': 0},
-        24: {'Pos': [18, 90], 'Item': 'Empty', 'amount': 0},
-        25: {'Pos': [30, 90], 'Item': 'Empty', 'amount': 0},
-        26: {'Pos': [42, 90], 'Item': 'Empty', 'amount': 0},
-        27: {'Pos': [54, 90], 'Item': 'Empty', 'amount': 0},
-        28: {'Pos': [66, 90], 'Item': 'Empty', 'amount': 0},
-        29: {'Pos': [78, 90], 'Item': 'Empty', 'amount': 0},
-        30: {'Pos': [90, 90], 'Item': 'Empty', 'amount': 0},
-        31: {'Pos': [102, 90], 'Item': 'Empty', 'amount': 0}
+        0: {'Pos': [18, 110], 'Item': None, 'amount': 0},
+        1: {'Pos': [30, 110], 'Item': None, 'amount': 0},
+        2: {'Pos': [42, 110], 'Item': None, 'amount': 0},
+        3: {'Pos': [54, 110], 'Item': None, 'amount': 0},
+        4: {'Pos': [66, 110], 'Item': None, 'amount': 0},
+        5: {'Pos': [78, 110], 'Item': None, 'amount': 0},
+        6: {'Pos': [90, 110], 'Item': None, 'amount': 0},
+        7: {'Pos': [102, 110], 'Item': None, 'amount': 0},
+        8: {'Pos': [18, 66], 'Item': None, 'amount': 0},
+        9: {'Pos': [30, 66], 'Item': None, 'amount': 0},
+        10: {'Pos': [42, 66], 'Item': None, 'amount': 0},
+        11: {'Pos': [54, 66], 'Item': None, 'amount': 0},
+        12: {'Pos': [66, 66], 'Item': None, 'amount': 0},
+        13: {'Pos': [78, 66], 'Item': None, 'amount': 0},
+        14: {'Pos': [90, 66], 'Item': None, 'amount': 0},
+        15: {'Pos': [102, 66], 'Item': None, 'amount': 0},
+        16: {'Pos': [18, 78], 'Item': None, 'amount': 0},
+        17: {'Pos': [30, 78], 'Item': None, 'amount': 0},
+        18: {'Pos': [42, 78], 'Item': None, 'amount': 0},
+        19: {'Pos': [54, 78], 'Item': None, 'amount': 0},
+        20: {'Pos': [66, 78], 'Item': None, 'amount': 0},
+        21: {'Pos': [78, 78], 'Item': None, 'amount': 0},
+        22: {'Pos': [90, 78], 'Item': None, 'amount': 0},
+        23: {'Pos': [102, 78], 'Item': None, 'amount': 0},
+        24: {'Pos': [18, 90], 'Item': None, 'amount': 0},
+        25: {'Pos': [30, 90], 'Item': None, 'amount': 0},
+        26: {'Pos': [42, 90], 'Item': None, 'amount': 0},
+        27: {'Pos': [54, 90], 'Item': None, 'amount': 0},
+        28: {'Pos': [66, 90], 'Item': None, 'amount': 0},
+        29: {'Pos': [78, 90], 'Item': None, 'amount': 0},
+        30: {'Pos': [90, 90], 'Item': None, 'amount': 0},
+        31: {'Pos': [102, 90], 'Item': None, 'amount': 0}
     }
     
+    Holding_Item = False
     Holding_item_name = None
     Holding_item_amount = 0
-    Holding_key = None
     
-    class Crafiting:
+    Menus_names = ['Inventory', 'Workbench', 'Chest', 'Furnace']
+    Actual_Menu = 'Inventory'
+    
+    class inInventory:
         grid_pos = {
             (0, 0): {'grid': [0, 0], 'x': 18, 'y': 10},
             (0, 1): {'grid': [0, 1], 'x': 30, 'y': 10},
@@ -398,34 +402,106 @@ class Inventory:
         
         grid = [
             [None, None],
-            [None, None],
+            [None, None]
         ]
         
         ItemOnCraft = None
         CraftSlot = [30, 46]
         
-        def MoveItemsToCraft():
-            for key, slot in Inventory.Crafiting.grid_pos.items():
+        def Save():
+            dx = pyxel.mouse_x - 96
+            dy = pyxel.mouse_y - 6
+            
+            if 0 <= dx < 20 and 0 <= dy < 11:
+                Data.SaveLoad.SaveWorld()
+        
+        def Update():
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+                Menu.CraftingFunction.MoveItemToCraft(Menu.inInventory.grid_pos, Menu.inInventory.grid)
+                Menu.CraftingFunction.ExecuteCraft(Menu.inInventory.ItemOnCraft, Menu.inInventory.CraftSlot)
+                Menu.inInventory.Save()
+            
+            Menu.inInventory.ItemOnCraft = Menu.CraftingFunction.CheckCrafting(Menu.inInventory.grid)
+            
+        def Draw():
+            for i, x in enumerate(Menu.inInventory.grid):
+                for j, y in enumerate(x):
+                    if Menu.inInventory.grid[i][j] == None: continue
+                    
+                    item = next(item for item in Data.item_data['Items'] if item['name'] == Menu.inInventory.grid[i][j])
+                    pyxel.blt(Menu.inInventory.grid_pos[(i, j)]['x'], 
+                              Menu.inInventory.grid_pos[(i, j)]['y'], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
+            
+            if Menu.inInventory.ItemOnCraft != None:
+                item = next(item for item in Data.item_data['Items'] if item['name'] == Menu.inInventory.ItemOnCraft['item'])
+                pyxel.blt(Menu.inInventory.CraftSlot[0], Menu.inInventory.CraftSlot[1], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
+     
+    class inWorkbench:
+        grid_pos = {
+            (0, 0): {'grid': [0, 0], 'x': 30, 'y': 18},
+            (0, 1): {'grid': [0, 1], 'x': 42, 'y': 18},
+            (0, 2): {'grid': [0, 2], 'x': 54, 'y': 18},
+            (1, 0): {'grid': [1, 0], 'x': 30, 'y': 30},
+            (1, 1): {'grid': [1, 1], 'x': 42, 'y': 30},
+            (1, 2): {'grid': [1, 2], 'x': 54, 'y': 30},
+            (2, 0): {'grid': [2, 0], 'x': 30, 'y': 42},
+            (2, 1): {'grid': [2, 1], 'x': 42, 'y': 42},
+            (2, 2): {'grid': [2, 2], 'x': 54, 'y': 42},
+        }
+        
+        grid = [
+            [None, None, None],
+            [None, None, None],
+            [None, None, None]
+        ]
+        
+        ItemOnCraft = None
+        CraftSlot = [90, 30]
+        
+        def Update():
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+                Menu.CraftingFunction.MoveItemToCraft(Menu.inWorkbench.grid_pos, Menu.inWorkbench.grid)
+                Menu.CraftingFunction.ExecuteCraft(Menu.inWorkbench.ItemOnCraft, Menu.inWorkbench.CraftSlot)
+            
+            Menu.inWorkbench.ItemOnCraft = Menu.CraftingFunction.CheckCrafting(Menu.inWorkbench.grid)
+        
+        def Draw():
+            for i, x in enumerate(Menu.inWorkbench.grid):
+                for j, y in enumerate(x):
+                    if Menu.inWorkbench.grid[i][j] == None: continue
+                    
+                    item = next(item for item in Data.item_data['Items'] if item['name'] == Menu.inWorkbench.grid[i][j])
+                    pyxel.blt(Menu.inWorkbench.grid_pos[(i, j)]['x'], 
+                              Menu.inWorkbench.grid_pos[(i, j)]['y'], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
+            
+            if Menu.inWorkbench.ItemOnCraft != None:
+                item = next(item for item in Data.item_data['Items'] if item['name'] == Menu.inWorkbench.ItemOnCraft['item'])
+                pyxel.blt(Menu.inWorkbench.CraftSlot[0], Menu.inWorkbench.CraftSlot[1], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
+             
+    class CraftingFunction:
+        def MoveItemToCraft(matriz_pos, matriz):
+            for key, slot in matriz_pos.items():
                 dx = pyxel.mouse_x - slot['x']
                 dy = pyxel.mouse_y - slot['y']
                 
                 if 0 <= dx < 8 and 0 <= dy < 8:
-                    if Inventory.Holding_key != None:
-                        if Inventory.Crafiting.grid[slot['grid'][0]][slot['grid'][1]] == None:
-                            Inventory.Crafiting.grid[slot['grid'][0]][slot['grid'][1]] = Inventory.Holding_item_name
-                            Inventory.Holding_item_amount -= 1
-                            Inventory.RemoveItem(Inventory.Holding_key, 1)
-                            if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
-                    elif Inventory.Crafiting.grid[Inventory.Crafiting.grid_pos[key]['grid'][0]][Inventory.Crafiting.grid_pos[key]['grid'][1]] != None:
-                        Inventory.AddItem(Inventory.Crafiting.grid[Inventory.Crafiting.grid_pos[key]['grid'][0]][Inventory.Crafiting.grid_pos[key]['grid'][1]], 1, None)
-                        Inventory.Crafiting.grid[Inventory.Crafiting.grid_pos[key]['grid'][0]][Inventory.Crafiting.grid_pos[key]['grid'][1]] = None
+                    if Menu.Holding_Item:
+                        if matriz[slot['grid'][0]][slot['grid'][1]] == None:
+                            matriz[slot['grid'][0]][slot['grid'][1]] = Menu.Holding_item_name
+                            Menu.Holding_item_amount -= 1
+                            if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
+                    elif matriz[slot['grid'][0]][slot['grid'][1]] != None:
+                        Menu.Holding_item_name = matriz[slot['grid'][0]][slot['grid'][1]]
+                        matriz[slot['grid'][0]][slot['grid'][1]] = None
+                        Menu.Holding_item_amount = 1
+                        Menu.Holding_Item = True
         
-        def CheckCrafting():
+        def CheckCrafting(matriz):
             CheckGrid = []
-            tempgrid = []
+            tempGrid = []
             
             min_pos_x = None; max_pos_x = None; min_pos_y = None; max_pos_y = None
-            for i, x in enumerate(Inventory.Crafiting.grid):
+            for i, x in enumerate(matriz):
                 for j, y in enumerate(x):
                     if y != None:
                         holdX = i + 1
@@ -438,184 +514,173 @@ class Inventory:
             max_pos_x = min_pos_x
             max_pos_y = min_pos_y
             
-            for i, x in enumerate(Inventory.Crafiting.grid):
+            for i, x in enumerate(matriz):
                 for j, y in enumerate(x):
                     if y != None:
                         holdX = i + 1
                         holdY = j + 1
                         max_pos_x = holdX if holdX > max_pos_x else max_pos_x
                         max_pos_y = holdY if holdY > max_pos_y else max_pos_y
-            
-            for x in Inventory.Crafiting.grid:
+                        
+            for x in matriz:
                 for y in x:
                     if y != None:
-                        tempgrid.append(y)
+                        tempGrid.append(y)
                 else:
-                    if tempgrid != []:
-                        CheckGrid.append(tempgrid)
-                        tempgrid = []
+                    if tempGrid != []:
+                        CheckGrid.append(tempGrid)
+                        tempGrid = []
             
             if CheckGrid != []:
                 grid_size = [(max_pos_x + min_pos_x - 1)// min_pos_x, (max_pos_y + min_pos_y - 1) // min_pos_y]
-
+            
             for recipe in Data.crafting_data['recipes']:
                 if recipe['shaped'] == True:
-                    if Inventory.Crafiting.grid == recipe['craft']:
-                        Inventory.Crafiting.ItemOnCraft = recipe['result']
-                        return
-                    else:
-                        Inventory.Crafiting.ItemOnCraft = None
+                    if matriz == recipe['craft']:
+                        return recipe['result']
                 else:
                     if CheckGrid == recipe['craft'] and grid_size == recipe['size']:
-                        Inventory.Crafiting.ItemOnCraft = recipe['result']
+                        return recipe['result']
+        
+        def ExecuteCraft(itemOnCraft, craftSlot):
+            if itemOnCraft != None:
+                dx = pyxel.mouse_x - craftSlot[0]
+                dy = pyxel.mouse_y - craftSlot[1]
+                if 0 <= dx < 8 and 0 <= dy < 8:
+                    if Menu.Holding_Item == False:
+                        Menu.CraftingFunction.CleanGrid()
+                        Menu.Holding_item_name = itemOnCraft['item']
+                        Menu.Holding_item_amount = itemOnCraft['amount']
+                        Menu.Holding_Item = True
                         return
                     else:
-                        Inventory.Crafiting.ItemOnCraft = None
+                        Menu.CraftingFunction.CleanGrid()
+                        Menu.AddItem(itemOnCraft['item'], itemOnCraft['amount'], None)
+                        return
         
-        def ExecuteCraft():
-            if Inventory.Crafiting.ItemOnCraft != None:
-                dx = pyxel.mouse_x - Inventory.Crafiting.CraftSlot[0]
-                dy = pyxel.mouse_y - Inventory.Crafiting.CraftSlot[1]
-                if 0 <= dx < 8 and 0 <= dy < 8:
-                    Inventory.Crafiting.grid = [[None, None], [None, None]]
-                    Inventory.AddItem(Inventory.Crafiting.ItemOnCraft['item'], Inventory.Crafiting.ItemOnCraft['amount'], None)
-        
-        def DrawItemsOnCraft():
-            for i, x in enumerate(Inventory.Crafiting.grid):
-                for j, y in enumerate(x):
-                    if Inventory.Crafiting.grid[i][j] == None: continue
-                
-                    item = next(item for item in Data.item_data['Items'] if item['name'] == Inventory.Crafiting.grid[i][j])
-                    pyxel.blt(Inventory.Crafiting.grid_pos[(i, j)]['x'], Inventory.Crafiting.grid_pos[(i, j)]['y'], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
-            
-            if Inventory.Crafiting.ItemOnCraft != None:
-                item = next(item for item in Data.item_data['Items'] if item['name'] == Inventory.Crafiting.ItemOnCraft['item'])
-                pyxel.blt(Inventory.Crafiting.CraftSlot[0], Inventory.Crafiting.CraftSlot[1], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
-                pyxel.rect(Inventory.Crafiting.CraftSlot[0] + 6, Inventory.Crafiting.CraftSlot[1] + 4, 3, 5, 7)
-                pyxel.text(Inventory.Crafiting.CraftSlot[0] + 7, Inventory.Crafiting.CraftSlot[1] + 5, f'{Inventory.Crafiting.ItemOnCraft['amount']}', 0)
+        def CleanGrid():
+            if Menu.Actual_Menu == "Inventory": Menu.inInventory.grid = [[None, None],[None, None]]
+            elif Menu.Actual_Menu == "Workbench": Menu.inWorkbench.grid = [[None, None, None],[None, None, None], [None, None, None]]
+            #elif Menu.Actual_Menu == "Chest": 
+            #elif Menu.Actual_Menu == "Furnace": 
     
     def AddItem(Item, amount, KEY):
         i = next(i for i in Data.item_data['Items'] if i['name'] == Item)
         if KEY == None:
-            for key, slot in Inventory.Inventory.items():
-                if slot['Item'] == "Empty" or (slot['Item'] == Item and slot['amount'] < i['stack']):
-                    Inventory.Inventory[key]['Item'] = Item
-                    Inventory.Inventory[key]['amount'] += amount
+            for key, slot in Menu.Inventory.items():
+                if slot['Item'] == None or (slot['Item'] == Item and slot['amount'] < i['stack']):
+                    Menu.Inventory[key]['Item'] = Item
+                    Menu.Inventory[key]['amount'] += amount
                     return
         else:
-            Inventory.Inventory[KEY]['Item'] = Item
-            Inventory.Inventory[KEY]['amount'] += amount
+            Menu.Inventory[KEY]['Item'] = Item
+            Menu.Inventory[KEY]['amount'] += amount
     
     def RemoveItem(Key, amount):
-        if Inventory.Inventory[Key]['amount'] > 0:
-            Inventory.Inventory[Key]['amount'] -= amount
-            if Inventory.Inventory[Key]['amount'] <= 0:
-                Inventory.Inventory[Key]['Item'] = "Empty"
+        if Menu.Inventory[Key]['amount'] > 0:
+            Menu.Inventory[Key]['amount'] -= amount
+            if Menu.Inventory[Key]['amount'] <= 0:
+                Menu.Inventory[Key]['Item'] = None
     
     def MoveItem(Amount):
-        for key, Item in Inventory.Inventory.items():
-                dx = pyxel.mouse_x - Inventory.Inventory[key]['Pos'][0]
-                dy = pyxel.mouse_y - Inventory.Inventory[key]['Pos'][1]
+        for key, Item in Menu.Inventory.items():
+                dx = pyxel.mouse_x - Menu.Inventory[key]['Pos'][0]
+                dy = pyxel.mouse_y - Menu.Inventory[key]['Pos'][1]
                 
                 if 0 <= dx < 8 and 0 <= dy < 8:
-                    if Inventory.Holding_key == None:
-                        if Item['Item'] != "Empty":
-                            Inventory.Holding_item_name = Item['Item']
-                            Inventory.Holding_item_amount = Item['amount']
-                            Inventory.Holding_key = key
+                    if not Menu.Holding_Item:
+                        if Item['Item'] != None:
+                            Menu.Holding_item_name = Item['Item']
+                            Menu.Holding_item_amount = Item['amount']
+                            Menu.Holding_Item = True
+                            Menu.RemoveItem(key, Item['amount'])
                             return
                     else:
-                        if key == Inventory.Holding_key:
-                            Inventory.Holding_item_name = None
-                            Inventory.Holding_item_amount = 0
-                            Inventory.Holding_key = None
+                        if Item['Item'] == None:
+                            Menu.Inventory[key]["Item"] = Menu.Holding_item_name
+                            Menu.Inventory[key]["amount"] = Amount
+                            Menu.Holding_item_amount -= Amount
+                            if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
                             return
-                        elif Item['Item'] == "Empty" or Item['Item'] == Inventory.Holding_item_name:
-                            if Inventory.Holding_item_amount + Item['amount'] <= 8:
-                                Inventory.AddItem(Inventory.Holding_item_name, Amount, key)
-                                Inventory.RemoveItem(Inventory.Holding_key, Amount)
-                                Inventory.Holding_item_amount -= Amount
-                                if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
+                        elif Item['Item'] == Menu.Holding_item_name:
+                            i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
+                            if Item['amount'] + Amount <= i['stack']:
+                                Menu.Inventory[key]["amount"] += Amount
+                                Menu.Holding_item_amount -= Amount
+                                if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
                                 return
-                            elif Item['amount'] < 8:
-                                quant = 8 - Item['amount']
+                            else:
+                                quant = i['stack'] - Item['amount']
                                 if quant < 0: quant = quant * -1
-                                Inventory.AddItem(Inventory.Holding_item_name, quant, key)
-                                Inventory.RemoveItem(Inventory.Holding_key, quant)
-                                Inventory.Holding_item_amount -= Amount
-                                Inventory.Holding_item_name = None
-                                Inventory.Holding_item_amount = 0
-                                Inventory.Holding_key = None
-                                return
-    
+                                while quant > 0:
+                                    Menu.Inventory[key]["amount"] += 1
+                                    Menu.Holding_item_amount -= 1
+                                    quant -= 1
+                                    
     def DeleteItem(Amount):
-        if Inventory.Holding_key != None:
-            dx = pyxel.mouse_x - 98
-            dy = pyxel.mouse_y - 44
-            if 0 <= dx < 15 and 0 <= dy < 15:
-                Inventory.RemoveItem(Inventory.Holding_key, Amount)
-                Inventory.Holding_item_amount -= Amount
-                if Inventory.Holding_item_amount <= 0: Inventory.Holding_item_name = None; Inventory.Holding_key = None
-            
+        if Menu.Holding_Item:
+            dx = pyxel.mouse_x - 101
+            dy = pyxel.mouse_y - 46
+            if 0 <= dx < 7 and 0 <= dy < 9:
+                if Amount >= Menu.Holding_item_amount:
+                    Menu.Holding_Item = False
+                    Menu.Holding_item_name = None
+                    Menu.Holding_item_amount = 0
+                else:
+                    Menu.Holding_item_amount -= Amount
     
     def DrawItemsOnInventory():
-        for key, Item in Inventory.Inventory.items():
-            if Item['Item'] != 'Empty':
+        for key, Item in Menu.Inventory.items():
+            if Item['Item'] != None:
                 i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
-                pos = Inventory.Inventory[key]['Pos']
+                pos = Menu.Inventory[key]['Pos']
+                pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
+                pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
+                pyxel.text(pos[0] + 7, pos[1] + 5, f'{Item['amount']}', 0)
                 
-                if key != Inventory.Holding_key:
-                    pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
-                    if Inventory.Inventory[key]['amount'] > 1:
-                        pyxel.rect(pos[0] + 6, pos[1] + 4, 3, 5, 7)
-                        pyxel.text(pos[0] + 7, pos[1] + 5, f'{Inventory.Inventory[key]['amount']}', 0)
+    def DrawItemOnMouse():
+        i = next(i for i in Data.item_data['Items'] if i['name'] == Menu.Holding_item_name)
+        pos = [pyxel.mouse_x + 4, pyxel.mouse_y + 8]
+        pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
+        pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
+        pyxel.text(pos[0] + 7, pos[1] + 5, f'{Menu.Holding_item_amount}', 0)
     
-    def DrawHoldingItemOnMouse():
-        if Inventory.Holding_item_name != None:
-            i = next(i for i in Data.item_data['Items'] if i['name'] == Inventory.Holding_item_name)
-            pos = [pyxel.mouse_x + 4, pyxel.mouse_y + 8]
-            pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
-            pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
-            pyxel.text(pos[0] + 7, pos[1] + 5, f'{Inventory.Inventory[Inventory.Holding_key]['amount']}', 0)
+    def DrawMenu():
+        if Menu.Actual_Menu == "Inventory": pyxel.blt(0, 0, 2, 0, 0, 128, 128, 2); Menu.inInventory.Draw()
+        elif Menu.Actual_Menu == "Workbench": pyxel.blt(0, 0, 2, 128, 0, 128, 128, 2); Menu.inWorkbench.Draw()
+        elif Menu.Actual_Menu == "Chest": pyxel.blt(0, 0, 2, 0, 128, 128, 128, 2)
+        elif Menu.Actual_Menu == "Furnace": pyxel.blt(0, 0, 2, 128, 128, 128, 128, 2)
     
-    def Save():
-        dx = pyxel.mouse_x - 96
-        dy = pyxel.mouse_y - 6
-        
-        if 0 <= dx < 20 and 0 <= dy < 11:
-            Data.SaveLoad.SaveWorld()
-            
     def Inputs():
-        if pyxel.btnp(pyxel.KEY_E): StateMachine.ChangeGameState('Gameplay')
+        if pyxel.btnp(pyxel.KEY_E): 
+            StateMachine.ChangeGameState('Gameplay')
+            Menu.Actual_Menu = "Inventory"
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            Inventory.MoveItem(Inventory.Holding_item_amount)
-            Inventory.DeleteItem(Inventory.Holding_item_amount)
-            Inventory.Crafiting.MoveItemsToCraft()
-            Inventory.Crafiting.ExecuteCraft()
-            Inventory.Save()
-            
-        Inventory.Crafiting.CheckCrafting()
-            
+            Menu.MoveItem(Menu.Holding_item_amount)
+            Menu.DeleteItem(Menu.Holding_item_amount)
+        
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
-            Inventory.MoveItem(1)
-            Inventory.DeleteItem(1)
+            Menu.MoveItem(1)
+            Menu.DeleteItem(1)
     
     def Update():
-        Inventory.Inputs()
+        Menu.Inputs()
+        if Menu.Actual_Menu == "Inventory": Menu.inInventory.Update()
+        elif Menu.Actual_Menu == "Workbench": Menu.inWorkbench.Update()
+        #elif Menu.Actual_Menu == "Chest": 
+        #elif Menu.Actual_Menu == "Furnace": 
     
     def Draw():
         Gameplay.Atlas.RendererLayer()
-        
         Gameplay.Camera.UICamera()
         
-        pyxel.blt(0, 0, 2, 0, 0, 128, 128, 2)
-        Inventory.DrawItemsOnInventory()
-        Inventory.Crafiting.DrawItemsOnCraft()
-        Inventory.DrawHoldingItemOnMouse()
-        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 2)
+        Menu.DrawMenu() # Draw Actual Menu
+        Menu.DrawItemsOnInventory()
+        if Menu.Holding_Item: Menu.DrawItemOnMouse()
+        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 2) # Draw Mouse
         
         pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
-
+    
 class StateMachine:
     def ChangeGameState(newState):
         global GAME_STATE
@@ -636,7 +701,7 @@ class Data:
     class SaveLoad:
             def SaveWorld():
                 world_data = {str(key): value for key, value in Gameplay.Atlas.World.items()}
-                inventory_data = {str(key): value for key, value in Inventory.Inventory.items()}
+                inventory_data = {str(key): value for key, value in Menu.Inventory.items()}
                 
                 save_data = {
                     'world': world_data,
@@ -656,7 +721,7 @@ class Data:
                         Gameplay.Atlas.World = {eval(key): value for key, value in world_data.items()}
                         
                         inventory_data = save_data.get('inventory', {})
-                        Inventory.Inventory = {int(key): value for key, value in inventory_data.items()}
+                        Menu.Inventory = {int(key): value for key, value in inventory_data.items()}
                         
                     print("Game loaded from save_data.json")
                 except FileNotFoundError:
@@ -675,12 +740,12 @@ class App:
     def update(self):
         if GAME_STATE == 'MainMenu': MainMenu.Update()
         elif GAME_STATE == 'Gameplay': Gameplay.Update()
-        elif GAME_STATE == 'Inventory': Inventory.Update()
+        elif GAME_STATE == 'Menu': Menu.Update()
     
     def draw(self):
         pyxel.cls(0)
         if GAME_STATE == 'MainMenu': MainMenu.Draw()
         elif GAME_STATE == 'Gameplay': Gameplay.Draw()
-        elif GAME_STATE == 'Inventory': Inventory.Draw()
+        elif GAME_STATE == 'Menu': Menu.Draw()
 
 App()
