@@ -6,7 +6,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Grass_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Grass_Dirty_block",
@@ -14,7 +15,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Dirt_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Dirt_block",
@@ -22,7 +24,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Dirt_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Stone_block",
@@ -30,7 +33,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Cobblestone_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Cobblestone_block",
@@ -38,7 +42,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Cobblestone_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Bedrock_block",
@@ -46,7 +51,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Bedrock_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Coal_Ore_block",
@@ -54,7 +60,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Coal",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Iron_Ore_block",
@@ -62,7 +69,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Iron_raw",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Gold_Ore_block",
@@ -70,7 +78,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Gold_raw",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Diamond_Ore_block",
@@ -78,7 +87,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Diamond",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Emerald_Ore_block",
@@ -86,7 +96,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Emerald",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Wood_Log_block_Top",
@@ -94,7 +105,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Wood_Log_block_Top",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Wood_Log_block_Bottom",
@@ -102,7 +114,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Wood_Log_block_Bottom",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Wood_Plank_block",
@@ -110,7 +123,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Wood_Plank_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Leaves_block",
@@ -118,7 +132,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Leaves_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Workbench_block",
@@ -126,7 +141,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Workbench_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Chest_block",
@@ -134,7 +150,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Chest_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Furnace_block",
@@ -142,7 +159,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Furnace_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Door_block",
@@ -150,7 +168,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Door_block",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Bed",
@@ -158,7 +177,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Bed",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": true
         },
         {
             "name": "Bed_block_Top",
@@ -166,7 +186,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Bed",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": true
         },
         {
             "name": "Bed_block_Bottom",
@@ -174,7 +195,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Block",
             "drop": "Bed",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": true
         },
         {
             "name": "Coal",
@@ -182,7 +204,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Item",
             "drop": "Coal",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Iron_raw",
@@ -190,7 +213,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Item",
             "drop": "Iron_raw",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Iron_ingot",
@@ -198,7 +222,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Item",
             "drop": "Iron_ingot",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Gold_raw",
@@ -206,7 +231,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Item",
             "drop": "Gold_raw",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Gold_ingot",
@@ -214,7 +240,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Item",
             "drop": "Gold_ingot",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Diamond",
@@ -222,7 +249,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Item",
             "drop": "Diamond",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Emerald",
@@ -230,7 +258,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Item",
             "drop": "Emerald",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Apple",
@@ -238,7 +267,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Food",
             "drop": "Apple",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Golden_Apple",
@@ -246,7 +276,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Food",
             "drop": "Golden_Apple",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Porkchop_Raw",
@@ -254,7 +285,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Food",
             "drop": "Porkchop_Raw",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Porkchop_Cooked",
@@ -262,7 +294,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Food",
             "drop": "Porkchop_Cooked",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         },
         {
             "name": "Wooden_Pickaxe",
@@ -270,7 +303,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Wooden_Pickaxe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Stone_Pickaxe",
@@ -278,7 +312,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Stone_Pickaxe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Iron_Pickaxe",
@@ -286,7 +321,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Iron_Pickaxe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Golden_Pickaxe",
@@ -294,7 +330,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Golden_Pickaxe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Diamond_Pickaxe",
@@ -302,14 +339,17 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Diamond_Pickaxe",
-            "stack": 1
-        },        {
+            "stack": 1,
+            "placeSpecial": false
+        },
+        {
             "name": "Wooden_Axe",
             "local": {"x": 88, "y": 8},
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Wooden_Axe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Stone_Axe",
@@ -317,7 +357,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Stone_Axe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Iron_Axe",
@@ -325,7 +366,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Iron_Axe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Golden_Axe",
@@ -333,7 +375,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Golden_Axe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Diamond_Axe",
@@ -341,7 +384,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Diamond_Axe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Wooden_Shovel",
@@ -349,7 +393,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Wooden_Shovel",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Stone_Shovel",
@@ -357,7 +402,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Stone_Shovel",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Iron_Shovel",
@@ -365,7 +411,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Iron_Shovel",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Golden_Shovel",
@@ -373,7 +420,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Golden_Shovel",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Diamond_Shovel",
@@ -381,7 +429,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Diamond_Shovel",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Wooden_Hoe",
@@ -389,7 +438,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Wooden_Hoe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Stone_Hoe",
@@ -397,7 +447,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Stone_Hoe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Iron_Hoe",
@@ -405,7 +456,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Iron_Hoe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Golden_Hoe",
@@ -413,7 +465,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Golden_Hoe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Diamond_Hoe",
@@ -421,7 +474,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Diamond_Hoe",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Wooden_Sword",
@@ -429,7 +483,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Wooden_Sword",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Stone_Sword",
@@ -437,7 +492,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Stone_Sword",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Iron_Sword",
@@ -445,7 +501,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Iron_Sword",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Golden_Sword",
@@ -453,7 +510,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Golden_Sword",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Diamond_Sword",
@@ -461,7 +519,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Tool",
             "drop": "Diamond_Sword",
-            "stack": 1
+            "stack": 1,
+            "placeSpecial": false
         },
         {
             "name": "Stick",
@@ -469,7 +528,8 @@
             "size": {"w": 8, "h": 8},
             "type": "Item",
             "drop": "Stick",
-            "stack": 8
+            "stack": 8,
+            "placeSpecial": false
         }
     ]
 }

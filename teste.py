@@ -2,8 +2,10 @@ import pyxel
 
 class App:
     def __init__(self):
-        pyxel.init(160, 120, title="Hello Pyxel")
+        pyxel.init(128, 128, title="Hello Pyxel")
         pyxel.images[0].load(0, 0, "assets/pyxel_logo_38x16.png")
+        pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet_0.png')
+        pyxel.colors[11] = 0xFFFFFF
         pyxel.run(self.update, self.draw)
 
     def update(self):
@@ -16,8 +18,6 @@ class App:
 
     def draw(self):
         pyxel.cls(0)
-        pyxel.text(55, 41, "Hello, Pyxel!", 7)
-        pyxel.blt(61, 66, 0, 0, 0, 38, 16)
-
+        pyxel.blt(56, 56, 1, 0, 0, 8, 8)
 
 App()

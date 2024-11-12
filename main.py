@@ -165,12 +165,12 @@ class Gameplay:
 
     class Transition:
             transition_active = True
-            dither = 0
+            dither = -1
             
             def UpdateTransition():
                 if Gameplay.Transition.transition_active:
                     if Gameplay.Transition.dither < 1:
-                        Gameplay.Transition.dither += 0.01
+                        Gameplay.Transition.dither += 0.02
                         pyxel.dither(Gameplay.Transition.dither)
                     else:
                         Gameplay.Transition.transition_active = False
@@ -286,6 +286,7 @@ class Gameplay:
                         block = next(block for block in Data.item_data['Items'] if block['name'] == Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'])
                         Menu.AddItem(block['drop'], 1, None)
                         Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': 'Air'}
+                        if block['placeSpecial'] == True: Gameplay.Special.Break(block['name'], target_x, target_y, layer)
                         Gameplay.Player.break_progress = 0
                         Gameplay.Player.hold_break = True
                         return
@@ -305,8 +306,11 @@ class Gameplay:
             
             while layer < Gameplay.Atlas.MaxLayerValue:
                 if (target_x, target_y, layer) not in Gameplay.Atlas.World or Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'] == 'Air':
-                    Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': selected_block}
-                    Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
+                    if block['placeSpecial'] == True:
+                        Gameplay.Special.Place(selected_block, target_x, target_y, layer)
+                    else:
+                        Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': selected_block}
+                        Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
                     return
                 else:
                     layer += 1
@@ -342,7 +346,23 @@ class Gameplay:
         
         def Update():
             Gameplay.Player.Inputs()
-                
+
+    class Special:
+        def Place(block, x, y, layer):
+            if block == 'Bed':
+                if Gameplay.Atlas.World[(x, y - BLOCK_SIZE, layer)]['Block'] == "Air":
+                    Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Bed_block_Bottom"}
+                    Gameplay.Atlas.World[(x, y - BLOCK_SIZE, layer)] = {'Block': "Bed_block_Top"}
+                    Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
+        
+        def Break(block, x, y, layer):
+            if block == 'Bed_block_Bottom':
+                Gameplay.Atlas.World[(x, y, layer)] = {'Block': 'Air'}
+                Gameplay.Atlas.World[(x, y - BLOCK_SIZE, layer)] = {'Block': 'Air'}
+            elif block == 'Bed_block_Top':
+                Gameplay.Atlas.World[(x, y, layer)] = {'Block': 'Air'}
+                Gameplay.Atlas.World[(x, y + BLOCK_SIZE, layer)] = {'Block': 'Air'}       
+                         
     def Debug():
         if pyxel.btnp(pyxel.KEY_EQUALS) and Gameplay.Atlas.LayerVisibility < Gameplay.Atlas.MaxLayerValue:
             Gameplay.Atlas.LayerVisibility += 1
@@ -368,7 +388,7 @@ class Gameplay:
 
 class Menu:
     Inventory = {
-        0: {'Pos': [18, 110], 'Item': None, 'amount': 0},
+        0: {'Pos': [18, 110], 'Item': "Bed", 'amount': 100},
         1: {'Pos': [30, 110], 'Item': None, 'amount': 0},
         2: {'Pos': [42, 110], 'Item': None, 'amount': 0},
         3: {'Pos': [54, 110], 'Item': None, 'amount': 0},
@@ -705,9 +725,9 @@ class Menu:
 
 class Sound:
     def BackgroundMusic():
-        nt0="E0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrD2E2A0rrrF#2rD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrG0rrD0rrrrB0rrrrrrE0rrrrA0rrrrrrG0rrrrB0rrrrrrE0rrrD0A0rrrD2rD1rrrr"
-        nt1="E1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rB3rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrF#3E3F#1rrrD3rA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#2rrF#3rrA1rrrrB1rrrrrrE1rrrrE1rrrrrrD1rrrrB1rrrrrrE1rrrE3E1rrrF#3rG1rrrr"
-        nt2="rrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0A2F#2rrrrrrD3rA2rrrB0D2E2rrrG0A2F#2rrrrrrrrrB2rrrB0rrrrrG0rC#3rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrrF#2A2rrrrrrrrrrB2A2rrrE2D2rrrrrD2E2rrrrrrrrrrB2A2rrrE2rrrrD3rE2rrrrr"
+        nt0="rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrD2E2A0rrrF#2rD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrG0rrD0rrrrB0rrrrrrE0rrrrA0rrrrrrG0rrrrB0rrrrrrE0rrrD0A0rrrD2rD1"
+        nt1="rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rB3rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrF#3E3F#1rrrD3rA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#2rrF#3rrA1rrrrB1rrrrrrE1rrrrE1rrrrrrD1rrrrB1rrrrrrE1rrrE3E1rrrF#3rG1"
+        nt2="rrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0A2F#2rrrrrrD3rA2rrrB0D2E2rrrG0A2F#2rrrrrrrrrB2rrrB0rrrrrG0rC#3rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrrF#2A2rrrrrrrrrrB2A2rrrE2D2rrrrrD2E2rrrrrrrrrrB2A2rrrE2rrrrD3rE2r"
         
         pyxel.sounds[0].set(nt0, tones='T', volumes='4', effects='n', speed=45)
         pyxel.sounds[1].set(nt1, tones='T', volumes='4', effects='f', speed=45)
