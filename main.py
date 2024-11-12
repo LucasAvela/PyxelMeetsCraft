@@ -23,8 +23,8 @@ BLOCKSBYLAYER = [
 
 class MainMenu:
     Buttons = {
-        'Play': {'Pos': [8, 75], 'Font': [129, 1], 'Size': [48, 18]},
-        'Load': {'Pos': [72, 75], 'Font': [178, 1], 'Size': [48, 18]}
+        'Play': {'Pos': [17, 62], 'Font': [129, 1], 'Size': [94, 11]},
+        'Load': {'Pos': [17, 77], 'Font': [129, 13], 'Size': [94, 11]}
     }
     
     class Transition:
@@ -435,7 +435,9 @@ class Menu:
             if Menu.inInventory.ItemOnCraft != None:
                 item = next(item for item in Data.item_data['Items'] if item['name'] == Menu.inInventory.ItemOnCraft['item'])
                 pyxel.blt(Menu.inInventory.CraftSlot[0], Menu.inInventory.CraftSlot[1], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
-     
+                pyxel.rect(Menu.inInventory.CraftSlot[0] + 6, Menu.inInventory.CraftSlot[1] + 4, 5, 7, 7)
+                pyxel.text(Menu.inInventory.CraftSlot[0] + 7, Menu.inInventory.CraftSlot[1] + 5, f'{Menu.inInventory.ItemOnCraft['amount']}', 0)
+   
     class inWorkbench:
         grid_pos = {
             (0, 0): {'grid': [0, 0], 'x': 30, 'y': 18},
@@ -477,6 +479,8 @@ class Menu:
             if Menu.inWorkbench.ItemOnCraft != None:
                 item = next(item for item in Data.item_data['Items'] if item['name'] == Menu.inWorkbench.ItemOnCraft['item'])
                 pyxel.blt(Menu.inWorkbench.CraftSlot[0], Menu.inWorkbench.CraftSlot[1], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
+                pyxel.rect(Menu.inWorkbench.CraftSlot[0] + 6, Menu.inWorkbench.CraftSlot[1] + 4, 5, 7, 7)
+                pyxel.text(Menu.inWorkbench.CraftSlot[0] + 7, Menu.inWorkbench.CraftSlot[1] + 5, f'{Menu.inWorkbench.ItemOnCraft['amount']}', 0)
              
     class CraftingFunction:
         def MoveItemToCraft(matriz_pos, matriz):
@@ -635,8 +639,9 @@ class Menu:
                 i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
                 pos = Menu.Inventory[key]['Pos']
                 pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
-                pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
-                pyxel.text(pos[0] + 7, pos[1] + 5, f'{Item['amount']}', 0)
+                if Item['amount'] > 1:
+                    pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
+                    pyxel.text(pos[0] + 7, pos[1] + 5, f'{Item['amount']}', 0)
                 
     def DrawItemOnMouse():
         i = next(i for i in Data.item_data['Items'] if i['name'] == Menu.Holding_item_name)
