@@ -685,6 +685,20 @@ class Menu:
         pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 2) # Draw Mouse
         
         pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
+
+class Sound:
+    def BackgroundMusic():
+        nt0="E1rrrrrG1rrrrrA1rrrrrD1rrrrE1rrrrrG1rrrrrA1rrrrrD1rrrrE1rrrrrG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrrrA1rrrrrD1rrrrE1rF#1rG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrD3E3A1rrrF#3rD1rrrrE1rrF#1rG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrrrA1rrG1rrD1rrrrB1rrrrrrE1rrrrA1rrrrrrG1rrrrB1rrrrrrE1rrrD1A1rrrD3rD2rrrr"
+        nt1="E2rrrrrA2rrrrrF#2rrrrrA2rrrrE2rrrrrA2rrrrrF#2rrrrrA2rrrrE2rrrrrA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrrrF#2rrrrrA2rrrrE2rB4rA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrF#4E4F#2rrrD4rA2rrrrE2rrA3rA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrrrF#3rrF#4rrA2rrrrB2rrrrrrE2rrrrE2rrrrrrD2rrrrB2rrrrrrE2rrrE4E2rrrF#4rG2rrrr"
+        nt2="rrrF#1rrrrrB1rrrrrG1rrrrrrrrrrF#1rrrrrB1rrrrrG1rrrrrrrrrrF#1rrrrrB1rrrrrG1rrrrrrrrrrrB3rrrB1D3E3rrrG1F#3A3rrrrrrrrrB3rrrB1D3E3rrrG1A3F#3rrrrrrD4rA3rrrB1D3E3rrrG1A3F#3rrrrrrrrrB3rrrB1rrrrrG1rC#4rrrrrrrrrB3rrrB1D3E3rrrG1F#3A3rrrrrrrrrB3rrrB1D3E3rrrG1F#3A3rrrrrrrrrB3rrrB1D3E3rrrrF#3A3rrrrrrrrrrB3A3rrrE3D3rrrrrD3E3rrrrrrrrrrB3A3rrrE3rrrrD4rE3rrrrr"
+        
+        pyxel.sounds[0].set(nt0, tones='T', volumes='7', effects='n', speed=45)
+        pyxel.sounds[1].set(nt1, tones='T', volumes='7', effects='f', speed=45)
+        pyxel.sounds[2].set(nt2, tones='T', volumes='7', effects='n', speed=45)
+        
+        pyxel.play(0,0, loop=True)
+        pyxel.play(1,1, loop=True)
+        pyxel.play(2,2, loop=True)
     
 class StateMachine:
     def ChangeGameState(newState):
@@ -739,6 +753,7 @@ class App:
         pyxel.init(SCREEN_SIZE[0], SCREEN_SIZE[1], title=WINDOW_TITLE, display_scale=DISPLAY_SCALE, fps=FPS, quit_key=None)
         
         Data.Images()
+        Sound.BackgroundMusic()
 
         pyxel.run(self.update, self.draw)
         
