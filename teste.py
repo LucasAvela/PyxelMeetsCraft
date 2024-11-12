@@ -1,0 +1,23 @@
+import pyxel
+
+class App:
+    def __init__(self):
+        pyxel.init(160, 120, title="Hello Pyxel")
+        pyxel.images[0].load(0, 0, "assets/pyxel_logo_38x16.png")
+        pyxel.run(self.update, self.draw)
+
+    def update(self):
+        if pyxel.btnp(pyxel.KEY_Q):
+            pyxel.quit()
+        
+        old_colors = pyxel.colors.to_list()
+        if pyxel.btnp(pyxel.KEY_SPACE):
+            print(old_colors)
+
+    def draw(self):
+        pyxel.cls(0)
+        pyxel.text(55, 41, "Hello, Pyxel!", 7)
+        pyxel.blt(61, 66, 0, 0, 0, 38, 16)
+
+
+App()

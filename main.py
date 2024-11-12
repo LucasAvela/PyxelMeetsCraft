@@ -28,20 +28,24 @@ class MainMenu:
     }
     
     class Transition:
-        Animation_blocks = []
+        #Animation_blocks = []
+        #transition_timer = [0, 0]
         transition_active = False
-        transition_timer = [0, 0]
+        dither = 1
         
         def UpdateTransition():
             if MainMenu.Transition.transition_active:
-                if MainMenu.Transition.transition_timer[0] < SCREEN_SIZE[0] / BLOCK_SIZE:
-                    x = MainMenu.Transition.transition_timer[0] * 8
-                    y = MainMenu.Transition.transition_timer[1] * 8
-                    MainMenu.Transition.Animation_blocks.append([x, y])
-                    MainMenu.Transition.transition_timer[0] += 2
-                elif MainMenu.Transition.transition_timer[1] < SCREEN_SIZE[1] / BLOCK_SIZE: 
-                    MainMenu.Transition.transition_timer[0] = 0
-                    MainMenu.Transition.transition_timer[1] += 2
+                # if MainMenu.Transition.transition_timer[0] < SCREEN_SIZE[0] / BLOCK_SIZE:
+                #     x = MainMenu.Transition.transition_timer[0] * 8
+                #     y = MainMenu.Transition.transition_timer[1] * 8
+                #     MainMenu.Transition.Animation_blocks.append([x, y])
+                #     MainMenu.Transition.transition_timer[0] += 2
+                # elif MainMenu.Transition.transition_timer[1] < SCREEN_SIZE[1] / BLOCK_SIZE: 
+                #     MainMenu.Transition.transition_timer[0] = 0
+                #     MainMenu.Transition.transition_timer[1] += 2
+                if MainMenu.Transition.dither > 0:
+                    MainMenu.Transition.dither -= 0.02
+                    pyxel.dither(MainMenu.Transition.dither)
                 else:
                     MainMenu.Transition.transition_active = False
                     StateMachine.ChangeGameState(GAME_STATE_LIST[1])
@@ -59,8 +63,8 @@ class MainMenu:
             
             pyxel.blt(pos_x, pos_y, 0, font_u, font_v, size_w, size_h, 2)
         
-        for e in MainMenu.Transition.Animation_blocks:
-            pyxel.rect(e[0], e[1], BLOCK_SIZE * 2, BLOCK_SIZE * 2, 0)
+        #for e in MainMenu.Transition.Animation_blocks:
+            #pyxel.rect(e[0], e[1], BLOCK_SIZE * 2, BLOCK_SIZE * 2, 0)
     
     def ButtonFunc(button):
         if button == "Play":
@@ -158,6 +162,18 @@ class Gameplay:
             Gameplay.UI.DrawMouse()
             Gameplay.UI.Hotbar()
             if Gameplay.UI.Show_Debug: Gameplay.UI.Debug()
+
+    class Transition:
+            transition_active = True
+            dither = 0
+            
+            def UpdateTransition():
+                if Gameplay.Transition.transition_active:
+                    if Gameplay.Transition.dither < 1:
+                        Gameplay.Transition.dither += 0.01
+                        pyxel.dither(Gameplay.Transition.dither)
+                    else:
+                        Gameplay.Transition.transition_active = False
         
     class Optfine:
         def GetGenerationArea():
@@ -245,13 +261,13 @@ class Gameplay:
                 Gameplay.Player.frame_count = 0
                 Gameplay.Player.blint_mouse = not Gameplay.Player.blint_mouse
             
-            if Gameplay.Player.blint_mouse: pyxel.blt(mouse_x, mouse_y, 1, 72, 0, 8, 8, 2)
-            else: pyxel.blt(mouse_x, mouse_y, 1, 72, 8, 8, 8, 2)
+            if Gameplay.Player.blint_mouse: pyxel.blt(mouse_x, mouse_y, 1, 104, 56, 8, 8, 2)
+            else:                           pyxel.blt(mouse_x, mouse_y, 1, 104, 64, 8, 8, 2)
 
-            if 16 > Gameplay.Player.break_progress > 0: pyxel.blt(mouse_x, mouse_y, 1, 64, 0, 8, 8, 2)
-            elif 32 > Gameplay.Player.break_progress > 16: pyxel.blt(mouse_x, mouse_y, 1, 64, 8, 8, 8, 2)
-            elif 48 > Gameplay.Player.break_progress > 32: pyxel.blt(mouse_x, mouse_y, 1, 64, 16, 8, 8, 2)
-            elif 64 > Gameplay.Player.break_progress > 48: pyxel.blt(mouse_x, mouse_y, 1, 64, 24, 8, 8, 2)
+            if   16 > Gameplay.Player.break_progress >  0: pyxel.blt(mouse_x, mouse_y, 1, 120, 56, 8, 8, 2)
+            elif 32 > Gameplay.Player.break_progress > 16: pyxel.blt(mouse_x, mouse_y, 1, 120, 64, 8, 8, 2)
+            elif 48 > Gameplay.Player.break_progress > 32: pyxel.blt(mouse_x, mouse_y, 1, 120, 72, 8, 8, 2)
+            elif 64 > Gameplay.Player.break_progress > 48: pyxel.blt(mouse_x, mouse_y, 1, 120, 80, 8, 8, 2)
         
         def BreakBLock():
             target_x = (pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8
@@ -341,6 +357,7 @@ class Gameplay:
         Gameplay.UI.Update()
         Gameplay.Player.Update()
         
+        Gameplay.Transition.UpdateTransition()
         Gameplay.Debug()
     
     def Draw():
@@ -688,13 +705,13 @@ class Menu:
 
 class Sound:
     def BackgroundMusic():
-        nt0="E1rrrrrG1rrrrrA1rrrrrD1rrrrE1rrrrrG1rrrrrA1rrrrrD1rrrrE1rrrrrG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrrrA1rrrrrD1rrrrE1rF#1rG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrD3E3A1rrrF#3rD1rrrrE1rrF#1rG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrrrA1rrrrrD1rrrrE1rrF#1rG1rrrrrA1rrG1rrD1rrrrB1rrrrrrE1rrrrA1rrrrrrG1rrrrB1rrrrrrE1rrrD1A1rrrD3rD2rrrr"
-        nt1="E2rrrrrA2rrrrrF#2rrrrrA2rrrrE2rrrrrA2rrrrrF#2rrrrrA2rrrrE2rrrrrA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrrrF#2rrrrrA2rrrrE2rB4rA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrF#4E4F#2rrrD4rA2rrrrE2rrA3rA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrrrF#2rrrrrA2rrrrE2rrA3rA2rrrrrF#3rrF#4rrA2rrrrB2rrrrrrE2rrrrE2rrrrrrD2rrrrB2rrrrrrE2rrrE4E2rrrF#4rG2rrrr"
-        nt2="rrrF#1rrrrrB1rrrrrG1rrrrrrrrrrF#1rrrrrB1rrrrrG1rrrrrrrrrrF#1rrrrrB1rrrrrG1rrrrrrrrrrrB3rrrB1D3E3rrrG1F#3A3rrrrrrrrrB3rrrB1D3E3rrrG1A3F#3rrrrrrD4rA3rrrB1D3E3rrrG1A3F#3rrrrrrrrrB3rrrB1rrrrrG1rC#4rrrrrrrrrB3rrrB1D3E3rrrG1F#3A3rrrrrrrrrB3rrrB1D3E3rrrG1F#3A3rrrrrrrrrB3rrrB1D3E3rrrrF#3A3rrrrrrrrrrB3A3rrrE3D3rrrrrD3E3rrrrrrrrrrB3A3rrrE3rrrrD4rE3rrrrr"
+        nt0="E0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrD2E2A0rrrF#2rD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrG0rrD0rrrrB0rrrrrrE0rrrrA0rrrrrrG0rrrrB0rrrrrrE0rrrD0A0rrrD2rD1rrrr"
+        nt1="E1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rB3rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrF#3E3F#1rrrD3rA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#2rrF#3rrA1rrrrB1rrrrrrE1rrrrE1rrrrrrD1rrrrB1rrrrrrE1rrrE3E1rrrF#3rG1rrrr"
+        nt2="rrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0A2F#2rrrrrrD3rA2rrrB0D2E2rrrG0A2F#2rrrrrrrrrB2rrrB0rrrrrG0rC#3rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrrF#2A2rrrrrrrrrrB2A2rrrE2D2rrrrrD2E2rrrrrrrrrrB2A2rrrE2rrrrD3rE2rrrrr"
         
-        pyxel.sounds[0].set(nt0, tones='T', volumes='7', effects='n', speed=45)
-        pyxel.sounds[1].set(nt1, tones='T', volumes='7', effects='f', speed=45)
-        pyxel.sounds[2].set(nt2, tones='T', volumes='7', effects='n', speed=45)
+        pyxel.sounds[0].set(nt0, tones='T', volumes='4', effects='n', speed=45)
+        pyxel.sounds[1].set(nt1, tones='T', volumes='4', effects='f', speed=45)
+        pyxel.sounds[2].set(nt2, tones='T', volumes='4', effects='n', speed=45)
         
         pyxel.play(0,0, loop=True)
         pyxel.play(1,1, loop=True)
