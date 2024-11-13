@@ -15,6 +15,7 @@ GAME_STATE_LIST = ['MainMenu', 'Gameplay', 'Menu']
 BLOCKSBYLAYER = [
     {'Bedrock_block': 100},
     {'Cobblestone_block': 90, 'Coal_Ore_block': 5, 'Iron_Ore_block': 2, 'Gold_Ore_block': 1.5, 'Diamond_Ore_block': 1, 'Emerald_Ore_block': 0.5},
+    {'Stone_block': 95, 'Coal_Ore_block': 3.5, 'Iron_Ore_block': 1, 'Gold_Ore_block': 0.5},
     {'Stone_block': 50, 'Dirt_block': 50},
     {'Grass_block': 99, 'Grass_Dirty_block': 1},
     {'Tree_block': 0.5,'Air': 99.5},
@@ -23,38 +24,43 @@ BLOCKSBYLAYER = [
 
 class MainMenu:
     Buttons = {
-        'Play': {'Pos': [17, 62], 'Font': [129, 1], 'Size': [94, 11]},
-        'Load': {'Pos': [17, 77], 'Font': [129, 13], 'Size': [94, 11]}
+        'Play':     {'Pos': [17, 61], 'Font': [129, 56], 'Size': [94, 11]},
+        'Load':     {'Pos': [17, 74], 'Font': [129, 68], 'Size': [94, 11]},
+        'Options':  {'Pos': [17, 87], 'Font': [129, 80], 'Size': [46, 11]},
+        'Controls': {'Pos': [65, 87], 'Font': [177, 80], 'Size': [46, 11]}
     }
     
+    PyxelCraft_txt = [20, 5]
+    
     class Transition:
-        #Animation_blocks = []
-        #transition_timer = [0, 0]
+        dither = -0.5
+        intro_active = True
         transition_active = False
-        dither = 1
         
+        def UpdateIntro():
+            if MainMenu.Transition.intro_active:
+                    if MainMenu.Transition.dither < 1: 
+                        MainMenu.Transition.dither += 0.02
+                        pyxel.dither(MainMenu.Transition.dither)
+                    else:
+                        MainMenu.Transition.intro_active = False
+                    
         def UpdateTransition():
             if MainMenu.Transition.transition_active:
-                # if MainMenu.Transition.transition_timer[0] < SCREEN_SIZE[0] / BLOCK_SIZE:
-                #     x = MainMenu.Transition.transition_timer[0] * 8
-                #     y = MainMenu.Transition.transition_timer[1] * 8
-                #     MainMenu.Transition.Animation_blocks.append([x, y])
-                #     MainMenu.Transition.transition_timer[0] += 2
-                # elif MainMenu.Transition.transition_timer[1] < SCREEN_SIZE[1] / BLOCK_SIZE: 
-                #     MainMenu.Transition.transition_timer[0] = 0
-                #     MainMenu.Transition.transition_timer[1] += 2
                 if MainMenu.Transition.dither > 0:
                     MainMenu.Transition.dither -= 0.02
                     pyxel.dither(MainMenu.Transition.dither)
                 else:
-                    MainMenu.Transition.transition_active = False
                     StateMachine.ChangeGameState(GAME_STATE_LIST[1])
+                    MainMenu.Transition.transition_active = False
 
     def MouseDraw():
-        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 2)
+        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 0, 8, 8, 2)
         
     def Canvas():
         pyxel.blt(0, 0, 0, 0, 0, 128, 128)  # Background
+        
+        pyxel.blt(MainMenu.PyxelCraft_txt[0], MainMenu.PyxelCraft_txt[1], 0, 129, 1, 88, 54, 2) # Text
         
         for key, button in MainMenu.Buttons.items():
             pos_x, pos_y = button['Pos']
@@ -62,9 +68,6 @@ class MainMenu:
             size_w, size_h = button['Size']
             
             pyxel.blt(pos_x, pos_y, 0, font_u, font_v, size_w, size_h, 2)
-        
-        #for e in MainMenu.Transition.Animation_blocks:
-            #pyxel.rect(e[0], e[1], BLOCK_SIZE * 2, BLOCK_SIZE * 2, 0)
     
     def ButtonFunc(button):
         if button == "Play":
@@ -83,8 +86,9 @@ class MainMenu:
                     MainMenu.ButtonFunc(key)
                         
     def Update():
-        MainMenu.Inputs()
+        MainMenu.Transition.UpdateIntro()
         MainMenu.Transition.UpdateTransition()
+        if not MainMenu.Transition.intro_active and not MainMenu.Transition.transition_active: MainMenu.Inputs()
     
     def Draw():
         MainMenu.Canvas()
@@ -388,7 +392,7 @@ class Gameplay:
 
 class Menu:
     Inventory = {
-        0: {'Pos': [18, 110], 'Item': "Bed", 'amount': 100},
+        0: {'Pos': [18, 110], 'Item': None, 'amount': 0},
         1: {'Pos': [30, 110], 'Item': None, 'amount': 0},
         2: {'Pos': [42, 110], 'Item': None, 'amount': 0},
         3: {'Pos': [54, 110], 'Item': None, 'amount': 0},
@@ -719,7 +723,7 @@ class Menu:
         Menu.DrawMenu() # Draw Actual Menu
         Menu.DrawItemsOnInventory()
         if Menu.Holding_Item: Menu.DrawItemOnMouse()
-        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 120, 8, 8, 2) # Draw Mouse
+        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 0, 248, 0, 8, 8, 2) # Draw Mouse
         
         pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
 
@@ -753,6 +757,43 @@ class Data:
     with open('assets/data/blocks_id.json') as f: block_data = json.load(f)
     with open('assets/data/Items_id.json') as g: item_data = json.load(g)
     with open('assets/data/craftings_recipes.json') as h: crafting_data = json.load(h)
+
+    def CollorPallets(n):
+        if n ==0:
+            pyxel.colors[0] = 0x000000
+            pyxel.colors[1] = 0x2B335F
+            pyxel.colors[2] = 0x7E2072
+            pyxel.colors[3] = 0x19959C
+            pyxel.colors[4] = 0x8B4852
+            pyxel.colors[5] = 0x395C98
+            pyxel.colors[6] = 0xA9C1FF
+            pyxel.colors[7] = 0xEEEEEE
+            pyxel.colors[8] = 0xD4186C
+            pyxel.colors[9] = 0xD38441
+            pyxel.colors[10] = 0xE9C35B
+            pyxel.colors[11] = 0x70C6A9
+            pyxel.colors[12] = 0x7696D3
+            pyxel.colors[13] = 0xA3A3A3
+            pyxel.colors[14] = 0xFF9798
+            pyxel.colors[15] = 0xEDC7B0
+            
+        elif n == 1:
+            pyxel.colors[0] = 0x000000
+            pyxel.colors[1] = 0x27275f
+            pyxel.colors[2] = 0x511d72
+            pyxel.colors[3] = 0x19588b
+            pyxel.colors[4] = 0x573152
+            pyxel.colors[5] = 0x2e3b89
+            pyxel.colors[6] = 0x666ebc
+            pyxel.colors[7] = 0x8984b4
+            pyxel.colors[8] = 0x7c186c
+            pyxel.colors[9] = 0x7b4f41
+            pyxel.colors[10] = 0x866f5b
+            pyxel.colors[11] = 0x4a7091
+            pyxel.colors[12] = 0x4d58ac
+            pyxel.colors[13] = 0x635f8e
+            pyxel.colors[14] = 0x915989
+            pyxel.colors[15] = 0x887195
     
     class SaveLoad:
             def SaveWorld():

@@ -75,7 +75,7 @@
         },
         {
             "name": "Tree_block",
-            "local": {"x": 0, "y": 40},
+            "local": {"x": 0, "y": 120},
             "size": {"w": 8, "h": 8},
             "Colision": true
         },
