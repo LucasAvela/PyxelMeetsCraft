@@ -449,6 +449,18 @@ class Menu:
         ItemOnCraft = None
         CraftSlot = [30, 46]
         
+        def DeleteItem(Amount):
+            if Menu.Holding_Item:
+                dx = pyxel.mouse_x - 101
+                dy = pyxel.mouse_y - 46
+                if 0 <= dx < 7 and 0 <= dy < 9:
+                    if Amount >= Menu.Holding_item_amount:
+                        Menu.Holding_Item = False
+                        Menu.Holding_item_name = None
+                        Menu.Holding_item_amount = 0
+                    else:
+                        Menu.Holding_item_amount -= Amount
+        
         def Save():
             dx = pyxel.mouse_x - 96
             dy = pyxel.mouse_y - 6
@@ -460,7 +472,11 @@ class Menu:
             if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
                 Menu.CraftingFunction.MoveItemToCraft(Menu.inInventory.grid_pos, Menu.inInventory.grid)
                 Menu.CraftingFunction.ExecuteCraft(Menu.inInventory.ItemOnCraft, Menu.inInventory.CraftSlot)
+                Menu.inInventory.DeleteItem(Menu.Holding_item_amount)
                 Menu.inInventory.Save()
+        
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
+                Menu.inInventory.DeleteItem(1)
             
             Menu.inInventory.ItemOnCraft = Menu.CraftingFunction.CheckCrafting(Menu.inInventory.grid)
             
@@ -661,18 +677,6 @@ class Menu:
                                     Menu.Inventory[key]["amount"] += 1
                                     Menu.Holding_item_amount -= 1
                                     quant -= 1
-                                    
-    def DeleteItem(Amount):
-        if Menu.Holding_Item:
-            dx = pyxel.mouse_x - 101
-            dy = pyxel.mouse_y - 46
-            if 0 <= dx < 7 and 0 <= dy < 9:
-                if Amount >= Menu.Holding_item_amount:
-                    Menu.Holding_Item = False
-                    Menu.Holding_item_name = None
-                    Menu.Holding_item_amount = 0
-                else:
-                    Menu.Holding_item_amount -= Amount
     
     def DrawItemsOnInventory():
         for key, Item in Menu.Inventory.items():
@@ -701,13 +705,12 @@ class Menu:
         if pyxel.btnp(pyxel.KEY_E): 
             StateMachine.ChangeGameState('Gameplay')
             Menu.Actual_Menu = "Inventory"
+        
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             Menu.MoveItem(Menu.Holding_item_amount)
-            Menu.DeleteItem(Menu.Holding_item_amount)
         
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
             Menu.MoveItem(1)
-            Menu.DeleteItem(1)
     
     def Update():
         Menu.Inputs()
