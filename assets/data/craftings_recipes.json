@@ -54,6 +54,16 @@
             ]
         },
         {
+            "result": {"item": "Chest_block", "amount": 4},
+            "size": [3, 3],
+            "shaped": true,
+            "craft": [
+                ["Wood_Log_block_Bottom", "Wood_Log_block_Bottom", "Wood_Log_block_Bottom"],
+                ["Wood_Log_block_Bottom",           null         , "Wood_Log_block_Bottom"],
+                ["Wood_Log_block_Bottom", "Wood_Log_block_Bottom", "Wood_Log_block_Bottom"]
+            ]
+        },
+        {
             "result": {"item": "Furnace_block", "amount": 1},
             "size": [3, 3],
             "shaped": true,

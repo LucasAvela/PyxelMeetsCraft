@@ -1,6 +1,7 @@
 import pyxel
 import json
 import random
+import copy
 
 #-------------------------------- App
 SCREEN_SIZE = [128, 128]
@@ -391,6 +392,12 @@ class Gameplay:
                     Menu.Actual_Menu = "Workbench"
                     StateMachine.ChangeGameState("Menu")
                     return
+                elif Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'] == 'Chest_block':
+                    Menu.inChest.actual_inventory = Gameplay.Atlas.Entities[(target_x, target_y, layer)]['Inventory']
+                    Menu.inChest.actual_chest = [target_x, target_y, layer]
+                    Menu.Actual_Menu = "Chest"
+                    StateMachine.ChangeGameState("Menu")
+                    return
                 else:
                     layer += 1
             
@@ -415,6 +422,12 @@ class Gameplay:
                     Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Bed_block_Bottom"}
                     Gameplay.Atlas.World[(x, y - BLOCK_SIZE, layer)] = {'Block': "Bed_block_Top"}
                     Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
+                    
+            elif block == "Chest_block":
+                Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Chest_block"}
+                Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': copy.deepcopy(Menu.chest_inventory)}
+            
+            Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
         
         def Break(block, x, y, layer):
             if block == 'Bed_block_Bottom':
@@ -430,6 +443,10 @@ class Gameplay:
         
         if pyxel.btnp(pyxel.KEY_MINUS) and Gameplay.Atlas.LayerVisibility > 0:
             Gameplay.Atlas.LayerVisibility -= 1
+            
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_MIDDLE): 
+            print('--------------------------------------------------------------------------')
+            for x in Menu.chest_inventory.items(): print(x)#print(Gameplay.Atlas.Entities)
     
     def Update():
         Gameplay.Camera.CamController()
@@ -481,6 +498,33 @@ class Menu:
         29: {'Pos': [78, 90], 'Item': None, 'amount': 0},
         30: {'Pos': [90, 90], 'Item': None, 'amount': 0},
         31: {'Pos': [102, 90], 'Item': None, 'amount': 0}
+    }
+    
+    chest_inventory = {
+        0: {'Pos': [18, 18], 'Item': None, 'amount': 0},
+        1: {'Pos': [30, 18], 'Item': None, 'amount': 0},
+        2: {'Pos': [42, 18], 'Item': None, 'amount': 0},
+        3: {'Pos': [54, 18], 'Item': None, 'amount': 0},
+        4: {'Pos': [66, 18], 'Item': None, 'amount': 0},
+        5: {'Pos': [78, 18], 'Item': None, 'amount': 0},
+        6: {'Pos': [90, 18], 'Item': None, 'amount': 0},
+        7: {'Pos': [102, 18], 'Item': None, 'amount': 0},
+        8: {'Pos': [18, 30], 'Item': None, 'amount': 0},
+        9: {'Pos': [30, 30], 'Item': None, 'amount': 0},
+        10: {'Pos': [42, 30], 'Item': None, 'amount': 0},
+        11: {'Pos': [54, 30], 'Item': None, 'amount': 0},
+        12: {'Pos': [66, 30], 'Item': None, 'amount': 0},
+        13: {'Pos': [78, 30], 'Item': None, 'amount': 0},
+        14: {'Pos': [90, 30], 'Item': None, 'amount': 0},
+        15: {'Pos': [102, 30], 'Item': None, 'amount': 0},
+        16: {'Pos': [18, 42], 'Item': None, 'amount': 0},
+        17: {'Pos': [30, 42], 'Item': None, 'amount': 0},
+        18: {'Pos': [42, 42], 'Item': None, 'amount': 0},
+        19: {'Pos': [54, 42], 'Item': None, 'amount': 0},
+        20: {'Pos': [66, 42], 'Item': None, 'amount': 0},
+        21: {'Pos': [78, 42], 'Item': None, 'amount': 0},
+        22: {'Pos': [90, 42], 'Item': None, 'amount': 0},
+        23: {'Pos': [102, 42], 'Item': None, 'amount': 0}
     }
     
     Holding_Item = False
@@ -595,6 +639,71 @@ class Menu:
                 pyxel.blt(Menu.inWorkbench.CraftSlot[0], Menu.inWorkbench.CraftSlot[1], 1, item['local']['x'], item['local']['y'], 8, 8, 2)
                 pyxel.rect(Menu.inWorkbench.CraftSlot[0] + 6, Menu.inWorkbench.CraftSlot[1] + 4, 5, 7, 7)
                 pyxel.text(Menu.inWorkbench.CraftSlot[0] + 7, Menu.inWorkbench.CraftSlot[1] + 5, f'{Menu.inWorkbench.ItemOnCraft['amount']}', 0)
+
+    class inChest:
+        actual_inventory = None
+        actual_chest = None
+        
+        def CloseChest():
+            Gameplay.Atlas.Entities[Menu.inChest.actual_chest[0], Menu.inChest.actual_chest[1], Menu.inChest.actual_chest[2]]['Inventory'] = Menu.inChest.actual_inventory
+            Menu.inChest.actual_inventory = None
+            Menu.inChest.actual_chest = None
+        
+        def RemoveItemInChest(Key, amount):
+            if Menu.inChest.actual_inventory[Key]['amount'] > 0:
+                Menu.inChest.actual_inventory[Key]['amount'] -= amount
+                if Menu.inChest.actual_inventory[Key]['amount'] <= 0:
+                    Menu.inChest.actual_inventory[Key]['Item'] = None
+        
+        def MoveItemInChest(Amount):
+            for key, Item in Menu.inChest.actual_inventory.items():
+                    dx = pyxel.mouse_x - Menu.inChest.actual_inventory[key]['Pos'][0]
+                    dy = pyxel.mouse_y - Menu.inChest.actual_inventory[key]['Pos'][1]
+                    
+                    if 0 <= dx < 8 and 0 <= dy < 8:
+                        if not Menu.Holding_Item:
+                            if Item['Item'] != None:
+                                Menu.Holding_item_name = Item['Item']
+                                Menu.Holding_item_amount = Item['amount']
+                                Menu.Holding_Item = True
+                                Menu.inChest.RemoveItemInChest(key, Item['amount'])
+                                return
+                        else:
+                            if Item['Item'] == None:
+                                Menu.inChest.actual_inventory[key]["Item"] = Menu.Holding_item_name
+                                Menu.inChest.actual_inventory[key]["amount"] = Amount
+                                Menu.Holding_item_amount -= Amount
+                                if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
+                                return
+                            elif Item['Item'] == Menu.Holding_item_name:
+                                i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
+                                if Item['amount'] + Amount <= i['stack']:
+                                    Menu.inChest.actual_inventory[key]["amount"] += Amount
+                                    Menu.Holding_item_amount -= Amount
+                                    if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
+                                    return
+                                else:
+                                    quant = i['stack'] - Item['amount']
+                                    if quant < 0: quant = quant * -1
+                                    while quant > 0:
+                                        Menu.inChest.actual_inventory[key]["amount"] += 1
+                                        Menu.Holding_item_amount -= 1
+                                        quant -= 1
+        
+        def Update():
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): Menu.inChest.MoveItemInChest(Menu.Holding_item_amount)
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT): Menu.inChest.MoveItemInChest(1)
+        
+        def Draw():
+            for key, Item in Menu.inChest.actual_inventory.items():
+                if Item['Item'] != None:
+                    i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
+                    pos = Menu.inChest.actual_inventory[key]['Pos']
+                    pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
+                    if Item['amount'] > 1:
+                        pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
+                        pyxel.text(pos[0] + 7, pos[1] + 5, f'{Item['amount']}', 0)
+                    
              
     class CraftingFunction:
         def MoveItemToCraft(matriz_pos, matriz):
@@ -755,11 +864,12 @@ class Menu:
     def DrawMenu():
         if Menu.Actual_Menu == "Inventory": pyxel.blt(0, 0, 2, 0, 0, 128, 128, 2); Menu.inInventory.Draw()
         elif Menu.Actual_Menu == "Workbench": pyxel.blt(0, 0, 2, 128, 0, 128, 128, 2); Menu.inWorkbench.Draw()
-        elif Menu.Actual_Menu == "Chest": pyxel.blt(0, 0, 2, 0, 128, 128, 128, 2)
+        elif Menu.Actual_Menu == "Chest": pyxel.blt(0, 0, 2, 0, 128, 128, 128, 2); Menu.inChest.Draw()
         elif Menu.Actual_Menu == "Furnace": pyxel.blt(0, 0, 2, 128, 128, 128, 128, 2)
     
     def Inputs():
-        if pyxel.btnp(pyxel.KEY_E): 
+        if pyxel.btnp(pyxel.KEY_E):   
+            if Menu.Actual_Menu == 'Chest': Menu.inChest.CloseChest()
             StateMachine.ChangeGameState('Gameplay')
             Menu.Actual_Menu = "Inventory"
         
@@ -773,7 +883,7 @@ class Menu:
         Menu.Inputs()
         if Menu.Actual_Menu == "Inventory": Menu.inInventory.Update()
         elif Menu.Actual_Menu == "Workbench": Menu.inWorkbench.Update()
-        #elif Menu.Actual_Menu == "Chest": 
+        elif Menu.Actual_Menu == "Chest": Menu.inChest.Update()
         #elif Menu.Actual_Menu == "Furnace": 
     
     def Draw():
@@ -803,9 +913,9 @@ class Sound:
         wethands_nt0='rrrrA0E1A1B1C#2B1A1E1D1F#1C#2E2C#2A1RA0E1A1B1C#2B1A1E1D1F#1C#2E2C#2A1RG#2E1A1B1C#2B1RE1F#2F#1C#2E2C#2A1RE2F#2G#2E1A1B1RC#3D1RC#2E2A1RC#3E3RB0D1RRF#1RRG0B0D1F#1A1RRB0F#3F#1RF#1RRG0B0D1F#1A1RA2RE1A1B1C#2B1A1E1A0E1A1B1C#2RE1A2C#3RRD1F#1C#3A2RRB0RF#1A1C#2RA1C#3RB0C#3D3A1F#3C#3RB1A1RRG#0B0E1G#1E1B0G#0RE0G#0B0E1G#1E1A0G0B0D1F#1A1F#1D1B0A0D#1E1A1C#2B1A1E1RE0G#0B0E1G#1E0G#0B0E1G#1R'
         wethands_nt1='rrrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRA2RRRRRRRRRRRRRRA1RRF#1RRRRRRG3RRF#3A1RD1B0RRRRRRG3RRRA1RD1B0RRRRRRRA0RRRRRRRRRRRRRRRRRB0RRRRE2F#2RD1RRRRRRG0RRRRRRRRRRE0RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
         wethands_nt2='rrrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRA1RRRRRRRRRRRRRRB2RRF#2RRRRRRG0RRF#1D3RA2B2RRRRRRG0RRRD3RA2B2RRRRRRRE2RRRRRRRRRRRRRRRRRD2RRRRE3F#3RD2RRRRRRD3RRRRRRRRRRB1RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
-        pyxel.sounds[3].set(wethands_nt0, tones='s', volumes='4', effects='n', speed=45)
-        pyxel.sounds[4].set(wethands_nt1, tones='s', volumes='4', effects='n', speed=45)
-        pyxel.sounds[5].set(wethands_nt2, tones='s', volumes='4', effects='n', speed=45)
+        pyxel.sounds[3].set(wethands_nt0, tones='t', volumes='4', effects='n', speed=45)
+        pyxel.sounds[4].set(wethands_nt1, tones='t', volumes='4', effects='n', speed=45)
+        pyxel.sounds[5].set(wethands_nt2, tones='t', volumes='4', effects='n', speed=45)
         pyxel.musics[1].set([3], [4], [5])
         
         subwoofer_nt0='rrrrC2RRRG2RRRC2RRRG2RRRC2RRRG2RRRC2RRRG2RRRC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1C3B1E3G1D3B1B2C1RB1G2G1RB1RA0E3C2E3A1G3C2E3A0RC2E3A1G3C2E3A0RC2RA1RC2RF0E3A1C3F1A2A1RG0G2B1E3G1D3B1F2F0E3A1C3F1A2A1RG0RB1D3G1B2RC1RC2RC1RC2RC1B1RC1RB1RC1RC2RC1RC2RC1B1RC1RB1RE1'
