@@ -88,7 +88,7 @@ class MainMenu:
                 size_w, size_h = panel['Size']
                 pyxel.blt(pos_x, pos_y, 0, font_u, font_v, size_w, size_h, 2)
 
-            if key == "Options":
+            if MainMenu.current_Menu == "Options":
                 MusicText = Sound.musics[Sound.currentMusic]
                 MusicTextW = len(MusicText) * 4
                 pyxel.text(((83 - MusicTextW) // 2) + 24, 98, Sound.musics[Sound.currentMusic], 7)
@@ -774,7 +774,7 @@ class Menu:
         pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
 
 class Sound:
-    musics = ['Sweden', 'Wet Hands']
+    musics = ['Sweden', 'Wet Hands', 'Subwoofer']
     currentMusic = 0
     
     def BackgroundMusics():
@@ -793,6 +793,14 @@ class Sound:
         pyxel.sounds[4].set(wethands_nt1, tones='s', volumes='4', effects='n', speed=45)
         pyxel.sounds[5].set(wethands_nt2, tones='s', volumes='4', effects='n', speed=45)
         pyxel.musics[1].set([3], [4], [5])
+        
+        subwoofer_nt0='rrrrC2RRRG2RRRC2RRRG2RRRC2RRRG2RRRC2RRRG2RRRC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1C3B1E3G1D3B1B2C1RB1G2G1RB1RA0E3C2E3A1G3C2E3A0RC2E3A1G3C2E3A0RC2RA1RC2RF0E3A1C3F1A2A1RG0G2B1E3G1D3B1F2F0E3A1C3F1A2A1RG0RB1D3G1B2RC1RC2RC1RC2RC1B1RC1RB1RC1RC2RC1RC2RC1B1RC1RB1RE1'
+        subwoofer_nt1='rrrrRRE2RRRE2RRRE2RRRE2RRRE2RRRE2RRRE2RRRE2RC2RE2RG2RE2RC2RE2RG2RE2RC2RE2RG2RE2RC2RE2RG2RE2RC2RE2RRRE2RC2RE2RRRE2RA1RE2RRRE2RA1RE2RRRE2RA1RE2RRRE2RF1RC2RRRC2RG1RD2RRRD2RF1RC2RRRC2RG1RD2RRRRRRB2RG2RB2RRE2RG2RE2RRRB2RG2RB2RRE2RG2RE2RR'
+        subwoofer_nt2='rrrrRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RRRB2RB2RD3RRRRRC3RRRRRRRB2RD3RRRRRRRD3RRRRRRRD3RRRB2RF3RRRRRC3RB2RRRRRE2RF3RRRRRA3RG3RE3RRRRRRG3RE3RG3RRB2RE3RB2RRRG3RE3RG3RRB2RE3RB2RR'
+        pyxel.sounds[6].set(subwoofer_nt0, tones='t', volumes='4', effects=('n'), speed=45)
+        pyxel.sounds[7].set(subwoofer_nt1, tones='t', volumes='4', effects=('n'), speed=45)
+        pyxel.sounds[8].set(subwoofer_nt2, tones='t', volumes='4', effects=('n'), speed=45)
+        pyxel.musics[2].set([6], [7], [8])
     
     def MusicSelection(music):
         pyxel.playm(music, loop=True)
