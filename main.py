@@ -39,10 +39,15 @@ class MainMenu:
         'PVMusic':      {'Pos': [32, 98], 'Size': [3, 5]},
     }
     
+    Controls_Buttons = {
+        'CloseOptions': {'Pos': [98, 30], 'Size': [7, 7]}
+    }
+    
     PyxelCraft_txt = [20, 5]
     
     Panels = {
-        'Options':  {'Pos': [24, 30], 'Font': [129, 92], 'Size': [83, 83]}
+        'Options':   {'Pos': [24, 30], 'Font': [129, 92], 'Size': [83, 83]},
+        'Controls':  {'Pos': [24, 30], 'Font': [1,  129], 'Size': [83, 83]}
     }
     
     class Transition:
@@ -101,6 +106,8 @@ class MainMenu:
             MainMenu.Transition.transition_active = True
         elif button == "Options":
             MainMenu.current_Menu = 'Options'
+        elif button == "Controls":
+            MainMenu.current_Menu = 'Controls'
         elif button == "CloseOptions":
             MainMenu.current_Menu = 'Main'
         elif button == "NXMusic":
@@ -125,7 +132,14 @@ class MainMenu:
                         
                     if 0 <= dx < button['Size'][0] and 0 <= dy < button['Size'][1]:
                         MainMenu.ButtonFunc(key)
+            
+            elif MainMenu.current_Menu == "Controls":
+                for key, button in MainMenu.Controls_Buttons.items():
+                    dx = pyxel.mouse_x - button['Pos'][0]
+                    dy = pyxel.mouse_y - button['Pos'][1]
                         
+                    if 0 <= dx < button['Size'][0] and 0 <= dy < button['Size'][1]:
+                        MainMenu.ButtonFunc(key)
     def Update():
         MainMenu.Transition.UpdateIntro()
         MainMenu.Transition.UpdateTransition()
@@ -801,8 +815,9 @@ class Sound:
         pyxel.sounds[7].set(subwoofer_nt1, tones='t', volumes='4', effects=('n'), speed=45)
         pyxel.sounds[8].set(subwoofer_nt2, tones='t', volumes='4', effects=('n'), speed=45)
         pyxel.musics[2].set([6], [7], [8])
-    
+        
     def MusicSelection(music):
+        pyxel.stop()
         pyxel.playm(music, loop=True)
         Sound.currentMusic = music
         
