@@ -151,7 +151,7 @@
             "type": "Block",
             "drop": "Chest_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": true
         },
         {
             "name": "Furnace_block",
@@ -160,7 +160,7 @@
             "type": "Block",
             "drop": "Furnace_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": true
         },
         {
             "name": "Door_block",

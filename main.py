@@ -23,6 +23,9 @@ BLOCKSBYLAYER = [
 ]
 
 class MainMenu:
+    Menus = ['Main', "Options", 'Controls']
+    current_Menu = 'Main'
+    
     Buttons = {
         'Play':     {'Pos': [17, 61], 'Font': [129, 56], 'Size': [94, 11]},
         'Load':     {'Pos': [17, 74], 'Font': [129, 68], 'Size': [94, 11]},
@@ -30,7 +33,17 @@ class MainMenu:
         'Controls': {'Pos': [65, 87], 'Font': [177, 80], 'Size': [46, 11]}
     }
     
+    Options_Buttons = {
+        'CloseOptions': {'Pos': [98, 30], 'Size': [7, 7]},
+        'NXMusic':      {'Pos': [93, 98], 'Size': [3, 5]},
+        'PVMusic':      {'Pos': [32, 98], 'Size': [3, 5]},
+    }
+    
     PyxelCraft_txt = [20, 5]
+    
+    Panels = {
+        'Options':  {'Pos': [24, 30], 'Font': [129, 92], 'Size': [83, 83]}
+    }
     
     class Transition:
         dither = -0.5
@@ -66,8 +79,19 @@ class MainMenu:
             pos_x, pos_y = button['Pos']
             font_u, font_v = button['Font']
             size_w, size_h = button['Size']
-            
             pyxel.blt(pos_x, pos_y, 0, font_u, font_v, size_w, size_h, 2)
+        
+        for key, panel in MainMenu.Panels.items():
+            if key == MainMenu.current_Menu:
+                pos_x, pos_y = panel['Pos']
+                font_u, font_v = panel['Font']
+                size_w, size_h = panel['Size']
+                pyxel.blt(pos_x, pos_y, 0, font_u, font_v, size_w, size_h, 2)
+
+            if key == "Options":
+                MusicText = Sound.musics[Sound.currentMusic]
+                MusicTextW = len(MusicText) * 4
+                pyxel.text(((83 - MusicTextW) // 2) + 24, 98, Sound.musics[Sound.currentMusic], 7)
     
     def ButtonFunc(button):
         if button == "Play":
@@ -75,15 +99,32 @@ class MainMenu:
         elif button == "Load":
             Data.SaveLoad.LoadWorld()
             MainMenu.Transition.transition_active = True
+        elif button == "Options":
+            MainMenu.current_Menu = 'Options'
+        elif button == "CloseOptions":
+            MainMenu.current_Menu = 'Main'
+        elif button == "NXMusic":
+            if Sound.currentMusic < len(Sound.musics) - 1: Sound.MusicSelection(Sound.currentMusic + 1)
+        elif button == "PVMusic":
+            if Sound.currentMusic > 0: Sound.MusicSelection(Sound.currentMusic - 1)
     
     def Inputs():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            for key, button in MainMenu.Buttons.items():
-                dx = pyxel.mouse_x - button['Pos'][0]
-                dy = pyxel.mouse_y - button['Pos'][1]
-                    
-                if 0 <= dx < button['Size'][0] and 0 <= dy < button['Size'][1]:
-                    MainMenu.ButtonFunc(key)
+            if MainMenu.current_Menu == "Main":
+                for key, button in MainMenu.Buttons.items():
+                    dx = pyxel.mouse_x - button['Pos'][0]
+                    dy = pyxel.mouse_y - button['Pos'][1]
+                        
+                    if 0 <= dx < button['Size'][0] and 0 <= dy < button['Size'][1]:
+                        MainMenu.ButtonFunc(key)
+                        
+            elif MainMenu.current_Menu == "Options":
+                for key, button in MainMenu.Options_Buttons.items():
+                    dx = pyxel.mouse_x - button['Pos'][0]
+                    dy = pyxel.mouse_y - button['Pos'][1]
+                        
+                    if 0 <= dx < button['Size'][0] and 0 <= dy < button['Size'][1]:
+                        MainMenu.ButtonFunc(key)
                         
     def Update():
         MainMenu.Transition.UpdateIntro()
@@ -189,6 +230,7 @@ class Gameplay:
         
     class Atlas:
         World = {}
+        Entities = {}
         MaxLayerValue = len(BLOCKSBYLAYER)
         LayerVisibility = MaxLayerValue
         
@@ -236,8 +278,9 @@ class Gameplay:
                 
                 for x in range(start_x, end_x, BLOCK_SIZE):
                     for y in range(start_y, end_y, BLOCK_SIZE):
-                        if Gameplay.Atlas.World[(x, y, 4)]['Block'] == "Tree_block":
-                            Gameplay.Atlas.Structures.CreateTree(x, y, 4)
+                        for z in range(0, Gameplay.Atlas.MaxLayerValue):
+                            if Gameplay.Atlas.World[(x, y, z)]['Block'] == "Tree_block":
+                                Gameplay.Atlas.Structures.CreateTree(x, y, z)
             
            def CreateTree(x, y, layer):
                 Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Wood_Log_block_Bottom"}
@@ -731,19 +774,30 @@ class Menu:
         pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
 
 class Sound:
-    def BackgroundMusic():
-        nt0="rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrD2E2A0rrrF#2rD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrG0rrD0rrrrB0rrrrrrE0rrrrA0rrrrrrG0rrrrB0rrrrrrE0rrrD0A0rrrD2rD1"
-        nt1="rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rB3rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrF#3E3F#1rrrD3rA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#2rrF#3rrA1rrrrB1rrrrrrE1rrrrE1rrrrrrD1rrrrB1rrrrrrE1rrrE3E1rrrF#3rG1"
-        nt2="rrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0A2F#2rrrrrrD3rA2rrrB0D2E2rrrG0A2F#2rrrrrrrrrB2rrrB0rrrrrG0rC#3rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrrF#2A2rrrrrrrrrrB2A2rrrE2D2rrrrrD2E2rrrrrrrrrrB2A2rrrE2rrrrD3rE2r"
-        
-        pyxel.sounds[0].set(nt0, tones='T', volumes='4', effects='n', speed=45)
-        pyxel.sounds[1].set(nt1, tones='T', volumes='4', effects='f', speed=45)
-        pyxel.sounds[2].set(nt2, tones='T', volumes='4', effects='n', speed=45)
-        
-        pyxel.play(0,0, loop=True)
-        pyxel.play(1,1, loop=True)
-        pyxel.play(2,2, loop=True)
+    musics = ['Sweden', 'Wet Hands']
+    currentMusic = 0
     
+    def BackgroundMusics():
+        sweden_nt0="rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrrrrG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrD2E2A0rrrF#2rD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrrrrD0rrrrE0rrF#0rG0rrrrrA0rrG0rrD0rrrrB0rrrrrrE0rrrrA0rrrrrrG0rrrrB0rrrrrrE0rrrD0A0rrrD2rD1"
+        sweden_nt1="rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrrrrA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rB3rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrF#3E3F#1rrrD3rA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#1rrrrrA1rrrrE1rrA2rA1rrrrrF#2rrF#3rrA1rrrrB1rrrrrrE1rrrrE1rrrrrrD1rrrrB1rrrrrrE1rrrE3E1rrrF#3rG1"
+        sweden_nt2="rrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrF#0rrrrrB0rrrrrG0rrrrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0A2F#2rrrrrrD3rA2rrrB0D2E2rrrG0A2F#2rrrrrrrrrB2rrrB0rrrrrG0rC#3rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrG0F#2A2rrrrrrrrrB2rrrB0D2E2rrrrF#2A2rrrrrrrrrrB2A2rrrE2D2rrrrrD2E2rrrrrrrrrrB2A2rrrE2rrrrD3rE2r"
+        pyxel.sounds[0].set(sweden_nt0, tones='t', volumes='4', effects='n', speed=45)
+        pyxel.sounds[1].set(sweden_nt1, tones='t', volumes='4', effects='n', speed=45)
+        pyxel.sounds[2].set(sweden_nt2, tones='t', volumes='4', effects='n', speed=45)
+        pyxel.musics[0].set([0], [1], [2])
+        
+        wethands_nt0='rrrrA0E1A1B1C#2B1A1E1D1F#1C#2E2C#2A1RA0E1A1B1C#2B1A1E1D1F#1C#2E2C#2A1RG#2E1A1B1C#2B1RE1F#2F#1C#2E2C#2A1RE2F#2G#2E1A1B1RC#3D1RC#2E2A1RC#3E3RB0D1RRF#1RRG0B0D1F#1A1RRB0F#3F#1RF#1RRG0B0D1F#1A1RA2RE1A1B1C#2B1A1E1A0E1A1B1C#2RE1A2C#3RRD1F#1C#3A2RRB0RF#1A1C#2RA1C#3RB0C#3D3A1F#3C#3RB1A1RRG#0B0E1G#1E1B0G#0RE0G#0B0E1G#1E1A0G0B0D1F#1A1F#1D1B0A0D#1E1A1C#2B1A1E1RE0G#0B0E1G#1E0G#0B0E1G#1R'
+        wethands_nt1='rrrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRA2RRRRRRRRRRRRRRA1RRF#1RRRRRRG3RRF#3A1RD1B0RRRRRRG3RRRA1RD1B0RRRRRRRA0RRRRRRRRRRRRRRRRRB0RRRRE2F#2RD1RRRRRRG0RRRRRRRRRRE0RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
+        wethands_nt2='rrrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRA1RRRRRRRRRRRRRRB2RRF#2RRRRRRG0RRF#1D3RA2B2RRRRRRG0RRRD3RA2B2RRRRRRRE2RRRRRRRRRRRRRRRRRD2RRRRE3F#3RD2RRRRRRD3RRRRRRRRRRB1RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
+        pyxel.sounds[3].set(wethands_nt0, tones='s', volumes='4', effects='n', speed=45)
+        pyxel.sounds[4].set(wethands_nt1, tones='s', volumes='4', effects='n', speed=45)
+        pyxel.sounds[5].set(wethands_nt2, tones='s', volumes='4', effects='n', speed=45)
+        pyxel.musics[1].set([3], [4], [5])
+    
+    def MusicSelection(music):
+        pyxel.playm(music, loop=True)
+        Sound.currentMusic = music
+        
 class StateMachine:
     def ChangeGameState(newState):
         global GAME_STATE
@@ -799,42 +853,48 @@ class Data:
             pyxel.colors[15] = 0x887195
     
     class SaveLoad:
-            def SaveWorld():
-                world_data = {str(key): value for key, value in Gameplay.Atlas.World.items()}
-                inventory_data = {str(key): value for key, value in Menu.Inventory.items()}
-                
-                save_data = {
-                    'world': world_data,
-                    'inventory': inventory_data
-                }
-                
-                with open("save_data.json", "w") as file:
-                    json.dump(save_data, file)
-                print("Game saved to save_data.json")
-                
-            def LoadWorld():
-                try:
-                    with open("save_data.json", "r") as file:
-                        save_data = json.load(file)
-                        
-                        world_data = save_data.get('world', {})
-                        Gameplay.Atlas.World = {eval(key): value for key, value in world_data.items()}
-                        
-                        inventory_data = save_data.get('inventory', {})
-                        Menu.Inventory = {int(key): value for key, value in inventory_data.items()}
-                        
-                    print("Game loaded from save_data.json")
-                except FileNotFoundError:
-                    print("No saved game file found. Starting with a new game.")
-                except json.JSONDecodeError:
-                    print("Error decoding the saved game file. Starting with a new game.")
+        def SaveWorld():
+            world_data = {str(key): value for key, value in Gameplay.Atlas.World.items()}
+            inventory_data = {str(key): value for key, value in Menu.Inventory.items()}
+            camera_diff = Gameplay.Camera.diff
+
+            save_data = {
+                'world': world_data,
+                'inventory': inventory_data,
+                'camera_diff': camera_diff
+            }
+
+            with open("save_data.json", "w") as file:
+                json.dump(save_data, file)
+            print("Game saved to save_data.json")
+            
+        def LoadWorld():
+            try:
+                with open("save_data.json", "r") as file:
+                    save_data = json.load(file)
+
+                    world_data = save_data.get('world', {})
+                    Gameplay.Atlas.World = {eval(key): value for key, value in world_data.items()}
+
+                    inventory_data = save_data.get('inventory', {})
+                    Menu.Inventory = {int(key): value for key, value in inventory_data.items()}
+
+                    camera_diff = save_data.get('camera_diff', [0, 0])
+                    Gameplay.Camera.diff = camera_diff
+
+                print("Game loaded from save_data.json")
+            except FileNotFoundError:
+                print("No saved game file found. Starting with a new game.")
+            except json.JSONDecodeError:
+                print("Error decoding the saved game file. Starting with a new game.")
 
 class App:
     def __init__(self):
         pyxel.init(SCREEN_SIZE[0], SCREEN_SIZE[1], title=WINDOW_TITLE, display_scale=DISPLAY_SCALE, fps=FPS, quit_key=None)
         
         Data.Images()
-        Sound.BackgroundMusic()
+        Sound.BackgroundMusics()
+        Sound.MusicSelection(Sound.currentMusic)
 
         pyxel.run(self.update, self.draw)
         
