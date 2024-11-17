@@ -435,7 +435,12 @@ class Gameplay:
                 Gameplay.Atlas.World[(x, y - BLOCK_SIZE, layer)] = {'Block': 'Air'}
             elif block == 'Bed_block_Top':
                 Gameplay.Atlas.World[(x, y, layer)] = {'Block': 'Air'}
-                Gameplay.Atlas.World[(x, y + BLOCK_SIZE, layer)] = {'Block': 'Air'}       
+                Gameplay.Atlas.World[(x, y + BLOCK_SIZE, layer)] = {'Block': 'Air'}     
+              
+            elif block == "Chest_block":
+                Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Air"}
+                Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': None}
+                del Gameplay.Atlas.Entities[(x, y, layer)]
                          
     def Debug():
         if pyxel.btnp(pyxel.KEY_EQUALS) and Gameplay.Atlas.LayerVisibility < Gameplay.Atlas.MaxLayerValue:
@@ -443,10 +448,6 @@ class Gameplay:
         
         if pyxel.btnp(pyxel.KEY_MINUS) and Gameplay.Atlas.LayerVisibility > 0:
             Gameplay.Atlas.LayerVisibility -= 1
-            
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_MIDDLE): 
-            print('--------------------------------------------------------------------------')
-            for x in Menu.chest_inventory.items(): print(x)#print(Gameplay.Atlas.Entities)
     
     def Update():
         Gameplay.Camera.CamController()
@@ -935,8 +936,6 @@ class StateMachine:
     def ChangeGameState(newState):
         global GAME_STATE
         GAME_STATE = newState
-        
-        print('Game state changed to:', GAME_STATE)
 
 class Data:
     def Images():
