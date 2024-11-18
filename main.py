@@ -426,8 +426,7 @@ class Gameplay:
             elif block == "Chest_block":
                 Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Chest_block"}
                 Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': copy.deepcopy(Menu.chest_inventory)}
-            
-            Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
+                Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
         
         def Break(block, x, y, layer):
             if block == 'Bed_block_Bottom':
@@ -467,7 +466,7 @@ class Gameplay:
 
 class Menu:
     Inventory = {
-        0: {'Pos': [18, 110], 'Item': None, 'amount': 0},
+        0: {'Pos': [18, 110], 'Item': 'Bed', 'amount': 1},
         1: {'Pos': [30, 110], 'Item': None, 'amount': 0},
         2: {'Pos': [42, 110], 'Item': None, 'amount': 0},
         3: {'Pos': [54, 110], 'Item': None, 'amount': 0},
@@ -704,8 +703,7 @@ class Menu:
                     if Item['amount'] > 1:
                         pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
                         pyxel.text(pos[0] + 7, pos[1] + 5, f'{Item['amount']}', 0)
-                    
-             
+                              
     class CraftingFunction:
         def MoveItemToCraft(matriz_pos, matriz):
             for key, slot in matriz_pos.items():
@@ -1033,13 +1031,13 @@ class App:
         pyxel.run(self.update, self.draw)
         
     def update(self):
-        if GAME_STATE == 'MainMenu': MainMenu.Update()
+        if   GAME_STATE == 'MainMenu': MainMenu.Update()
         elif GAME_STATE == 'Gameplay': Gameplay.Update()
         elif GAME_STATE == 'Menu': Menu.Update()
     
     def draw(self):
         pyxel.cls(0)
-        if GAME_STATE == 'MainMenu': MainMenu.Draw()
+        if   GAME_STATE == 'MainMenu': MainMenu.Draw()
         elif GAME_STATE == 'Gameplay': Gameplay.Draw()
         elif GAME_STATE == 'Menu': Menu.Draw()
 
