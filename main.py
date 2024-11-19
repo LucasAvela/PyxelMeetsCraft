@@ -6,7 +6,6 @@ import copy
 #-------------------------------- App
 SCREEN_SIZE = [128, 128]
 WINDOW_TITLE = 'Pyxel Meets Craft'
-DISPLAY_SCALE = 7
 FPS = 60
 
 #-------------------------------- Game
@@ -212,7 +211,13 @@ class Gameplay:
                         pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Menu.Inventory[i]['amount']}', 0)
                             
         def Debug():
-            pyxel.text(2, 1, f'x:{(pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8}\ny:{(pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8}', 7)
+            selectarea_x = (pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8
+            selectarea_y = (pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8
+            
+            pyxel.text(2, 1, f'x:{selectarea_x // 8}\ny:{selectarea_y // 8}', 7)
+            
+            for i in range(0, Gameplay.Atlas.MaxLayerValue):
+                pyxel.text(2, 15 + i * 7, f'{Gameplay.Atlas.World[selectarea_x, selectarea_y, i]['Block']}', 7)
         
         def Update():
             Gameplay.UI.Inputs()
@@ -421,12 +426,13 @@ class Gameplay:
                 if Gameplay.Atlas.World[(x, y - BLOCK_SIZE, layer)]['Block'] == "Air":
                     Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Bed_block_Bottom"}
                     Gameplay.Atlas.World[(x, y - BLOCK_SIZE, layer)] = {'Block': "Bed_block_Top"}
-                    Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
+                else: return
                     
             elif block == "Chest_block":
                 Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Chest_block"}
                 Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': copy.deepcopy(Menu.chest_inventory)}
-                Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
+            
+            Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
         
         def Break(block, x, y, layer):
             if block == 'Bed_block_Bottom':
@@ -466,7 +472,7 @@ class Gameplay:
 
 class Menu:
     Inventory = {
-        0: {'Pos': [18, 110], 'Item': 'Bed', 'amount': 1},
+        0: {'Pos': [18, 110], 'Item': None, 'amount': 0},
         1: {'Pos': [30, 110], 'Item': None, 'amount': 0},
         2: {'Pos': [42, 110], 'Item': None, 'amount': 0},
         3: {'Pos': [54, 110], 'Item': None, 'amount': 0},
@@ -1022,7 +1028,7 @@ class Data:
 
 class App:
     def __init__(self):
-        pyxel.init(SCREEN_SIZE[0], SCREEN_SIZE[1], title=WINDOW_TITLE, display_scale=DISPLAY_SCALE, fps=FPS, quit_key=None)
+        pyxel.init(SCREEN_SIZE[0], SCREEN_SIZE[1], title=WINDOW_TITLE, fps=FPS, quit_key=None)
         
         Data.Images()
         Sound.BackgroundMusics()
