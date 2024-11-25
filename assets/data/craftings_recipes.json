@@ -75,7 +75,7 @@
         },
         {
             "result": {"item": "Door_block", "amount": 3},
-            "size": [3, 3],
+            "size": [3, 2],
             "shaped": false,
             "craft": [
                 ["Wood_Plank_block", "Wood_Plank_block"],

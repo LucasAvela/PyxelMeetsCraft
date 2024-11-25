@@ -7,6 +7,7 @@ import copy
 SCREEN_SIZE = [128, 128]
 WINDOW_TITLE = 'Pyxel Meets Craft'
 FPS = 60
+TPS = FPS // 3
 
 #-------------------------------- Game
 BLOCK_SIZE = 8
@@ -112,8 +113,10 @@ class MainMenu:
             MainMenu.current_Menu = 'Main'
         elif button == "NXMusic":
             if Sound.currentMusic < len(Sound.musics) - 1: Sound.MusicSelection(Sound.currentMusic + 1)
+            else: Sound.MusicSelection(0)
         elif button == "PVMusic":
             if Sound.currentMusic > 0: Sound.MusicSelection(Sound.currentMusic - 1)
+            else: Sound.MusicSelection(len(Sound.musics) - 1)
     
     def Inputs():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -211,6 +214,8 @@ class Gameplay:
                         pyxel.text(Gameplay.UI.Horbar_ItemsAmount_pos[i] + 1, 122, f'{Menu.Inventory[i]['amount']}', 0)
                             
         def Debug():
+            pyxel.text(2, SCREEN_SIZE[0] - 25, f'Tick: {Gameplay.tick}', 7)
+            
             selectarea_x = (pyxel.mouse_x + Gameplay.Camera.diff[0]) // 8 * 8
             selectarea_y = (pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8
             
@@ -316,6 +321,7 @@ class Gameplay:
         blint_mouse = False
         
         break_progress = 0
+        tick_time = None
         last_target = [None, None]
         hold_break = False
         
@@ -343,7 +349,7 @@ class Gameplay:
             
             if Gameplay.Player.last_target != [target_x, target_y]:
                 Gameplay.Player.break_progress = 0
-                Gameplay.Player.last_target = [target_x, target_y]
+                Gameplay.Player.last_target = [target_x, target_y]                 
             
             while layer > 0:
                 if (target_x, target_y, layer) not in Gameplay.Atlas.World or Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'] == 'Air':
@@ -355,6 +361,7 @@ class Gameplay:
                         Gameplay.Atlas.World[(target_x, target_y, layer)] = {'Block': 'Air'}
                         if block['placeSpecial'] == True: Gameplay.Special.Break(block['name'], target_x, target_y, layer)
                         Gameplay.Player.break_progress = 0
+                        Gameplay.Player.tick_time = None
                         Gameplay.Player.hold_break = True
                         return
                     else:
@@ -446,7 +453,17 @@ class Gameplay:
                 Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Air"}
                 Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': None}
                 del Gameplay.Atlas.Entities[(x, y, layer)]
-                         
+    
+    tick = 0
+    frame_count = 0
+    
+    def TickUpdate():
+        Gameplay.frame_count += 1
+        
+        if Gameplay.frame_count >= TPS:
+            Gameplay.tick += 1
+            Gameplay.frame_count = 0
+    
     def Debug():
         if pyxel.btnp(pyxel.KEY_EQUALS) and Gameplay.Atlas.LayerVisibility < Gameplay.Atlas.MaxLayerValue:
             Gameplay.Atlas.LayerVisibility += 1
@@ -455,6 +472,7 @@ class Gameplay:
             Gameplay.Atlas.LayerVisibility -= 1
     
     def Update():
+        Gameplay.TickUpdate()
         Gameplay.Camera.CamController()
         Gameplay.Atlas.GenerateWorldLayers()
         Gameplay.Atlas.Structures.GenerateWorldStructure()
@@ -472,38 +490,38 @@ class Gameplay:
 
 class Menu:
     Inventory = {
-        0: {'Pos': [18, 110], 'Item': None, 'amount': 0},
-        1: {'Pos': [30, 110], 'Item': None, 'amount': 0},
-        2: {'Pos': [42, 110], 'Item': None, 'amount': 0},
-        3: {'Pos': [54, 110], 'Item': None, 'amount': 0},
-        4: {'Pos': [66, 110], 'Item': None, 'amount': 0},
-        5: {'Pos': [78, 110], 'Item': None, 'amount': 0},
-        6: {'Pos': [90, 110], 'Item': None, 'amount': 0},
-        7: {'Pos': [102, 110], 'Item': None, 'amount': 0},
-        8: {'Pos': [18, 66], 'Item': None, 'amount': 0},
-        9: {'Pos': [30, 66], 'Item': None, 'amount': 0},
-        10: {'Pos': [42, 66], 'Item': None, 'amount': 0},
-        11: {'Pos': [54, 66], 'Item': None, 'amount': 0},
-        12: {'Pos': [66, 66], 'Item': None, 'amount': 0},
-        13: {'Pos': [78, 66], 'Item': None, 'amount': 0},
-        14: {'Pos': [90, 66], 'Item': None, 'amount': 0},
-        15: {'Pos': [102, 66], 'Item': None, 'amount': 0},
-        16: {'Pos': [18, 78], 'Item': None, 'amount': 0},
-        17: {'Pos': [30, 78], 'Item': None, 'amount': 0},
-        18: {'Pos': [42, 78], 'Item': None, 'amount': 0},
-        19: {'Pos': [54, 78], 'Item': None, 'amount': 0},
-        20: {'Pos': [66, 78], 'Item': None, 'amount': 0},
-        21: {'Pos': [78, 78], 'Item': None, 'amount': 0},
-        22: {'Pos': [90, 78], 'Item': None, 'amount': 0},
-        23: {'Pos': [102, 78], 'Item': None, 'amount': 0},
-        24: {'Pos': [18, 90], 'Item': None, 'amount': 0},
-        25: {'Pos': [30, 90], 'Item': None, 'amount': 0},
-        26: {'Pos': [42, 90], 'Item': None, 'amount': 0},
-        27: {'Pos': [54, 90], 'Item': None, 'amount': 0},
-        28: {'Pos': [66, 90], 'Item': None, 'amount': 0},
-        29: {'Pos': [78, 90], 'Item': None, 'amount': 0},
-        30: {'Pos': [90, 90], 'Item': None, 'amount': 0},
-        31: {'Pos': [102, 90], 'Item': None, 'amount': 0}
+        0:  {'Pos': [18 , 110], 'Item': None, 'amount': 0},
+        1:  {'Pos': [30 , 110], 'Item': None, 'amount': 0},
+        2:  {'Pos': [42 , 110], 'Item': None, 'amount': 0},
+        3:  {'Pos': [54 , 110], 'Item': None, 'amount': 0},
+        4:  {'Pos': [66 , 110], 'Item': None, 'amount': 0},
+        5:  {'Pos': [78 , 110], 'Item': None, 'amount': 0},
+        6:  {'Pos': [90 , 110], 'Item': None, 'amount': 0},
+        7:  {'Pos': [102, 110], 'Item': None, 'amount': 0},
+        8:  {'Pos': [18 , 66 ], 'Item': None, 'amount': 0},
+        9:  {'Pos': [30 , 66 ], 'Item': None, 'amount': 0},
+        10: {'Pos': [42 , 66 ], 'Item': None, 'amount': 0},
+        11: {'Pos': [54 , 66 ], 'Item': None, 'amount': 0},
+        12: {'Pos': [66 , 66 ], 'Item': None, 'amount': 0},
+        13: {'Pos': [78 , 66 ], 'Item': None, 'amount': 0},
+        14: {'Pos': [90 , 66 ], 'Item': None, 'amount': 0},
+        15: {'Pos': [102, 66 ], 'Item': None, 'amount': 0},
+        16: {'Pos': [18 , 78 ], 'Item': None, 'amount': 0},
+        17: {'Pos': [30 , 78 ], 'Item': None, 'amount': 0},
+        18: {'Pos': [42 , 78 ], 'Item': None, 'amount': 0},
+        19: {'Pos': [54 , 78 ], 'Item': None, 'amount': 0},
+        20: {'Pos': [66 , 78 ], 'Item': None, 'amount': 0},
+        21: {'Pos': [78 , 78 ], 'Item': None, 'amount': 0},
+        22: {'Pos': [90 , 78 ], 'Item': None, 'amount': 0},
+        23: {'Pos': [102, 78 ], 'Item': None, 'amount': 0},
+        24: {'Pos': [18 , 90 ], 'Item': None, 'amount': 0},
+        25: {'Pos': [30 , 90 ], 'Item': None, 'amount': 0},
+        26: {'Pos': [42 , 90 ], 'Item': None, 'amount': 0},
+        27: {'Pos': [54 , 90 ], 'Item': None, 'amount': 0},
+        28: {'Pos': [66 , 90 ], 'Item': None, 'amount': 0},
+        29: {'Pos': [78 , 90 ], 'Item': None, 'amount': 0},
+        30: {'Pos': [90 , 90 ], 'Item': None, 'amount': 0},
+        31: {'Pos': [102, 90 ], 'Item': None, 'amount': 0}
     }
     
     chest_inventory = {
@@ -903,8 +921,8 @@ class Menu:
         pyxel.camera(Gameplay.Camera.diff[0], Gameplay.Camera.diff[1])
 
 class Sound:
-    musics = ['Sweden', 'Wet Hands', 'Subwoofer', 'Mice on Venus']
-    currentMusic = 0
+    musics = ['No Music', 'Sweden', 'Wet Hands', 'Subwoofer', 'Mice on Venus']
+    currentMusic = 1
     
     def BackgroundMusics():
         sweden_nt0='rrrrE0RRF#0RRG0RRB0RRA0RRG0RRD0RRRRE0RRF#0RRG0RRB0RRA0RRG0RRD0RRRRE0RRF#0RRG0RRB0RRA0RRG0RRD0RRRRE0RRF#0B2G0RRB0D2E2A0RRG0F#2A2D0RRRRE0D3F#0A2G0RRB0D2E2A0RRG0A2F#2D0RRRRE0RRF#0B2G0RRB0D2E2A0RRG0F#2C#3D0RRRRE0RRF#0B2G0RRB0D2E2A0RRG0F#2A2D0RRRRE0RRF#0B2G0RRB0D2E2A0RRG0F#2A2D0RRRRE0RRF#0B2G0RRB0D2E2A0RRG0F#2A2D0RRRRB0RRRRB2A2E0RRE2D2A0RRRRD1E2G0RRRRB0RRRRB0RRRRB2A2E0RRE2D2A0RRD3D2E2D1R'
@@ -915,7 +933,7 @@ class Sound:
         pyxel.sounds[1].set(sweden_nt1, tones='t', volumes='4', effects='n', speed=45)
         pyxel.sounds[2].set(sweden_nt2, tones='t', volumes='4', effects='n', speed=45)
         pyxel.sounds[3].set(sweden_nt3, tones='t', volumes='4', effects='n', speed=45)
-        pyxel.musics[0].set([0], [1], [2], [3])
+        pyxel.musics[1].set([0], [1], [2], [3])
         
         wethands_nt0='rrrrA0E1A1B1C#2B1A1E1D1F#1C#2E2C#2A1RA0E1A1B1C#2B1A1E1D1F#1C#2E2C#2A1RG#2E1A1B1C#2B1RE1F#2F#1C#2E2C#2A1RE2F#2G#2E1A1B1RC#3D1RC#2E2A1RC#3E3RB0D1RRF#1RRG0B0D1F#1A1RRB0F#3F#1RF#1RRG0B0D1F#1A1RA2RE1A1B1C#2B1A1E1A0E1A1B1C#2RE1A2C#3RRD1F#1C#3A2RRB0RF#1A1C#2RA1C#3RB0C#3D3A1F#3C#3RB1A1RRG#0B0E1G#1E1B0G#0RE0G#0B0E1G#1E1A0G0B0D1F#1A1F#1D1B0A0D#1E1A1C#2B1A1E1RE0G#0B0E1G#1E0G#0B0E1G#1R'
         wethands_nt1='rrrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRA2RRRRRRRRRRRRRRA1RRF#1RRRRRRG3RRF#3A1RD1B0RRRRRRG3RRRA1RD1B0RRRRRRRA0RRRRRRRRRRRRRRRRRB0RRRRE2F#2RD1RRRRRRG0RRRRRRRRRRE0RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
@@ -923,7 +941,7 @@ class Sound:
         pyxel.sounds[4].set(wethands_nt0, tones='t', volumes='4', effects='n', speed=45)
         pyxel.sounds[5].set(wethands_nt1, tones='t', volumes='4', effects='n', speed=45)
         pyxel.sounds[6].set(wethands_nt2, tones='t', volumes='4', effects='n', speed=45)
-        pyxel.musics[1].set([4], [5], [6])
+        pyxel.musics[2].set([4], [5], [6])
         
         subwoofer_nt0='rrrrC2RRRG2RRRC2RRRG2RRRC2RRRG2RRRC2RRRG2RRRC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1RC2RC1C3B1E3G1D3B1B2C1RB1G2G1RB1RA0E3C2E3A1G3C2E3A0RC2E3A1G3C2E3A0RC2RA1RC2RF0E3A1C3F1A2A1RG0G2B1E3G1D3B1F2F0E3A1C3F1A2A1RG0RB1D3G1B2RC1RC2RC1RC2RC1B1RC1RB1RC1RC2RC1RC2RC1B1RC1RB1RE1'
         subwoofer_nt1='rrrrRRE2RRRE2RRRE2RRRE2RRRE2RRRE2RRRE2RRRE2RC2RE2RG2RE2RC2RE2RG2RE2RC2RE2RG2RE2RC2RE2RG2RE2RC2RE2RRRE2RC2RE2RRRE2RA1RE2RRRE2RA1RE2RRRE2RA1RE2RRRE2RF1RC2RRRC2RG1RD2RRRD2RF1RC2RRRC2RG1RD2RRRRRRB2RG2RB2RRE2RG2RE2RRRB2RG2RB2RRE2RG2RE2RR'
@@ -931,7 +949,7 @@ class Sound:
         pyxel.sounds[7].set(subwoofer_nt0, tones='t', volumes='4', effects=('n'), speed=45)
         pyxel.sounds[8].set(subwoofer_nt1, tones='t', volumes='4', effects=('n'), speed=45)
         pyxel.sounds[9].set(subwoofer_nt2, tones='t', volumes='4', effects=('n'), speed=45)
-        pyxel.musics[2].set([7], [8], [9])
+        pyxel.musics[3].set([7], [8], [9])
         
     def MusicSelection(music):
         pyxel.stop()
@@ -945,14 +963,14 @@ class StateMachine:
 
 class Data:
     def Images():
-        pyxel.images[0].load(0, 0, 'assets/sprites/Background_MainMenu.png')  # main menu bg
-        pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet_0.png')       # blocks, items, and player
-        pyxel.images[2].load(0, 0, 'assets/sprites/Background_Menus_ingame.png')
+        pyxel.images[0].load(0, 0, 'assets/sprites/Background_MainMenu.png')       # main menu bg
+        pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet_0.png')            # blocks, items, and player
+        pyxel.images[2].load(0, 0, 'assets/sprites/Background_Menus_ingame.png')   # menus in game
 
     with open('assets/data/blocks_id.json') as f: block_data = json.load(f)
     with open('assets/data/Items_id.json') as g: item_data = json.load(g)
     with open('assets/data/craftings_recipes.json') as h: crafting_data = json.load(h)
-
+       
     def CollorPallets(n):
         if n ==0:
             pyxel.colors[0] = 0x000000
@@ -1001,14 +1019,24 @@ class Data:
                 'inventory': inventory_data,
                 'camera_diff': camera_diff
             }
+            
+            file_path = 'Save_data.json'
 
-            with open("save_data.json", "w") as file:
-                json.dump(save_data, file)
-            print("Game saved to save_data.json")
+            if file_path: 
+                with open(file_path, "w") as file:
+                    json.dump(save_data, file)
+                print(f"Game saved to {file_path}")
             
         def LoadWorld():
             try:
-                with open("save_data.json", "r") as file:
+                file_path = 'Save_data.json'
+                
+                print(file_path)
+                
+                if not file_path:
+                    return
+                
+                with open(file_path, "r") as file:
                     save_data = json.load(file)
 
                     world_data = save_data.get('world', {})
