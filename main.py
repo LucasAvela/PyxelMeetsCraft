@@ -156,7 +156,7 @@ class Gameplay:
     class Camera:
         diff = [0, 0]
         speed = 1
-        velocities = [1, 4]
+        velocities = [1, 2]
         
         def CamController():
             if pyxel.btn(pyxel.KEY_A): Gameplay.Camera.diff[0] -= Gameplay.Camera.speed
@@ -394,7 +394,7 @@ class Gameplay:
             target_y = (pyxel.mouse_y + Gameplay.Camera.diff[1]) // 8 * 8
             layer = 0
             selected_block = Menu.Inventory[Gameplay.UI.Hotbar_Selected_slot]['Item']
-            block = next((block for block in Data.item_data['Items'] if block['name'] == selected_block), None)
+            #block = next((block for block in Data.item_data['Items'] if block['name'] == selected_block), None)
             
             if selected_block != None:
                 return
@@ -408,6 +408,12 @@ class Gameplay:
                     Menu.inChest.actual_inventory = Gameplay.Atlas.Entities[(target_x, target_y, layer)]['Inventory']
                     Menu.inChest.actual_chest = [target_x, target_y, layer]
                     Menu.Actual_Menu = "Chest"
+                    StateMachine.ChangeGameState("Menu")
+                    return
+                elif Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'] == 'Furnace_block':
+                    Menu.inFurnace.actual_inventory = Gameplay.Atlas.Entities[(target_x, target_y, layer)]['Inventory']
+                    Menu.inFurnace.actual_furnace = [target_x, target_y, layer]
+                    Menu.Actual_Menu = "Furnace"
                     StateMachine.ChangeGameState("Menu")
                     return
                 else:
@@ -435,9 +441,13 @@ class Gameplay:
                     Gameplay.Atlas.World[(x, y - BLOCK_SIZE, layer)] = {'Block': "Bed_block_Top"}
                 else: return
                     
-            elif block == "Chest_block":
+            elif block == 'Chest_block':
                 Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Chest_block"}
                 Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': copy.deepcopy(Menu.chest_inventory)}
+                
+            elif block == 'Furnace_block':
+                Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Furnace_block"}
+                Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': copy.deepcopy(Menu.furnace_inventory)}
             
             Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
         
@@ -450,6 +460,11 @@ class Gameplay:
                 Gameplay.Atlas.World[(x, y + BLOCK_SIZE, layer)] = {'Block': 'Air'}     
               
             elif block == "Chest_block":
+                Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Air"}
+                Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': None}
+                del Gameplay.Atlas.Entities[(x, y, layer)]
+                
+            elif block == "Furnace_block":
                 Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Air"}
                 Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': None}
                 del Gameplay.Atlas.Entities[(x, y, layer)]
@@ -549,6 +564,11 @@ class Menu:
         21: {'Pos': [78, 42], 'Item': None, 'amount': 0},
         22: {'Pos': [90, 42], 'Item': None, 'amount': 0},
         23: {'Pos': [102, 42], 'Item': None, 'amount': 0}
+    }
+
+    furnace_inventory = {
+        0: {'Pos': [42, 18], 'Slot': 'Material', 'Item': None, 'amount': 0},
+        1: {'Pos': [42, 42], 'Slot': 'Fuel'    , 'Item': None, 'amount': 0},
     }
     
     Holding_Item = False
@@ -727,7 +747,54 @@ class Menu:
                     if Item['amount'] > 1:
                         pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
                         pyxel.text(pos[0] + 7, pos[1] + 5, f'{Item['amount']}', 0)
-                              
+           
+    class inFurnace:
+        actual_inventory = None
+        actual_furnace = None
+        
+        MeltedItem = None
+        ProductSlot = [90, 30]
+        
+        def RemoveItemInFurnace(Key, amount):
+            if Menu.inFurnace.actual_inventory[Key]['amount'] > 0:
+                Menu.inFurnace.actual_inventory[Key]['amount'] -= amount
+                if Menu.inFurnace.actual_inventory[Key]['amount'] <= 0:
+                    Menu.inFurnace.actual_inventory[Key]['Item'] = None
+        
+        def MoveItemInFurnace(Amount):
+            for key, Item in Menu.inFurnace.actual_inventory.items():
+                    dx = pyxel.mouse_x - Menu.inFurnace.actual_inventory[key]['Pos'][0]
+                    dy = pyxel.mouse_y - Menu.inFurnace.actual_inventory[key]['Pos'][1]
+                    
+                    if 0 <= dx < 8 and 0 <= dy < 8:
+                        if not Menu.Holding_Item:
+                            if Item['Item'] != None:
+                                Menu.Holding_item_name = Item['Item']
+                                Menu.Holding_item_amount = Item['amount']
+                                Menu.Holding_Item = True
+                                Menu.inFurnace.RemoveItemInFurnace(key, Item['amount'])
+                                return
+                        else:
+                            if Item['Item'] == None:
+                                Menu.inFurnace.actual_inventory[key]["Item"] = Menu.Holding_item_name
+                                Menu.inFurnace.actual_inventory[key]["amount"] = Amount
+                                Menu.Holding_item_amount -= Amount
+                                if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
+                                return
+                        
+        def Update():
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): Menu.inFurnace.MoveItemInFurnace(Menu.Holding_item_amount)
+        
+        def Draw():
+            for key, Item in Menu.inFurnace.actual_inventory.items():
+                if Item['Item'] != None:
+                    i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
+                    pos = Menu.inFurnace.actual_inventory[key]['Pos']
+                    pyxel.blt(pos[0], pos[1], 1, i['local']['x'], i['local']['y'], 8, 8, 2)
+                    if Item['amount'] > 1:
+                        pyxel.rect(pos[0] + 6, pos[1] + 4, 5, 7, 7)
+                        pyxel.text(pos[0] + 7, pos[1] + 5, f'{Item['amount']}', 0)
+                       
     class CraftingFunction:
         def MoveItemToCraft(matriz_pos, matriz):
             for key, slot in matriz_pos.items():
@@ -888,7 +955,7 @@ class Menu:
         if Menu.Actual_Menu == "Inventory": pyxel.blt(0, 0, 2, 0, 0, 128, 128, 2); Menu.inInventory.Draw()
         elif Menu.Actual_Menu == "Workbench": pyxel.blt(0, 0, 2, 128, 0, 128, 128, 2); Menu.inWorkbench.Draw()
         elif Menu.Actual_Menu == "Chest": pyxel.blt(0, 0, 2, 0, 128, 128, 128, 2); Menu.inChest.Draw()
-        elif Menu.Actual_Menu == "Furnace": pyxel.blt(0, 0, 2, 128, 128, 128, 128, 2)
+        elif Menu.Actual_Menu == "Furnace": pyxel.blt(0, 0, 2, 128, 128, 128, 128, 2); Menu.inFurnace.Draw()
     
     def Inputs():
         if pyxel.btnp(pyxel.KEY_E):   
@@ -907,7 +974,7 @@ class Menu:
         if Menu.Actual_Menu == "Inventory": Menu.inInventory.Update()
         elif Menu.Actual_Menu == "Workbench": Menu.inWorkbench.Update()
         elif Menu.Actual_Menu == "Chest": Menu.inChest.Update()
-        #elif Menu.Actual_Menu == "Furnace": 
+        elif Menu.Actual_Menu == "Furnace": Menu.inFurnace.Update()
     
     def Draw():
         Gameplay.Atlas.RendererLayer()
@@ -1010,40 +1077,43 @@ class Data:
     
     class SaveLoad:
         def SaveWorld():
-            world_data = {str(key): value for key, value in Gameplay.Atlas.World.items()}
             inventory_data = {str(key): value for key, value in Menu.Inventory.items()}
+            world_data = {str(key): value for key, value in Gameplay.Atlas.World.items()}
+            entities_data = {str(key): value for key, value in Gameplay.Atlas.Entities.items()}  # Incluindo entities
             camera_diff = Gameplay.Camera.diff
 
             save_data = {
-                'world': world_data,
                 'inventory': inventory_data,
-                'camera_diff': camera_diff
+                'world': world_data,
+                'entities': entities_data,
+                'camera_diff': camera_diff,
             }
-            
+
             file_path = 'Save_data.json'
 
             if file_path: 
                 with open(file_path, "w") as file:
                     json.dump(save_data, file)
                 print(f"Game saved to {file_path}")
-            
+
         def LoadWorld():
             try:
                 file_path = 'Save_data.json'
-                
-                print(file_path)
-                
+
                 if not file_path:
                     return
-                
+
                 with open(file_path, "r") as file:
                     save_data = json.load(file)
 
+                    inventory_data = save_data.get('inventory', {})
+                    Menu.Inventory = {int(key): value for key, value in inventory_data.items()}
+                    
                     world_data = save_data.get('world', {})
                     Gameplay.Atlas.World = {eval(key): value for key, value in world_data.items()}
 
-                    inventory_data = save_data.get('inventory', {})
-                    Menu.Inventory = {int(key): value for key, value in inventory_data.items()}
+                    entities_data = save_data.get('entities', {})
+                    Gameplay.Atlas.Entities = {eval(key): value for key, value in entities_data.items()}
 
                     camera_diff = save_data.get('camera_diff', [0, 0])
                     Gameplay.Camera.diff = camera_diff
