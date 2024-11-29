@@ -7,7 +7,8 @@
             "type": "Block",
             "drop": "Grass_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Grass_Dirty_block",
@@ -16,7 +17,8 @@
             "type": "Block",
             "drop": "Dirt_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Dirt_block",
@@ -25,7 +27,8 @@
             "type": "Block",
             "drop": "Dirt_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Stone_block",
@@ -34,7 +37,8 @@
             "type": "Block",
             "drop": "Cobblestone_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Cobblestone_block",
@@ -43,7 +47,8 @@
             "type": "Block",
             "drop": "Cobblestone_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Bedrock_block",
@@ -52,7 +57,8 @@
             "type": "Block",
             "drop": "Bedrock_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Coal_Ore_block",
@@ -61,7 +67,8 @@
             "type": "Block",
             "drop": "Coal",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Iron_Ore_block",
@@ -70,7 +77,8 @@
             "type": "Block",
             "drop": "Iron_raw",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Gold_Ore_block",
@@ -79,7 +87,8 @@
             "type": "Block",
             "drop": "Gold_raw",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Diamond_Ore_block",
@@ -88,7 +97,8 @@
             "type": "Block",
             "drop": "Diamond",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Emerald_Ore_block",
@@ -97,7 +107,8 @@
             "type": "Block",
             "drop": "Emerald",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Wood_Log_block_Top",
@@ -106,7 +117,8 @@
             "type": "Block",
             "drop": "Wood_Log_block_Top",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 4
         },
         {
             "name": "Wood_Log_block_Bottom",
@@ -115,7 +127,8 @@
             "type": "Block",
             "drop": "Wood_Log_block_Bottom",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 4
         },
         {
             "name": "Wood_Plank_block",
@@ -124,7 +137,8 @@
             "type": "Block",
             "drop": "Wood_Plank_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 1
         },
         {
             "name": "Leaves_block",
@@ -133,7 +147,8 @@
             "type": "Block",
             "drop": "Leaves_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Workbench_block",
@@ -142,7 +157,8 @@
             "type": "Block",
             "drop": "Workbench_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Chest_block",
@@ -151,7 +167,8 @@
             "type": "Block",
             "drop": "Chest_block",
             "stack": 8,
-            "placeSpecial": true
+            "placeSpecial": true,
+            "fuelValue": 0
         },
         {
             "name": "Furnace_block",
@@ -160,7 +177,8 @@
             "type": "Block",
             "drop": "Furnace_block",
             "stack": 8,
-            "placeSpecial": true
+            "placeSpecial": true,
+            "fuelValue": 0
         },
         {
             "name": "Door_block",
@@ -169,7 +187,8 @@
             "type": "Block",
             "drop": "Door_block",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Bed",
@@ -178,7 +197,8 @@
             "type": "Block",
             "drop": "Bed",
             "stack": 1,
-            "placeSpecial": true
+            "placeSpecial": true,
+            "fuelValue": 0
         },
         {
             "name": "Bed_block_Top",
@@ -187,7 +207,8 @@
             "type": "Block",
             "drop": "Bed",
             "stack": 1,
-            "placeSpecial": true
+            "placeSpecial": true,
+            "fuelValue": 0
         },
         {
             "name": "Bed_block_Bottom",
@@ -196,7 +217,8 @@
             "type": "Block",
             "drop": "Bed",
             "stack": 1,
-            "placeSpecial": true
+            "placeSpecial": true,
+            "fuelValue": 0
         },
         {
             "name": "Coal",
@@ -205,7 +227,8 @@
             "type": "Item",
             "drop": "Coal",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 8
         },
         {
             "name": "Iron_raw",
@@ -214,7 +237,8 @@
             "type": "Item",
             "drop": "Iron_raw",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Iron_ingot",
@@ -223,7 +247,8 @@
             "type": "Item",
             "drop": "Iron_ingot",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Gold_raw",
@@ -232,7 +257,8 @@
             "type": "Item",
             "drop": "Gold_raw",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Gold_ingot",
@@ -241,7 +267,8 @@
             "type": "Item",
             "drop": "Gold_ingot",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Diamond",
@@ -250,7 +277,8 @@
             "type": "Item",
             "drop": "Diamond",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Emerald",
@@ -259,7 +287,8 @@
             "type": "Item",
             "drop": "Emerald",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Apple",
@@ -268,7 +297,8 @@
             "type": "Food",
             "drop": "Apple",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Golden_Apple",
@@ -277,7 +307,8 @@
             "type": "Food",
             "drop": "Golden_Apple",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Porkchop_Raw",
@@ -286,7 +317,8 @@
             "type": "Food",
             "drop": "Porkchop_Raw",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Porkchop_Cooked",
@@ -295,7 +327,8 @@
             "type": "Food",
             "drop": "Porkchop_Cooked",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Wooden_Pickaxe",
@@ -304,7 +337,8 @@
             "type": "Tool",
             "drop": "Wooden_Pickaxe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Stone_Pickaxe",
@@ -313,7 +347,8 @@
             "type": "Tool",
             "drop": "Stone_Pickaxe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Iron_Pickaxe",
@@ -322,7 +357,8 @@
             "type": "Tool",
             "drop": "Iron_Pickaxe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Golden_Pickaxe",
@@ -331,7 +367,8 @@
             "type": "Tool",
             "drop": "Golden_Pickaxe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Diamond_Pickaxe",
@@ -340,7 +377,8 @@
             "type": "Tool",
             "drop": "Diamond_Pickaxe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Wooden_Axe",
@@ -349,7 +387,8 @@
             "type": "Tool",
             "drop": "Wooden_Axe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Stone_Axe",
@@ -358,7 +397,8 @@
             "type": "Tool",
             "drop": "Stone_Axe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Iron_Axe",
@@ -367,7 +407,8 @@
             "type": "Tool",
             "drop": "Iron_Axe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Golden_Axe",
@@ -376,7 +417,8 @@
             "type": "Tool",
             "drop": "Golden_Axe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Diamond_Axe",
@@ -385,7 +427,8 @@
             "type": "Tool",
             "drop": "Diamond_Axe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Wooden_Shovel",
@@ -394,7 +437,8 @@
             "type": "Tool",
             "drop": "Wooden_Shovel",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Stone_Shovel",
@@ -403,7 +447,8 @@
             "type": "Tool",
             "drop": "Stone_Shovel",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Iron_Shovel",
@@ -412,7 +457,8 @@
             "type": "Tool",
             "drop": "Iron_Shovel",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Golden_Shovel",
@@ -421,7 +467,8 @@
             "type": "Tool",
             "drop": "Golden_Shovel",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Diamond_Shovel",
@@ -430,7 +477,8 @@
             "type": "Tool",
             "drop": "Diamond_Shovel",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Wooden_Hoe",
@@ -439,7 +487,8 @@
             "type": "Tool",
             "drop": "Wooden_Hoe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Stone_Hoe",
@@ -448,7 +497,8 @@
             "type": "Tool",
             "drop": "Stone_Hoe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Iron_Hoe",
@@ -457,7 +507,8 @@
             "type": "Tool",
             "drop": "Iron_Hoe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Golden_Hoe",
@@ -466,7 +517,8 @@
             "type": "Tool",
             "drop": "Golden_Hoe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Diamond_Hoe",
@@ -475,7 +527,8 @@
             "type": "Tool",
             "drop": "Diamond_Hoe",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Wooden_Sword",
@@ -484,7 +537,8 @@
             "type": "Tool",
             "drop": "Wooden_Sword",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Stone_Sword",
@@ -493,7 +547,8 @@
             "type": "Tool",
             "drop": "Stone_Sword",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Iron_Sword",
@@ -502,7 +557,8 @@
             "type": "Tool",
             "drop": "Iron_Sword",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Golden_Sword",
@@ -511,7 +567,8 @@
             "type": "Tool",
             "drop": "Golden_Sword",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Diamond_Sword",
@@ -520,7 +577,8 @@
             "type": "Tool",
             "drop": "Diamond_Sword",
             "stack": 1,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         },
         {
             "name": "Stick",
@@ -529,7 +587,8 @@
             "type": "Item",
             "drop": "Stick",
             "stack": 8,
-            "placeSpecial": false
+            "placeSpecial": false,
+            "fuelValue": 0
         }
     ]
 }

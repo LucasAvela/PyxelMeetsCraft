@@ -412,6 +412,9 @@ class Gameplay:
                     return
                 elif Gameplay.Atlas.World[(target_x, target_y, layer)]['Block'] == 'Furnace_block':
                     Menu.inFurnace.actual_inventory = Gameplay.Atlas.Entities[(target_x, target_y, layer)]['Inventory']
+                    Menu.inFurnace.progress = Gameplay.Atlas.Entities[(target_x, target_y, layer)]['Progress']
+                    Menu.inFurnace.inProgress = Gameplay.Atlas.Entities[(target_x, target_y, layer)]['inProgress']
+                    Menu.inFurnace.consumed_fuel = Gameplay.Atlas.Entities[(target_x, target_y, layer)]['consumed_fuel']
                     Menu.inFurnace.actual_furnace = [target_x, target_y, layer]
                     Menu.Actual_Menu = "Furnace"
                     StateMachine.ChangeGameState("Menu")
@@ -447,7 +450,10 @@ class Gameplay:
                 
             elif block == 'Furnace_block':
                 Gameplay.Atlas.World[(x, y, layer)] = {'Block': "Furnace_block"}
-                Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': copy.deepcopy(Menu.furnace_inventory)}
+                Gameplay.Atlas.Entities[(x, y, layer)] = {'Inventory': copy.deepcopy(Menu.furnace_inventory),
+                                                          'Progress': 0,
+                                                          'inProgress': False,
+                                                          'consumed_fuel': 0}
             
             Menu.RemoveItem(Gameplay.UI.Hotbar_Selected_slot, 1)
         
@@ -569,6 +575,7 @@ class Menu:
     furnace_inventory = {
         0: {'Pos': [42, 18], 'Slot': 'Material', 'Item': None, 'amount': 0},
         1: {'Pos': [42, 42], 'Slot': 'Fuel'    , 'Item': None, 'amount': 0},
+        2: {'Pos': [90, 30], 'Slot': 'Result'  , 'Item': None, 'amount': 0}
     }
     
     Holding_Item = False
@@ -752,8 +759,21 @@ class Menu:
         actual_inventory = None
         actual_furnace = None
         
-        MeltedItem = None
-        ProductSlot = [90, 30]
+        frame_count = 0
+        progress = 0
+        inProgress = False
+        consumed_fuel = 0
+        
+        def CloseFurnace():
+            Gameplay.Atlas.Entities[Menu.inFurnace.actual_furnace[0], Menu.inFurnace.actual_furnace[1], Menu.inFurnace.actual_furnace[2]]['Inventory'] = Menu.inFurnace.actual_inventory
+            Gameplay.Atlas.Entities[Menu.inFurnace.actual_furnace[0], Menu.inFurnace.actual_furnace[1], Menu.inFurnace.actual_furnace[2]]['Progress'] = Menu.inFurnace.progress
+            Gameplay.Atlas.Entities[Menu.inFurnace.actual_furnace[0], Menu.inFurnace.actual_furnace[1], Menu.inFurnace.actual_furnace[2]]['inProgress'] = Menu.inFurnace.inProgress
+            Gameplay.Atlas.Entities[Menu.inFurnace.actual_furnace[0], Menu.inFurnace.actual_furnace[1], Menu.inFurnace.actual_furnace[2]]['consumed_fuel'] = Menu.inFurnace.consumed_fuel
+            Menu.inFurnace.actual_inventory = None
+            Menu.inFurnace.progress = 0
+            Menu.inFurnace.inProgress = False
+            Menu.inFurnace.consumed_fuel = 0
+            Menu.inFurnace.actual_furnace = None
         
         def RemoveItemInFurnace(Key, amount):
             if Menu.inFurnace.actual_inventory[Key]['amount'] > 0:
@@ -776,16 +796,87 @@ class Menu:
                                 return
                         else:
                             if Item['Item'] == None:
+                                if Menu.inFurnace.actual_inventory[key]["Slot"] == 'Fuel':
+                                    i = next(i for i in Data.item_data['Items'] if i['name'] == Menu.Holding_item_name)
+                                    if i['fuelValue'] <= 0: return
+                                elif Menu.inFurnace.actual_inventory[key]["Slot"] == 'Result': return
+                                    
                                 Menu.inFurnace.actual_inventory[key]["Item"] = Menu.Holding_item_name
                                 Menu.inFurnace.actual_inventory[key]["amount"] = Amount
                                 Menu.Holding_item_amount -= Amount
                                 if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
                                 return
+                            elif Item['Item'] == Menu.Holding_item_name:
+                                i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
+                                if Item['amount'] + Amount <= i['stack']:
+                                    Menu.inFurnace.actual_inventory[key]["amount"] += Amount
+                                    Menu.Holding_item_amount -= Amount
+                                    if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
+                                    return
+                                else:
+                                    quant = i['stack'] - Item['amount']
+                                    if quant < 0: quant = quant * -1
+                                    while quant > 0:
+                                        Menu.inFurnace.actual_inventory[key]["amount"] += 1
+                                        Menu.Holding_item_amount -= 1
+                                        quant -= 1
+        
+        def FurnaceEngine():
+            if Menu.inFurnace.inProgress == False:
+                if Menu.inFurnace.actual_inventory[0]["Item"] != None and Menu.inFurnace.actual_inventory[1]["Item"] != None:
+                    i = next(i for i in Data.item_data['Items'] if i['name'] == Menu.inFurnace.actual_inventory[1]["Item"])
+                    Menu.inFurnace.consumed_fuel = i['fuelValue']
+                    Menu.inFurnace.RemoveItemInFurnace(1, 1)
+                    Menu.inFurnace.inProgress = True
+                else:
+                    Menu.inFurnace.inProgress = False
+                    
+        def FurnaceUpdate():
+            if Menu.inFurnace.inProgress == True:
+                if Menu.inFurnace.consumed_fuel > 0:
+                    
+                    Menu.inFurnace.frame_count += 1
+            
+                    if Menu.inFurnace.frame_count >= TPS:
+                        Menu.inFurnace.progress += 1
+                        Menu.inFurnace.frame_count = 0
+                
+                    if Menu.inFurnace.progress >= 24:
+                        Menu.inFurnace.MeltItem()
+                        Menu.inFurnace.progress = 0
+                        Menu.inFurnace.consumed_fuel -= 1
+                        
+                    if Menu.inFurnace.actual_inventory[0]["Item"] == None:
+                        Menu.inFurnace.inProgress = False
+                        
+                else:
+                    Menu.inFurnace.inProgress = False
+        
+        def MeltItem():
+            i = next(i for i in Data.smelting_data['recipes'] if i['Item'] == Menu.inFurnace.actual_inventory[0]["Item"])
+            j = next(j for j in Data.item_data['Items'] if j['name'] == i["Result"])
+            
+            if Menu.inFurnace.actual_inventory[2]["Item"] == None:
+                Menu.inFurnace.actual_inventory[2]["Item"] = i["Result"]
+                Menu.inFurnace.actual_inventory[2]['amount'] = 1
+            elif Menu.inFurnace.actual_inventory[2]["Item"] == i["Result"] and Menu.inFurnace.actual_inventory[2]['amount'] < j['stack']:
+                Menu.inFurnace.actual_inventory[2]['amount'] += 1
+            else:
+                return
+                
+            Menu.inFurnace.RemoveItemInFurnace(0, 1)
                         
         def Update():
             if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): Menu.inFurnace.MoveItemInFurnace(Menu.Holding_item_amount)
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT): Menu.inFurnace.MoveItemInFurnace(1)
+            Menu.inFurnace.FurnaceEngine()
+            Menu.inFurnace.FurnaceUpdate()
         
         def Draw():
+            pyxel.rect(60, 30, 24, 8, 0)
+            pyxel.rect(60, 30, Menu.inFurnace.progress, 8, 8)
+            pyxel.blt(60, 30, 2, 188, 158, 24, 8, 2)
+            
             for key, Item in Menu.inFurnace.actual_inventory.items():
                 if Item['Item'] != None:
                     i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
@@ -914,11 +1005,11 @@ class Menu:
                             return
                     else:
                         if Item['Item'] == None:
-                            Menu.Inventory[key]["Item"] = Menu.Holding_item_name
-                            Menu.Inventory[key]["amount"] = Amount
-                            Menu.Holding_item_amount -= Amount
-                            if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
-                            return
+                                Menu.Inventory[key]["Item"] = Menu.Holding_item_name
+                                Menu.Inventory[key]["amount"] = Amount
+                                Menu.Holding_item_amount -= Amount
+                                if Menu.Holding_item_amount <= 0: Menu.Holding_Item = False; Menu.Holding_item_name = None
+                                return
                         elif Item['Item'] == Menu.Holding_item_name:
                             i = next(i for i in Data.item_data['Items'] if i['name'] == Item['Item'])
                             if Item['amount'] + Amount <= i['stack']:
@@ -952,14 +1043,15 @@ class Menu:
         pyxel.text(pos[0] + 7, pos[1] + 5, f'{Menu.Holding_item_amount}', 0)
     
     def DrawMenu():
-        if Menu.Actual_Menu == "Inventory": pyxel.blt(0, 0, 2, 0, 0, 128, 128, 2); Menu.inInventory.Draw()
-        elif Menu.Actual_Menu == "Workbench": pyxel.blt(0, 0, 2, 128, 0, 128, 128, 2); Menu.inWorkbench.Draw()
-        elif Menu.Actual_Menu == "Chest": pyxel.blt(0, 0, 2, 0, 128, 128, 128, 2); Menu.inChest.Draw()
-        elif Menu.Actual_Menu == "Furnace": pyxel.blt(0, 0, 2, 128, 128, 128, 128, 2); Menu.inFurnace.Draw()
+        if Menu.Actual_Menu == "Inventory"  : pyxel.blt(0, 0, 2, 0  , 0  , 128, 128, 2); Menu.inInventory.Draw()
+        elif Menu.Actual_Menu == "Workbench": pyxel.blt(0, 0, 2, 128, 0  , 128, 128, 2); Menu.inWorkbench.Draw()
+        elif Menu.Actual_Menu == "Chest"    : pyxel.blt(0, 0, 2, 0  , 128, 128, 128, 2); Menu.inChest.Draw()
+        elif Menu.Actual_Menu == "Furnace"  : pyxel.blt(0, 0, 2, 128, 128, 128, 128, 2); Menu.inFurnace.Draw()
     
     def Inputs():
         if pyxel.btnp(pyxel.KEY_E):   
             if Menu.Actual_Menu == 'Chest': Menu.inChest.CloseChest()
+            if Menu.Actual_Menu == 'Furnace': Menu.inFurnace.CloseFurnace()
             StateMachine.ChangeGameState('Gameplay')
             Menu.Actual_Menu = "Inventory"
         
@@ -1037,6 +1129,7 @@ class Data:
     with open('assets/data/blocks_id.json') as f: block_data = json.load(f)
     with open('assets/data/Items_id.json') as g: item_data = json.load(g)
     with open('assets/data/craftings_recipes.json') as h: crafting_data = json.load(h)
+    with open('assets/data/smelting_recipes.json') as i: smelting_data = json.load(i)
        
     def CollorPallets(n):
         if n ==0:

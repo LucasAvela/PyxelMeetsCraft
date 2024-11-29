@@ -1,0 +1,40 @@
+{
+    "recipes": [
+        {
+            "Item": "Cobblestone_block",
+            "Result": "Stone_block"
+        },
+        {
+            "Item": "Coal_Ore_block",
+            "Result": "Coal"
+        },
+        {
+            "Item": "Iron_Ore_block",
+            "Result": "Iron_ingot"
+        },
+        {
+            "Item": "Gold_Ore_block",
+            "Result": "Gold_ingot"
+        },
+        {
+            "Item": "Diamond_Ore_block",
+            "Result": "Diamond"
+        },
+        {
+            "Item": "Emerald_Ore_block",
+            "Result": "Emerald"
+        },
+        {
+            "Item": "Iron_raw",
+            "Result": "Iron_ingot"
+        },
+        {
+            "Item": "Gold_raw",
+            "Result": "Gold_ingot"
+        },
+        {
+            "Item": "Porkchop_Raw",
+            "Result": "Porkchop_Cooked"
+        }
+    ]
+}
