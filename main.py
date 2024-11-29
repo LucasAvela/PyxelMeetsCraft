@@ -573,9 +573,9 @@ class Menu:
     }
 
     furnace_inventory = {
-        0: {'Pos': [42, 18], 'Slot': 'Material', 'Item': None, 'amount': 0},
-        1: {'Pos': [42, 42], 'Slot': 'Fuel'    , 'Item': None, 'amount': 0},
-        2: {'Pos': [90, 30], 'Slot': 'Result'  , 'Item': None, 'amount': 0}
+        '0': {'Pos': [42, 18], 'Slot': 'Material', 'Item': None, 'amount': 0},
+        '1': {'Pos': [42, 42], 'Slot': 'Fuel'    , 'Item': None, 'amount': 0},
+        '2': {'Pos': [90, 30], 'Slot': 'Result'  , 'Item': None, 'amount': 0}
     }
     
     Holding_Item = False
@@ -823,10 +823,10 @@ class Menu:
         
         def FurnaceEngine():
             if Menu.inFurnace.inProgress == False:
-                if Menu.inFurnace.actual_inventory[0]["Item"] != None and Menu.inFurnace.actual_inventory[1]["Item"] != None:
-                    i = next(i for i in Data.item_data['Items'] if i['name'] == Menu.inFurnace.actual_inventory[1]["Item"])
+                if Menu.inFurnace.actual_inventory['0']["Item"] != None and Menu.inFurnace.actual_inventory['1']["Item"] != None:
+                    i = next(i for i in Data.item_data['Items'] if i['name'] == Menu.inFurnace.actual_inventory['1']["Item"])
                     Menu.inFurnace.consumed_fuel = i['fuelValue']
-                    Menu.inFurnace.RemoveItemInFurnace(1, 1)
+                    Menu.inFurnace.RemoveItemInFurnace('1', 1)
                     Menu.inFurnace.inProgress = True
                 else:
                     Menu.inFurnace.inProgress = False
@@ -846,25 +846,28 @@ class Menu:
                         Menu.inFurnace.progress = 0
                         Menu.inFurnace.consumed_fuel -= 1
                         
-                    if Menu.inFurnace.actual_inventory[0]["Item"] == None:
+                    if Menu.inFurnace.actual_inventory['0']["Item"] == None:
                         Menu.inFurnace.inProgress = False
                         
                 else:
                     Menu.inFurnace.inProgress = False
         
         def MeltItem():
-            i = next(i for i in Data.smelting_data['recipes'] if i['Item'] == Menu.inFurnace.actual_inventory[0]["Item"])
+            try:
+                i = next(i for i in Data.smelting_data['recipes'] if i['Item'] == Menu.inFurnace.actual_inventory['0']["Item"])
+            except StopIteration:
+                return
             j = next(j for j in Data.item_data['Items'] if j['name'] == i["Result"])
             
-            if Menu.inFurnace.actual_inventory[2]["Item"] == None:
-                Menu.inFurnace.actual_inventory[2]["Item"] = i["Result"]
-                Menu.inFurnace.actual_inventory[2]['amount'] = 1
-            elif Menu.inFurnace.actual_inventory[2]["Item"] == i["Result"] and Menu.inFurnace.actual_inventory[2]['amount'] < j['stack']:
-                Menu.inFurnace.actual_inventory[2]['amount'] += 1
+            if Menu.inFurnace.actual_inventory['2']["Item"] == None:
+                Menu.inFurnace.actual_inventory['2']["Item"] = i["Result"]
+                Menu.inFurnace.actual_inventory['2']['amount'] = 1
+            elif Menu.inFurnace.actual_inventory['2']["Item"] == i["Result"] and Menu.inFurnace.actual_inventory['2']['amount'] < j['stack']:
+                Menu.inFurnace.actual_inventory['2']['amount'] += 1
             else:
                 return
                 
-            Menu.inFurnace.RemoveItemInFurnace(0, 1)
+            Menu.inFurnace.RemoveItemInFurnace('0', 1)
                         
         def Update():
             if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): Menu.inFurnace.MoveItemInFurnace(Menu.Holding_item_amount)
@@ -1130,7 +1133,7 @@ class Data:
     with open('assets/data/Items_id.json') as g: item_data = json.load(g)
     with open('assets/data/craftings_recipes.json') as h: crafting_data = json.load(h)
     with open('assets/data/smelting_recipes.json') as i: smelting_data = json.load(i)
-       
+          
     def CollorPallets(n):
         if n ==0:
             pyxel.colors[0] = 0x000000
@@ -1172,7 +1175,7 @@ class Data:
         def SaveWorld():
             inventory_data = {str(key): value for key, value in Menu.Inventory.items()}
             world_data = {str(key): value for key, value in Gameplay.Atlas.World.items()}
-            entities_data = {str(key): value for key, value in Gameplay.Atlas.Entities.items()}  # Incluindo entities
+            entities_data = {str(key): value for key, value in Gameplay.Atlas.Entities.items()}
             camera_diff = Gameplay.Camera.diff
 
             save_data = {
