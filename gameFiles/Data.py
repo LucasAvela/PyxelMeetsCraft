@@ -27,12 +27,42 @@ class Blocks(Enum):
     Furnace_block = "Furnace_block"
     Bed_block_Top = "Bed_block_Top"
     Bed_block_Bottom = "Bed_block_Bottom"
-    Door_block = "Door_block"
+    Door_block_Top = "Door_block_Top"
+    Door_block_Bottom = "Door_block_Bottom"
+    Glass_block = "Glass_block"
 
-block_data = None
-item_data = None
-crafting_data = None
-smelting_data = None
+class GameStates(Enum):
+    MainMenu = 0
+    Gameplay = 1
+    Menu = 2
+
+blocks_by_layer = [
+    {Blocks.Bedrock_block.value: 100},
+    {Blocks.Cobblestone_block.value: 90, Blocks.Coal_Ore_block.value: 5, Blocks.Iron_Ore_block.value: 2, Blocks.Gold_Ore_block.value: 1.5, Blocks.Diamond_Ore_block.value: 1, Blocks.Emerald_Ore_block.value: 0.5},
+    {Blocks.Stone_block.value: 95, Blocks.Coal_Ore_block.value: 3.5, Blocks.Iron_Ore_block.value: 1, Blocks.Gold_Ore_block.value: 0.5},
+    {Blocks.Stone_block.value: 50, Blocks.Dirt_block.value: 50},
+    {Blocks.Dirt_block.value: 100},
+    {Blocks.Grass_block.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+    {Blocks.Air.value: 100},
+]
+
+block_Size = 8
+block_Height = 4
+view_Distance = 16
+
+layers_quantity = len(blocks_by_layer)
+top_layer = layers_quantity - 1
+bot_layer = 0
 
 def Images():
     pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet.png')
@@ -40,6 +70,10 @@ def Images():
 def Colors():
     pyxel.colors[5] = 0x545454
 
+block_data = None
+item_data = None
+crafting_data = None
+smelting_data = None
 def GameData():
     global block_data, item_data, crafting_data, smelting_data
     with open('assets/data/blocks_id.json') as f: block_data = json.load(f)

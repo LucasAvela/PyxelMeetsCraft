@@ -4,7 +4,7 @@
             "name": "Air",
             "local": {"x": null, "y": null},
             "Colision": true,
-            "Transparent": true
+            "Transparent": false
         },
         {
             "name": "Grass_block",
@@ -100,7 +100,7 @@
             "name": "Leaves_block",
             "local": {"x": 48, "y": 0},
             "Colision": true,
-            "Transparent": true
+            "Transparent": false
         },
         {
             "name": "Wood_Log_block",
@@ -118,13 +118,13 @@
             "name": "Bed_block_Top",
             "local": {"x": 48, "y": 48},
             "Colision": true,
-            "Transparent": true
+            "Transparent": false
         },
         {
             "name": "Bed_block_Bottom",
             "local": {"x": 48, "y": 64},
             "Colision": true,
-            "Transparent": true
+            "Transparent": false
         },
         {
             "name": "Workbench_block",
@@ -136,7 +136,7 @@
             "name": "Chest_block",
             "local": {"x": 64, "y": 16},
             "Colision": true,
-            "Transparent": true
+            "Transparent": false
         },
         {
             "name": "Furnace_block",
@@ -145,10 +145,22 @@
             "Transparent": false
         },
         {
-            "name": "Door_block",
+            "name": "Door_block_Top",
             "local": {"x": 64, "y": 48},
             "Colision": true,
             "Transparent": true
+        },
+        {
+            "name": "Door_block_Bottom",
+            "local": {"x": 64, "y": 64},
+            "Colision": true,
+            "Transparent": false
+        },
+        {
+            "name": "Glass_block",
+            "local": {"x": 80, "y": 0},
+            "Colision": true,
+            "Transparent": false
         }
     ]
 }
