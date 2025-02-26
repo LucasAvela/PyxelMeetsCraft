@@ -58,7 +58,8 @@ blocks_by_layer = [
 
 block_Size = 8
 block_Height = 4
-view_Distance = 16
+chunk_size = 8
+view_Distance = 2
 
 layers_quantity = len(blocks_by_layer)
 top_layer = layers_quantity - 1
@@ -76,7 +77,17 @@ crafting_data = None
 smelting_data = None
 def GameData():
     global block_data, item_data, crafting_data, smelting_data
-    with open('assets/data/blocks_id.json') as f: block_data = json.load(f)
-    with open('assets/data/Items_id.json') as g: item_data = json.load(g)
-    with open('assets/data/craftings_recipes.json') as h: crafting_data = json.load(h)
-    with open('assets/data/smelting_recipes.json') as i: smelting_data = json.load(i)
+
+    with open('assets/data/blocks_id.json', 'r') as f:
+        blocks_list = json.load(f)
+        block_data = { block["name"]: block for block in blocks_list["Blocks"] }
+
+    with open('assets/data/Items_id.json', 'r') as g:
+        item_list = json.load(g)
+        item_data = { item["name"]: item for item in item_list["Items"] }
+
+    with open('assets/data/craftings_recipes.json', 'r') as h:
+        crafting_data = json.load(h)
+
+    with open('assets/data/smelting_recipes.json', 'r') as i:
+        smelting_data = json.load(i)

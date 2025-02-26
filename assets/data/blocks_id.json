@@ -4,163 +4,163 @@
             "name": "Air",
             "local": {"x": null, "y": null},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Grass_block",
             "local": {"x": 0, "y": 0},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Dirt_block",
             "local": {"x": 0, "y": 16},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Stone_block",
             "local": {"x": 0, "y": 32},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Cobblestone_block",
             "local": {"x": 0, "y": 48},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Bedrock_block",
             "local": {"x": 0, "y": 64},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Coal_Ore_block",
             "local": {"x": 16, "y": 0},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Iron_Ore_block",
             "local": {"x": 16, "y": 16},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Gold_Ore_block",
             "local": {"x": 16, "y": 32},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Diamond_Ore_block",
             "local": {"x": 16, "y": 48},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Emerald_Ore_block",
             "local": {"x": 16, "y": 64},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Stone_Bricks_block",
             "local": {"x": 32, "y": 0},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Iron_block",
             "local": {"x": 32, "y": 16},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Gold_block",
             "local": {"x": 32, "y": 32},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Diamond_block",
             "local": {"x": 32, "y": 48},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Emerald_block",
             "local": {"x": 32, "y": 64},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Leaves_block",
             "local": {"x": 48, "y": 0},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Wood_Log_block",
             "local": {"x": 48, "y": 16},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Wood_Plank_block",
             "local": {"x": 48, "y": 32},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Bed_block_Top",
             "local": {"x": 48, "y": 48},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Bed_block_Bottom",
             "local": {"x": 48, "y": 64},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Workbench_block",
             "local": {"x": 64, "y": 0},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Chest_block",
             "local": {"x": 64, "y": 16},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Furnace_block",
             "local": {"x": 64, "y": 32},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Door_block_Top",
             "local": {"x": 64, "y": 48},
             "Colision": true,
-            "Transparent": true
+            "Solid": false
         },
         {
             "name": "Door_block_Bottom",
             "local": {"x": 64, "y": 64},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         },
         {
             "name": "Glass_block",
             "local": {"x": 80, "y": 0},
             "Colision": true,
-            "Transparent": false
+            "Solid": true
         }
     ]
 }

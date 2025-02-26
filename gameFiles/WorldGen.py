@@ -5,7 +5,7 @@ World = {}
 Entities = {}
 
 def GenerateWorldLayers(optfine):
-    for i in range(0, Data.layers_quantity):
+    for i in range(Data.layers_quantity):
         WorldGenLayer(i, optfine)
 
 def GetRandomBlock(layer):
@@ -26,6 +26,8 @@ def WorldGenLayer(layer, optfine):
 
     for x in range(start_x, end_x):
         for y in range(start_y, end_y):
-            if (x, y, layer) not in World:
+            key = (x, y, layer)
+            if key not in World:
                 blockSelected = GetRandomBlock(layer)
-                World[(x, y, layer)] = {"Block": blockSelected}
+                block = Data.block_data[blockSelected]
+                World[key] = {"Block": blockSelected, "Solid": block['Solid']}
