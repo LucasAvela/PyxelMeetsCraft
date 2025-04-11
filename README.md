@@ -15,13 +15,13 @@ Everything you see is actually 2D, but built with a layered tilemap that creates
 ## 📸 Screenshots
 
 ### World Exploration
-![World Scene](imgs/scene1.jpg)
+![World Scene](imgs/print1.jpg)
 
 ### Cozy Indoor Room
-![Room Interior](imgs/scene2.jpg)
+![Room Interior](imgs/print2.jpg)
 
 ### Block Palette and Assets
-![Block Display](imgs/scene3.jpg)
+![Block Display](imgs/print3.jpg)
 
 ---
 
