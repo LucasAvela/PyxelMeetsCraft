@@ -36,58 +36,34 @@ class GameStates(Enum):
     Gameplay = 1
     Menu = 2
 
-blocks_by_layer = [
-    {Blocks.Bedrock_block.value: 100},
-    {Blocks.Cobblestone_block.value: 90, Blocks.Coal_Ore_block.value: 5, Blocks.Iron_Ore_block.value: 2, Blocks.Gold_Ore_block.value: 1.5, Blocks.Diamond_Ore_block.value: 1, Blocks.Emerald_Ore_block.value: 0.5},
-    {Blocks.Stone_block.value: 95, Blocks.Coal_Ore_block.value: 3.5, Blocks.Iron_Ore_block.value: 1, Blocks.Gold_Ore_block.value: 0.5},
-    {Blocks.Stone_block.value: 50, Blocks.Dirt_block.value: 50},
-    {Blocks.Dirt_block.value: 100},
-    {Blocks.Grass_block.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-    {Blocks.Air.value: 100},
-]
+class GameData():
+    block_data = None
+    item_data = None
+    crafting_data = None
+    smelting_data = None
 
-block_Size = 8
-block_Height = 4
-chunk_size = 8
-view_Distance = 2
+    def GameData():
+        with open('D:/Projects/Avela/Pyxel/PyxelMeetsCraft/assets/data/blocks_id.json', 'r') as f:
+            blocks_list = json.load(f)
+            GameData.block_data = { block["name"]: block for block in blocks_list["Blocks"] }
 
-layers_quantity = len(blocks_by_layer)
-top_layer = layers_quantity - 1
-bot_layer = 0
+        with open('D:/Projects/Avela/Pyxel/PyxelMeetsCraft/assets/data/Items_id.json', 'r') as g:
+            item_list = json.load(g)
+            GameData.item_data = { item["name"]: item for item in item_list["Items"] }
 
-def Images():
-    pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet.png')
+        with open('D:/Projects/Avela/Pyxel/PyxelMeetsCraft/assets/data/craftings_recipes.json', 'r') as h:
+            GameData.crafting_data = json.load(h)
 
-def Colors():
-    pyxel.colors[5] = 0x545454
+        with open('D:/Projects/Avela/Pyxel/PyxelMeetsCraft/assets/data/smelting_recipes.json', 'r') as i:
+            GameData.smelting_data = json.load(i)
 
-block_data = None
-item_data = None
-crafting_data = None
-smelting_data = None
-def GameData():
-    global block_data, item_data, crafting_data, smelting_data
+    def Images():
+        pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet.png')
 
-    with open('assets/data/blocks_id.json', 'r') as f:
-        blocks_list = json.load(f)
-        block_data = { block["name"]: block for block in blocks_list["Blocks"] }
+    def Colors():
+        pyxel.colors[5] = 0x545454
 
-    with open('assets/data/Items_id.json', 'r') as g:
-        item_list = json.load(g)
-        item_data = { item["name"]: item for item in item_list["Items"] }
-
-    with open('assets/data/craftings_recipes.json', 'r') as h:
-        crafting_data = json.load(h)
-
-    with open('assets/data/smelting_recipes.json', 'r') as i:
-        smelting_data = json.load(i)
+    def Start():
+        GameData.GameData()
+        GameData.Images()
+        GameData.Colors()
