@@ -42,6 +42,12 @@ class Debug:
 
             if (target_x, adj_y, layer) in WorldGen.World and ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air.value):
                     WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": Data.Blocks.Cobblestone_block.value, "Solid": True}
+        
+        if pyxel.btnp(pyxel.KEY_EQUALS):
+            Renderer.ModifyMaxRenderLayer(1)
+        
+        if pyxel.btnp(pyxel.KEY_MINUS):
+            Renderer.ModifyMaxRenderLayer(-1)
 
 
 
@@ -98,7 +104,7 @@ class App:
         WorldGen.GetGameData()
         Renderer.GetGameData()
 
-        GameManager.PerlinNoise.init_seed()
+        GameManager.PerlinNoise.init_seed(128)
 
         pyxel.run(self.update, self.draw)
         

@@ -5,7 +5,7 @@ class AppInfo:
     ScreenWidth = 256
     ScreenHeight = 256
     WindowTitle = "Pyxel Meets Craft"
-    Fps = 120#60
+    Fps = 60
     Tps = 3
 
 class GameInfo:

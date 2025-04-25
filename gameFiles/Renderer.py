@@ -18,6 +18,9 @@ def GetGameData():
     GameData.block_height = GameManager.GameInfo.BlockHeight
     GameData.max_layer = GameManager.GameInfo.MaxLayer
 
+def ModifyMaxRenderLayer(layervalue):
+    GameData.max_layer += layervalue
+
 def WorldRenderer():
     start_x, end_x, start_y, end_y = GameManager.ChunkCalc.GetGenerationChunkArea()
 
