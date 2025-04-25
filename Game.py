@@ -111,7 +111,6 @@ class App:
         pyxel.cls(0)
 
         Renderer.WorldRenderer()
-        Renderer.DrawOutLine()
 
         Debug.DrawDebug()
         pyxel.camera(0, 0)
