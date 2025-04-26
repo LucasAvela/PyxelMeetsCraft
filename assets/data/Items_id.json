@@ -482,6 +482,19 @@
             }
         },
         {
+            "name": "Scissors",
+            "type": "Scissors",
+            "level": 5,
+            "stack": 1,
+            "fuel": 0,
+            "action": "Shave",
+            "block": null,
+            "local": {
+                "x": 0,
+                "y": 176
+            }
+        },
+        {
             "name": "Grass_block_item",
             "type": "Block",
             "level": 0,
