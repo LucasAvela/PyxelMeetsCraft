@@ -2,163 +2,409 @@
     "Blocks": [
         {
             "name": "Air",
-            "local": {"x": null, "y": null},
-            "Colision": true,
-            "Solid": true
+            "drop": "Air",
+            "tool": "Any",
+            "level": 0,
+            "local": {
+                "x": 256,
+                "y": 256
+            },
+            "Colision": false,
+            "Solid": false
         },
         {
             "name": "Grass_block",
-            "local": {"x": 0, "y": 0},
+            "drop": "Grass_block",
+            "tool": "Shovel",
+            "level": 0,
+            "local": {
+                "x": 0,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Dirt_block",
-            "local": {"x": 0, "y": 16},
+            "drop": "Dirt_block",
+            "tool": "Shovel",
+            "level": 0,
+            "local": {
+                "x": 8,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Stone_block",
-            "local": {"x": 0, "y": 32},
+            "drop": "Stone_block",
+            "tool": "Pickaxe",
+            "level": 1,
+            "local": {
+                "x": 16,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Cobblestone_block",
-            "local": {"x": 0, "y": 48},
+            "drop": "Cobblestone_block",
+            "tool": "Pickaxe",
+            "level": 1,
+            "local": {
+                "x": 24,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Bedrock_block",
-            "local": {"x": 0, "y": 64},
+            "drop": "Bedrock_block",
+            "tool": "Pickaxe",
+            "level": 10,
+            "local": {
+                "x": 32,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Farmland_block",
+            "drop": "Farmland_block",
+            "tool": "Shovel",
+            "level": 0,
+            "local": {
+                "x": 0,
+                "y": 12
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "StoneBricks_block",
+            "drop": "StoneBricks_block",
+            "tool": "Pickaxe",
+            "level": 1,
+            "local": {
+                "x": 40,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Coal_Ore_block",
-            "local": {"x": 16, "y": 0},
+            "drop": "Coal_Ore_block",
+            "tool": "Pickaxe",
+            "level": 1,
+            "local": {
+                "x": 48,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Iron_Ore_block",
-            "local": {"x": 16, "y": 16},
+            "drop": "Iron_Ore_block",
+            "tool": "Pickaxe",
+            "level": 2,
+            "local": {
+                "x": 56,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Gold_Ore_block",
-            "local": {"x": 16, "y": 32},
+            "drop": "Gold_Ore_block",
+            "tool": "Pickaxe",
+            "level": 2,
+            "local": {
+                "x": 64,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Diamond_Ore_block",
-            "local": {"x": 16, "y": 48},
+            "drop": "Diamond_Ore_block",
+            "tool": "Pickaxe",
+            "level": 3,
+            "local": {
+                "x": 72,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Emerald_Ore_block",
-            "local": {"x": 16, "y": 64},
-            "Colision": true,
-            "Solid": true
-        },
-        {
-            "name": "Stone_Bricks_block",
-            "local": {"x": 32, "y": 0},
+            "drop": "Emerald_Ore_block",
+            "tool": "Pickaxe",
+            "level": 3,
+            "local": {
+                "x": 80,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Iron_block",
-            "local": {"x": 32, "y": 16},
+            "drop": "Iron_block",
+            "tool": "Pickaxe",
+            "level": 3,
+            "local": {
+                "x": 88,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Gold_block",
-            "local": {"x": 32, "y": 32},
+            "drop": "Gold_block",
+            "tool": "Pickaxe",
+            "level": 3,
+            "local": {
+                "x": 96,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Diamond_block",
-            "local": {"x": 32, "y": 48},
+            "drop": "Diamond_block",
+            "tool": "Pickaxe",
+            "level": 3,
+            "local": {
+                "x": 104,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Emerald_block",
-            "local": {"x": 32, "y": 64},
+            "drop": "Emerald_block",
+            "tool": "Pickaxe",
+            "level": 3,
+            "local": {
+                "x": 112,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
-            "name": "Leaves_block",
-            "local": {"x": 48, "y": 0},
+            "name": "Wood_Planks_block",
+            "drop": "Wood_Planks_block",
+            "tool": "Axe",
+            "level": 0,
+            "local": {
+                "x": 120,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Wood_Log_block",
-            "local": {"x": 48, "y": 16},
+            "drop": "Wood_Log_block",
+            "tool": "Axe",
+            "level": 0,
+            "local": {
+                "x": 128,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
-            "name": "Wood_Plank_block",
-            "local": {"x": 48, "y": 32},
-            "Colision": true,
-            "Solid": true
-        },
-        {
-            "name": "Bed_block_Top",
-            "local": {"x": 48, "y": 48},
-            "Colision": true,
-            "Solid": true
-        },
-        {
-            "name": "Bed_block_Bottom",
-            "local": {"x": 48, "y": 64},
+            "name": "Leaves_block",
+            "drop": "Leaves_block",
+            "tool": "Scissors",
+            "level": 1,
+            "local": {
+                "x": 136,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Workbench_block",
-            "local": {"x": 64, "y": 0},
-            "Colision": true,
-            "Solid": true
-        },
-        {
-            "name": "Chest_block",
-            "local": {"x": 64, "y": 16},
+            "drop": "Workbench_block",
+            "tool": "Axe",
+            "level": 0,
+            "local": {
+                "x": 144,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Furnace_block",
-            "local": {"x": 64, "y": 32},
+            "drop": "Furnace_block",
+            "tool": "Pickaxe",
+            "level": 1,
+            "local": {
+                "x": 152,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
-            "name": "Door_block_Top",
-            "local": {"x": 64, "y": 48},
-            "Colision": true,
-            "Solid": false
-        },
-        {
-            "name": "Door_block_Bottom",
-            "local": {"x": 64, "y": 64},
+            "name": "Chest_block",
+            "drop": "Chest_block",
+            "tool": "Axe",
+            "level": 0,
+            "local": {
+                "x": 160,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         },
         {
             "name": "Glass_block",
-            "local": {"x": 80, "y": 0},
+            "drop": "Glass_block",
+            "tool": "Hoe",
+            "level": 4,
+            "local": {
+                "x": 168,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Bed_block_Top",
+            "drop": "Bed_block_Top",
+            "tool": "Any",
+            "level": 0,
+            "local": {
+                "x": 176,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Bed_block_Bottom",
+            "drop": "Bed_block_Bottom",
+            "tool": "Any",
+            "level": 0,
+            "local": {
+                "x": 184,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Door_block_Top",
+            "drop": "Door_block_Top",
+            "tool": "Axe",
+            "level": 0,
+            "local": {
+                "x": 192,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": false
+        },
+        {
+            "name": "Door_block_Bottom",
+            "drop": "Bed_block_Bottom",
+            "tool": "Axe",
+            "level": 0,
+            "local": {
+                "x": 200,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Wool_White_block",
+            "drop": "Wool_White_block",
+            "tool": "Scissors",
+            "level": 0,
+            "local": {
+                "x": 208,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Wool_Black_block",
+            "drop": "Wool_Black_block",
+            "tool": "Scissors",
+            "level": 0,
+            "local": {
+                "x": 216,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Wool_Red_block",
+            "drop": "Wool_Red_block",
+            "tool": "Scissors",
+            "level": 0,
+            "local": {
+                "x": 224,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Wool_Yellow_block",
+            "drop": "Wool_Yellow_block",
+            "tool": "Scissors",
+            "level": 0,
+            "local": {
+                "x": 232,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Wool_Blue_block",
+            "drop": "Wool_Blue_block",
+            "tool": "Scissors",
+            "level": 0,
+            "local": {
+                "x": 240,
+                "y": 0
+            },
+            "Colision": true,
+            "Solid": true
+        },
+        {
+            "name": "Wool_Green_block",
+            "drop": "Wool_Green_block",
+            "tool": "Scissors",
+            "level": 0,
+            "local": {
+                "x": 248,
+                "y": 0
+            },
             "Colision": true,
             "Solid": true
         }

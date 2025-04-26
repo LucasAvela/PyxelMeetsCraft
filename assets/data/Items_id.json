@@ -1,594 +1,888 @@
 {
     "Items": [
         {
-            "name": "Grass_block",
-            "local": {"x": 0, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Grass_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Grass_Dirty_block",
-            "local": {"x": 0, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Dirt_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Dirt_block",
-            "local": {"x": 0, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Dirt_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Stone_block",
-            "local": {"x": 0, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Cobblestone_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Cobblestone_block",
-            "local": {"x": 0, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Cobblestone_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Bedrock_block",
-            "local": {"x": 8, "y": 40},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Bedrock_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Coal_Ore_block",
-            "local": {"x": 8, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Coal",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Iron_Ore_block",
-            "local": {"x": 8, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Iron_raw",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Gold_Ore_block",
-            "local": {"x": 8, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Gold_raw",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Diamond_Ore_block",
-            "local": {"x": 8, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Diamond",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Emerald_Ore_block",
-            "local": {"x": 8, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Emerald",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Wood_Log_block_Top",
-            "local": {"x": 16, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Wood_Log_block_Top",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 4
-        },
-        {
-            "name": "Wood_Log_block_Bottom",
-            "local": {"x": 16, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Wood_Log_block_Bottom",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 4
-        },
-        {
-            "name": "Wood_Plank_block",
-            "local": {"x": 16, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Wood_Plank_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 1
-        },
-        {
-            "name": "Leaves_block",
-            "local": {"x": 16, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Leaves_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Workbench_block",
-            "local": {"x": 24, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Workbench_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Chest_block",
-            "local": {"x": 24, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Chest_block",
-            "stack": 8,
-            "placeSpecial": true,
-            "fuelValue": 0
-        },
-        {
-            "name": "Furnace_block",
-            "local": {"x": 24, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Furnace_block",
-            "stack": 8,
-            "placeSpecial": true,
-            "fuelValue": 0
-        },
-        {
-            "name": "Door_block",
-            "local": {"x": 24, "y": 40},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Door_block",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Bed",
-            "local": {"x": 32, "y": 40},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Bed",
-            "stack": 1,
-            "placeSpecial": true,
-            "fuelValue": 0
-        },
-        {
-            "name": "Bed_block_Top",
-            "local": {"x": 24, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Bed",
-            "stack": 1,
-            "placeSpecial": true,
-            "fuelValue": 0
-        },
-        {
-            "name": "Bed_block_Bottom",
-            "local": {"x": 24, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "type": "Block",
-            "drop": "Bed",
-            "stack": 1,
-            "placeSpecial": true,
-            "fuelValue": 0
+            "name": "Stick",
+            "type": "Item",
+            "level": 0,
+            "stack": 16,
+            "fuel": 1,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 0,
+                "y": 32
+            }
         },
         {
             "name": "Coal",
-            "local": {"x": 32, "y": 0},
-            "size": {"w": 8, "h": 8},
             "type": "Item",
-            "drop": "Coal",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 8
+            "level": 0,
+            "stack": 16,
+            "fuel": 8,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 16,
+                "y": 32
+            }
         },
         {
-            "name": "Iron_raw",
-            "local": {"x": 32, "y": 8},
-            "size": {"w": 8, "h": 8},
+            "name": "Raw_Iron",
             "type": "Item",
-            "drop": "Iron_raw",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 32,
+                "y": 32
+            }
         },
         {
-            "name": "Iron_ingot",
-            "local": {"x": 40, "y": 8},
-            "size": {"w": 8, "h": 8},
+            "name": "Iron",
             "type": "Item",
-            "drop": "Iron_ingot",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 48,
+                "y": 32
+            }
         },
         {
-            "name": "Gold_raw",
-            "local": {"x": 32, "y": 16},
-            "size": {"w": 8, "h": 8},
+            "name": "Raw_Gold",
             "type": "Item",
-            "drop": "Gold_raw",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 64,
+                "y": 32
+            }
         },
         {
-            "name": "Gold_ingot",
-            "local": {"x": 40, "y": 16},
-            "size": {"w": 8, "h": 8},
+            "name": "Gold",
             "type": "Item",
-            "drop": "Gold_ingot",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 80,
+                "y": 32
+            }
         },
         {
             "name": "Diamond",
-            "local": {"x": 32, "y": 24},
-            "size": {"w": 8, "h": 8},
             "type": "Item",
-            "drop": "Diamond",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 96,
+                "y": 32
+            }
         },
         {
             "name": "Emerald",
-            "local": {"x": 32, "y": 32},
-            "size": {"w": 8, "h": 8},
             "type": "Item",
-            "drop": "Emerald",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 112,
+                "y": 32
+            }
         },
         {
             "name": "Apple",
-            "local": {"x": 48, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Food",
-            "drop": "Apple",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "type": "Item",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 128,
+                "y": 32
+            }
         },
         {
             "name": "Golden_Apple",
-            "local": {"x": 48, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Food",
-            "drop": "Golden_Apple",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "type": "Item",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 144,
+                "y": 32
+            }
         },
         {
-            "name": "Porkchop_Raw",
-            "local": {"x": 48, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Food",
-            "drop": "Porkchop_Raw",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "name": "Raw_Steak",
+            "type": "Item",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 160,
+                "y": 32
+            }
         },
         {
-            "name": "Porkchop_Cooked",
-            "local": {"x": 48, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Food",
-            "drop": "Porkchop_Cooked",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "name": "Cooked_Steak",
+            "type": "Item",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 176,
+                "y": 32
+            }
         },
         {
             "name": "Wooden_Pickaxe",
-            "local": {"x": 88, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Wooden_Pickaxe",
+            "type": "Pickaxe",
+            "level": 1,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Stone_Pickaxe",
-            "local": {"x": 96, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Stone_Pickaxe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Iron_Pickaxe",
-            "local": {"x": 104, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Iron_Pickaxe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Golden_Pickaxe",
-            "local": {"x": 112, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Golden_Pickaxe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Diamond_Pickaxe",
-            "local": {"x": 120, "y": 0},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Diamond_Pickaxe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 2,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 0,
+                "y": 96
+            }
         },
         {
             "name": "Wooden_Axe",
-            "local": {"x": 88, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Wooden_Axe",
+            "type": "Axe",
+            "level": 1,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Stone_Axe",
-            "local": {"x": 96, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Stone_Axe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Iron_Axe",
-            "local": {"x": 104, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Iron_Axe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Golden_Axe",
-            "local": {"x": 112, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Golden_Axe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Diamond_Axe",
-            "local": {"x": 120, "y": 8},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Diamond_Axe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 2,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 0,
+                "y": 112
+            }
         },
         {
             "name": "Wooden_Shovel",
-            "local": {"x": 88, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Wooden_Shovel",
+            "type": "Shovel",
+            "level": 1,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Stone_Shovel",
-            "local": {"x": 96, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Stone_Shovel",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Iron_Shovel",
-            "local": {"x": 104, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Iron_Shovel",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Golden_Shovel",
-            "local": {"x": 112, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Golden_Shovel",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Diamond_Shovel",
-            "local": {"x": 120, "y": 16},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Diamond_Shovel",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 2,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 0,
+                "y": 128
+            }
         },
         {
             "name": "Wooden_Hoe",
-            "local": {"x": 88, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Wooden_Hoe",
+            "type": "Hoe",
+            "level": 1,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Stone_Hoe",
-            "local": {"x": 96, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Stone_Hoe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Iron_Hoe",
-            "local": {"x": 104, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Iron_Hoe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Golden_Hoe",
-            "local": {"x": 112, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Golden_Hoe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
-        },
-        {
-            "name": "Diamond_Hoe",
-            "local": {"x": 120, "y": 24},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Diamond_Hoe",
-            "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 2,
+            "action": "Farm",
+            "block": null,
+            "local": {
+                "x": 0,
+                "y": 144
+            }
         },
         {
             "name": "Wooden_Sword",
-            "local": {"x": 88, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Wooden_Sword",
+            "type": "Sword",
+            "level": 1,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 2,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 0,
+                "y": 160
+            }
+        },
+        {
+            "name": "Stone_Pickaxe",
+            "type": "Pickaxe",
+            "level": 2,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 16,
+                "y": 96
+            }
+        },
+        {
+            "name": "Stone_Axe",
+            "type": "Axe",
+            "level": 2,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 16,
+                "y": 112
+            }
+        },
+        {
+            "name": "Stone_Shovel",
+            "type": "Shovel",
+            "level": 2,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 16,
+                "y": 128
+            }
+        },
+        {
+            "name": "Stone_Hoe",
+            "type": "Hoe",
+            "level": 2,
+            "stack": 1,
+            "fuel": 0,
+            "action": "Farm",
+            "block": null,
+            "local": {
+                "x": 16,
+                "y": 144
+            }
         },
         {
             "name": "Stone_Sword",
-            "local": {"x": 96, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Stone_Sword",
+            "type": "Sword",
+            "level": 2,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 16,
+                "y": 160
+            }
+        },
+        {
+            "name": "Iron_Pickaxe",
+            "type": "Pickaxe",
+            "level": 3,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 32,
+                "y": 96
+            }
+        },
+        {
+            "name": "Iron_Axe",
+            "type": "Axe",
+            "level": 3,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 32,
+                "y": 112
+            }
+        },
+        {
+            "name": "Iron_Shovel",
+            "type": "Shovel",
+            "level": 3,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 32,
+                "y": 128
+            }
+        },
+        {
+            "name": "Iron_Hoe",
+            "type": "Hoe",
+            "level": 3,
+            "stack": 1,
+            "fuel": 0,
+            "action": "Farm",
+            "block": null,
+            "local": {
+                "x": 32,
+                "y": 144
+            }
         },
         {
             "name": "Iron_Sword",
-            "local": {"x": 104, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Iron_Sword",
+            "type": "Sword",
+            "level": 3,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 32,
+                "y": 160
+            }
+        },
+        {
+            "name": "Golden_Pickaxe",
+            "type": "Pickaxe",
+            "level": 2,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 48,
+                "y": 96
+            }
+        },
+        {
+            "name": "Golden_Axe",
+            "type": "Axe",
+            "level": 2,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 48,
+                "y": 112
+            }
+        },
+        {
+            "name": "Golden_Shovel",
+            "type": "Shovel",
+            "level": 2,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 48,
+                "y": 128
+            }
+        },
+        {
+            "name": "Golden_Hoe",
+            "type": "Hoe",
+            "level": 2,
+            "stack": 1,
+            "fuel": 0,
+            "action": "Farm",
+            "block": null,
+            "local": {
+                "x": 48,
+                "y": 144
+            }
         },
         {
             "name": "Golden_Sword",
-            "local": {"x": 112, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Golden_Sword",
+            "type": "Sword",
+            "level": 2,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 48,
+                "y": 160
+            }
+        },
+        {
+            "name": "Diamond_Pickaxe",
+            "type": "Pickaxe",
+            "level": 4,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 64,
+                "y": 96
+            }
+        },
+        {
+            "name": "Diamond_Axe",
+            "type": "Axe",
+            "level": 4,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 64,
+                "y": 112
+            }
+        },
+        {
+            "name": "Diamond_Shovel",
+            "type": "Shovel",
+            "level": 4,
+            "stack": 1,
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 64,
+                "y": 128
+            }
+        },
+        {
+            "name": "Diamond_Hoe",
+            "type": "Hoe",
+            "level": 4,
+            "stack": 1,
+            "fuel": 0,
+            "action": "Farm",
+            "block": null,
+            "local": {
+                "x": 64,
+                "y": 144
+            }
         },
         {
             "name": "Diamond_Sword",
-            "local": {"x": 120, "y": 32},
-            "size": {"w": 8, "h": 8},
-            "type": "Tool",
-            "drop": "Diamond_Sword",
+            "type": "Sword",
+            "level": 4,
             "stack": 1,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "fuel": 0,
+            "action": null,
+            "block": null,
+            "local": {
+                "x": 64,
+                "y": 160
+            }
         },
         {
-            "name": "Stick",
-            "local": {"x": 88, "y": 40},
-            "size": {"w": 8, "h": 8},
-            "type": "Item",
-            "drop": "Stick",
-            "stack": 8,
-            "placeSpecial": false,
-            "fuelValue": 0
+            "name": "Grass_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Grass_block",
+            "local": {
+                "x": 0,
+                "y": 48
+            }
+        },
+        {
+            "name": "Dirt_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Dirt_block",
+            "local": {
+                "x": 16,
+                "y": 48
+            }
+        },
+        {
+            "name": "Stone_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Stone_block",
+            "local": {
+                "x": 0,
+                "y": 64
+            }
+        },
+        {
+            "name": "Cobblestone_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Cobblestone_block",
+            "local": {
+                "x": 16,
+                "y": 64
+            }
+        },
+        {
+            "name": "Bedrock_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Bedrock_block",
+            "local": {
+                "x": 32,
+                "y": 48
+            }
+        },
+        {
+            "name": "Farmland_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Farmland_block",
+            "local": {
+                "x": 32,
+                "y": 64
+            }
+        },
+        {
+            "name": "StoneBricks_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "StoneBricks_block",
+            "local": {
+                "x": 48,
+                "y": 64
+            }
+        },
+        {
+            "name": "Coal_Ore_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 4,
+            "action": "Place",
+            "block": "Coal_Ore_block",
+            "local": {
+                "x": 48,
+                "y": 48
+            }
+        },
+        {
+            "name": "Iron_Ore_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Iron_Ore_block",
+            "local": {
+                "x": 64,
+                "y": 48
+            }
+        },
+        {
+            "name": "Gold_Ore_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Gold_Ore_block",
+            "local": {
+                "x": 80,
+                "y": 48
+            }
+        },
+        {
+            "name": "Diamond_Ore_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Diamond_Ore_block",
+            "local": {
+                "x": 96,
+                "y": 48
+            }
+        },
+        {
+            "name": "Emerald_Ore_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Emerald_Ore_block",
+            "local": {
+                "x": 112,
+                "y": 48
+            }
+        },
+        {
+            "name": "Iron_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Iron_block",
+            "local": {
+                "x": 64,
+                "y": 64
+            }
+        },
+        {
+            "name": "Gold_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Gold_block",
+            "local": {
+                "x": 80,
+                "y": 64
+            }
+        },
+        {
+            "name": "Diamond_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Diamond_block",
+            "local": {
+                "x": 96,
+                "y": 64
+            }
+        },
+        {
+            "name": "Emerald_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Emerald_block",
+            "local": {
+                "x": 112,
+                "y": 64
+            }
+        },
+        {
+            "name": "Wood_Planks_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 2,
+            "action": "Place",
+            "block": "Wood_Planks_block",
+            "local": {
+                "x": 128,
+                "y": 48
+            }
+        },
+        {
+            "name": "Wood_Log_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 4,
+            "action": "Place",
+            "block": "Wood_Log_block",
+            "local": {
+                "x": 144,
+                "y": 48
+            }
+        },
+        {
+            "name": "Leaves_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Leaves_block",
+            "local": {
+                "x": 160,
+                "y": 48
+            }
+        },
+        {
+            "name": "Workbench_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Workbench_block",
+            "local": {
+                "x": 128,
+                "y": 64
+            }
+        },
+        {
+            "name": "Furnace_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "PlaceSpecial",
+            "block": "Furnace_block",
+            "local": {
+                "x": 144,
+                "y": 64
+            }
+        },
+        {
+            "name": "Chest_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "PlaceSpecial",
+            "block": "Chest_block",
+            "local": {
+                "x": 160,
+                "y": 64
+            }
+        },
+        {
+            "name": "Glass_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 0,
+            "action": "Place",
+            "block": "Glass_block",
+            "local": {
+                "x": 176,
+                "y": 48
+            }
+        },
+        {
+            "name": "Wool_White_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 1,
+            "action": "Place",
+            "block": "Wool_White_block",
+            "local": {
+                "x": 176,
+                "y": 64
+            }
+        },
+        {
+            "name": "Wool_Black_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 1,
+            "action": "Place",
+            "block": "Wool_Black_block",
+            "local": {
+                "x": 192,
+                "y": 64
+            }
+        },
+        {
+            "name": "Wool_Red_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 1,
+            "action": "Place",
+            "block": "Wool_Red_block",
+            "local": {
+                "x": 192,
+                "y": 48
+            }
+        },
+        {
+            "name": "Wool_Yellow_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 1,
+            "action": "Place",
+            "block": "Wool_Yellow_block",
+            "local": {
+                "x": 208,
+                "y": 48
+            }
+        },
+        {
+            "name": "Wool_Blue_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 1,
+            "action": "Place",
+            "block": "Wool_Blue_block",
+            "local": {
+                "x": 224,
+                "y": 48
+            }
+        },
+        {
+            "name": "Wool_Green_block_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 16,
+            "fuel": 1,
+            "action": "Place",
+            "block": "Wool_Green_block",
+            "local": {
+                "x": 240,
+                "y": 48
+            }
+        },
+        {
+            "name": "Bed_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 1,
+            "fuel": 0,
+            "action": "PlaceSpecial",
+            "block": "Bed",
+            "local": {
+                "x": 224,
+                "y": 64
+            }
+        },
+        {
+            "name": "Door_item",
+            "type": "Block",
+            "level": 0,
+            "stack": 1,
+            "fuel": 0,
+            "action": "PlaceSpecial",
+            "block": "Door",
+            "local": {
+                "x": 240,
+                "y": 64
+            }
         }
     ]
 }

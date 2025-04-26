@@ -47,7 +47,7 @@ class GameData():
             blocks_list = json.load(f)
             GameData.block_data = { block["name"]: block for block in blocks_list["Blocks"] }
 
-        with open('D:/Projects/Avela/Pyxel/PyxelMeetsCraft/assets/data/Items_id.json', 'r') as g:
+        with open('D:/Projects/Avela/Pyxel/PyxelMeetsCraft/assets/data/items_id.json', 'r') as g:
             item_list = json.load(g)
             GameData.item_data = { item["name"]: item for item in item_list["Items"] }
 

@@ -94,7 +94,7 @@ def GenWorld():
             if (x, y, layer) in World: continue
             noise = GameManager.PerlinNoise.noise(x / 2, y / 2)
 
-            if noise > 0.8:
+            if noise >= 0.8:
                 World[(x, y, layer)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
                 World[(x, y, layer + 1)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
                 World[(x, y, layer + 2)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
