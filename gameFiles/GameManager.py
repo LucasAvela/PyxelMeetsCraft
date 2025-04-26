@@ -12,7 +12,7 @@ class GameInfo:
     BlockSize = 8
     BlockHeight = 4
     ViewDistance = 32
-    MaxLayer = 16
+    MaxLayer = 24
 
 class Camera:
     Position = [0, 0]
@@ -24,8 +24,8 @@ class ChunkCalc:
     def GetGenerationChunkArea():
         start_x = Camera.Position[0] // GameInfo.BlockSize
         end_x = start_x + (GameInfo.ViewDistance) + 1
-        start_y = Camera.Position[1] // GameInfo.BlockSize
-        end_y = start_y + (GameInfo.ViewDistance) + GameInfo.MaxLayer
+        start_y = Camera.Position[1] // GameInfo.BlockSize + 4
+        end_y = start_y + (GameInfo.ViewDistance) + 2
  
         return start_x, end_x, start_y, end_y
 

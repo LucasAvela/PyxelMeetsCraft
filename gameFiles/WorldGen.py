@@ -11,6 +11,8 @@ class BlocksStr:
     Gold_Ore_block = ""
     Diamond_Ore_block = ""
     Emerald_Ore_block = ""
+    Wood_Log_block = ""
+    Leabes_block = ""
 
 World = {}
 
@@ -24,6 +26,8 @@ def GetGameData():
     BlocksStr.Gold_Ore_block = Data.Blocks.Gold_Ore_block.value
     BlocksStr.Diamond_Ore_block = Data.Blocks.Diamond_Ore_block.value
     BlocksStr.Emerald_Ore_block = Data.Blocks.Emerald_Ore_block.value
+    BlocksStr.Wood_Log_block = Data.Blocks.Wood_Log_block.value
+    BlocksStr.Leaves_block = Data.Blocks.Leaves_block.value
 
 def GenWorld():
     global World
@@ -85,3 +89,16 @@ def GenWorld():
                 World[(x, y, layer + i)] = {"Block": BlocksStr.Dirt, "Solid": True}
             
             World[(x, y, layer + slope)] = {"Block": BlocksStr.Grass, "Solid": True}
+
+            layer = layer + slope + 1
+            if (x, y, layer) in World: continue
+            noise = GameManager.PerlinNoise.noise(x / 2, y / 2)
+
+            if noise > 0.8:
+                World[(x, y, layer)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
+                World[(x, y, layer + 1)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
+                World[(x, y, layer + 2)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
+                World[(x, y, layer + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
+                World[(x - 1, y, layer + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
+                World[(x + 1, y, layer + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
+                World[(x, y, layer + 4)] = {"Block": BlocksStr.Leaves_block, "Solid": True}

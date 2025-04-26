@@ -43,6 +43,30 @@ class Debug:
             if (target_x, adj_y, layer) in WorldGen.World and ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air.value):
                     WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": Data.Blocks.Cobblestone_block.value, "Solid": True}
         
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_MIDDLE):
+            position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
+            position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
+            layer = GameManager.GameInfo.MaxLayer - 2
+
+            while layer > 1:
+                target_x = position_x // GameManager.GameInfo.BlockSize
+                target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
+                adj_y = target_y + (layer // 2)
+
+                if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air.value:
+                    break
+
+                layer -= 1
+
+            if (target_x, adj_y, layer) in WorldGen.World and ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air.value):
+                    WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": Data.Blocks.Wood_Log_block.value, "Solid": True}
+                    WorldGen.World[(target_x, adj_y, layer + 2)] = {"Block": Data.Blocks.Wood_Log_block.value, "Solid": True}
+                    WorldGen.World[(target_x, adj_y, layer + 3)] = {"Block": Data.Blocks.Wood_Log_block.value, "Solid": True}
+                    WorldGen.World[(target_x, adj_y, layer + 4)] = {"Block": Data.Blocks.Leaves_block.value, "Solid": True}
+                    WorldGen.World[(target_x - 1, adj_y, layer + 4)] = {"Block": Data.Blocks.Leaves_block.value, "Solid": True}
+                    WorldGen.World[(target_x + 1, adj_y, layer + 4)] = {"Block": Data.Blocks.Leaves_block.value, "Solid": True}
+                    WorldGen.World[(target_x, adj_y, layer + 5)] = {"Block": Data.Blocks.Leaves_block.value, "Solid": True}
+        
         if pyxel.btnp(pyxel.KEY_EQUALS):
             Renderer.ModifyMaxRenderLayer(1)
         

@@ -59,16 +59,20 @@ def WorldRenderer():
                 )
 
                 solid = tile['Solid']
-                top          = WorldGen.World.get((x, y - 1, layer))
                 above        = above_tile
+                bellow       = WorldGen.World.get((x, y , layer - 1))
+                top          = WorldGen.World.get((x, y - 1, layer))
+                bottom       = fwrd_tile
                 left         = WorldGen.World.get((x - 1, y, layer))
                 right        = WorldGen.World.get((x + 1, y, layer))
-                bottom       = fwrd_tile
                 bottom_left  = WorldGen.World.get((x - 1, y + 1, layer))
                 bottom_right = WorldGen.World.get((x + 1, y + 1, layer))
 
                 if solid and is_air(top) and is_air(above):
                     pyxel.rect(world_x, world_y - 1, GameData.block_size, 1, 0)
+                
+                if solid and is_air(bellow) and is_air(bottom):
+                    pyxel.rect(world_x, world_y + GameData.block_size + GameData.block_height, GameData.block_size, 1, 0)
 
                 if is_air(left):
                     if solid:
