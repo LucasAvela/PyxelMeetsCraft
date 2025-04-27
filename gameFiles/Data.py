@@ -14,7 +14,7 @@ class Blocks(Enum):
     Gold_Ore_block = "Gold_Ore_block"
     Diamond_Ore_block = "Diamond_Ore_block"
     Emerald_Ore_block = "Emerald_Ore_block"
-    Stone_Bricks_block = "Stone_Bricks_block"
+    Stone_Bricks_block = "StoneBricks_block"
     Iron_block = "Iron_block"
     Gold_block = "Gold_block"
     Diamond_block = "Diamond_block"

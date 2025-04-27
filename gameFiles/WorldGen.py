@@ -35,70 +35,70 @@ def GenWorld():
 
     for x in range(start_x, end_x):
         for y in range(start_y, end_y):
-            World[(x, y, 0)] = {"Block": BlocksStr.Bedrock, "Solid": True}
-            
-            for z in range(1, 3):
-                if (x, y, z) in World: continue
-                modifier = 8
-                noise = GameManager.PerlinNoise.noise((x + modifier * 100) / 2, (y + z * modifier * 10) / 2)
-                block = BlocksStr.Stone
+            for z in range(0, 9):
+                if (x, y, z) in World: break
 
-                if noise   > 0.95: block = BlocksStr.Emerald_Ore_block
-                elif noise > 0.90: block = BlocksStr.Diamond_Ore_block
-                elif noise > 0.80: block = BlocksStr.Gold_Ore_block
-                elif noise > 0.70: block = BlocksStr.Iron_Ore_block
-                elif noise > 0.60: block = BlocksStr.Coal_Ore_block
+                if z == 0: 
+                    World[(x, y, z)] = {"Block": BlocksStr.Bedrock, "Solid": True}
+                    continue
+
+                if 0 < z < 3:
+                    modifier = 8
+                    noise = GameManager.PerlinNoise.noise((x + modifier * 100) / 2, (y + z * modifier * 10) / 2)
+                    block = BlocksStr.Stone
+
+                    if noise   > 0.90: block = BlocksStr.Emerald_Ore_block
+                    elif noise > 0.75: block = BlocksStr.Diamond_Ore_block
+                    elif noise > 0.65: block = BlocksStr.Gold_Ore_block
+                    elif noise > 0.55: block = BlocksStr.Iron_Ore_block
+                    
+                    World[(x, y, z)] = {"Block": block, "Solid": True}
+                    continue
+
+                if 3 <= z < 6:
+                    modifier = 5
+                    noise = GameManager.PerlinNoise.noise((x + modifier * 100) / 2, (y + z * modifier * 10) / 2)
+                    block = BlocksStr.Stone
+
+                    if noise > 0.70: block = BlocksStr.Gold_Ore_block
+                    elif noise > 0.60: block = BlocksStr.Coal_Ore_block
+                    elif noise > 0.50: block = BlocksStr.Iron_Ore_block
+                    
+                    World[(x, y, z)] = {"Block": block, "Solid": True}
+                    continue
+
+                if 6 <= z < 9:
+                    modifier = 2
+                    noise = GameManager.PerlinNoise.noise((x + modifier * 100) / 2, (y + z * modifier * 10) / 2)
+                    block = BlocksStr.Stone
+
+                    if noise > 0.70: block = BlocksStr.Iron_Ore_block
+                    elif noise > 0.50: block = BlocksStr.Coal_Ore_block
+                    
+                    World[(x, y, z)] = {"Block": block, "Solid": True}
+                    continue
                 
-                World[(x, y, z)] = {"Block": block, "Solid": True}
-
-            for z in range(3, 6):
-                if (x, y, z) in World: continue
-                modifier = 5
-                noise = GameManager.PerlinNoise.noise((x + modifier * 100) / 2, (y + z * modifier * 10) / 2)
-                block = BlocksStr.Stone
-
-                if noise > 0.70: block = BlocksStr.Gold_Ore_block
-                elif noise > 0.60: block = BlocksStr.Coal_Ore_block
-                elif noise > 0.50: block = BlocksStr.Iron_Ore_block
-                
-                World[(x, y, z)] = {"Block": block, "Solid": True}
-
-            for z in range(6, 9):
-                if (x, y, z) in World: continue
-                modifier = 2
-                noise = GameManager.PerlinNoise.noise((x + modifier * 100) / 2, (y + z * modifier * 10) / 2)
-                block = BlocksStr.Stone
-
-                if noise > 0.70: block = BlocksStr.Iron_Ore_block
-                elif noise > 0.50: block = BlocksStr.Coal_Ore_block
-                
-                World[(x, y, z)] = {"Block": block, "Solid": True}
-            
-
-            layer = 9
-            if (x, y, layer) in World: continue
-            noise = GameManager.PerlinNoise.noise(x / 8, y / 8)
+            z = 9
+            if (x, y, z) in World: continue
+            noise = GameManager.PerlinNoise.noise(x / 16, y / 16)
             slope = 0
 
-            if noise >= 0.35:
-                slope = 2
-            elif noise >= -0.35:
-                slope = 1
-            
-            for i in range(slope):
-                World[(x, y, layer + i)] = {"Block": BlocksStr.Dirt, "Solid": True}
-            
-            World[(x, y, layer + slope)] = {"Block": BlocksStr.Grass, "Solid": True}
+            if noise >= 0.35: slope = 2
+            elif noise >= -0.35: slope = 1
 
-            layer = layer + slope + 1
-            if (x, y, layer) in World: continue
+            for i in range(slope):
+                World[(x, y, z + i)] = {"Block": BlocksStr.Dirt, "Solid": True}
+            
+            World[(x, y, z + slope)] = {"Block": BlocksStr.Grass, "Solid": True}
+
+            z = z + slope + 1
             noise = GameManager.PerlinNoise.noise(x / 2, y / 2)
 
             if noise >= 0.8:
-                World[(x, y, layer)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
-                World[(x, y, layer + 1)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
-                World[(x, y, layer + 2)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
-                World[(x, y, layer + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
-                World[(x - 1, y, layer + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
-                World[(x + 1, y, layer + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
-                World[(x, y, layer + 4)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
+                World[(x, y, z)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
+                World[(x, y, z + 1)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
+                World[(x, y, z + 2)] = {"Block": BlocksStr.Wood_Log_block, "Solid": True}
+                World[(x, y, z + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
+                World[(x - 1, y, z + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
+                World[(x + 1, y, z + 3)] = {"Block": BlocksStr.Leaves_block, "Solid": True}
+                World[(x, y, z + 4)] = {"Block": BlocksStr.Leaves_block, "Solid": True}

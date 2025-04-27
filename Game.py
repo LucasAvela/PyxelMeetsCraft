@@ -32,10 +32,10 @@ class Debug:
 
                 if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air.value:
                     if (target_x, adj_y, layer + 1) not in WorldGen.World:
-                        WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": Data.Blocks.Diamond_block.value, "Solid": True}
+                        WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": Data.Blocks.Stone_Bricks_block.value, "Solid": True}
                     
                     if WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air.value:
-                        WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] = Data.Blocks.Diamond_block.value
+                        WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] = Data.Blocks.Stone_Bricks_block.value
                     
                     break
         
@@ -64,6 +64,7 @@ class Debug:
                             GameManager.GameInfo.BlockSize, 
                             GameManager.GameInfo.BlockSize, 2)
 
+                    pyxel.camera(0, 0)
                     pyxel.text(2, 2, f"X: {target_x} Y: {adj_y} L: {layer}", 7)
                     pyxel.text(2, 10, f"{WorldGen.World[(target_x, adj_y, layer)]['Block']}", 7)
                 break
