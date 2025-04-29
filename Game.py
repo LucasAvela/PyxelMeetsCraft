@@ -5,6 +5,8 @@ import gameFiles.WorldGen as WorldGen
 import gameFiles.Renderer as Renderer
 import gameFiles.GameManager as GameManager
 
+import gameFiles.MainMenu as MainMenu
+
 class Debug:
     def UpdateDebug():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -69,20 +71,27 @@ class Debug:
                     pyxel.text(2, 10, f"{WorldGen.World[(target_x, adj_y, layer)]['Block']}", 7)
                 break
 
-class Camera:
-    speed = 1
-    velocities = [1, 2]
-    
-    def CamController():
-        if pyxel.btn(pyxel.KEY_A): GameManager.Camera.Position[0] -= Camera.speed
-        if pyxel.btn(pyxel.KEY_D): GameManager.Camera.Position[0] += Camera.speed
-        if pyxel.btn(pyxel.KEY_W): GameManager.Camera.Position[1] -= Camera.speed
-        if pyxel.btn(pyxel.KEY_S): GameManager.Camera.Position[1] += Camera.speed
-            
-        if pyxel.btnp(pyxel.KEY_SHIFT): Camera.speed = Camera.velocities[1]
-        if pyxel.btnr(pyxel.KEY_SHIFT): Camera.speed = Camera.velocities[0]
-        
-        pyxel.camera(GameManager.Camera.Position[0], GameManager.Camera.Position[1])
+class Mouse:
+    actual_cursor = "Default"
+
+    cursors = {
+        "Default": {"local_x": 0, "local_y": 240, "offset_x": 0, "offset_y": 0},
+        "Hand":    {"local_x": 0, "local_y": 0, "offset_x": 0, "offset_y": 0},
+        "Sword":   {"local_x": 0, "local_y": 0, "offset_x": 0, "offset_y": 0},
+    }
+
+    def DrawMouse():
+        x = pyxel.mouse_x + GameManager.Camera.Position[0]
+        y = pyxel.mouse_y + GameManager.Camera.Position[1]
+
+        local_x = Mouse.cursors[Mouse.actual_cursor]["local_x"]
+        local_y = Mouse.cursors[Mouse.actual_cursor]["local_y"]
+
+        offset_x = Mouse.cursors[Mouse.actual_cursor]["offset_x"]
+        offset_y = Mouse.cursors[Mouse.actual_cursor]["offset_y"]
+
+        pyxel.blt(x, y, 1, local_x, local_y, 8, 8, 2)
+
 
 class App:
     def __init__(self):
@@ -103,17 +112,12 @@ class App:
         pyxel.run(self.update, self.draw)
         
     def update(self):
-        Camera.CamController()
-        WorldGen.GenWorld()
-        Debug.UpdateDebug()
+        MainMenu.Update()
     
     def draw(self):
         pyxel.cls(0)
 
-        Renderer.WorldRenderer()
-
-        Debug.DrawDebug()
-        pyxel.camera(0, 0)
-        pyxel.blt(pyxel.mouse_x, pyxel.mouse_y, 1, 0, 240, 8, 8, 2)
+        MainMenu.Draw()
+        Mouse.DrawMouse()
 
 App()

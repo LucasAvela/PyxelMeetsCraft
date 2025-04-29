@@ -58,7 +58,9 @@ class GameData():
             GameData.smelting_data = json.load(i)
 
     def Images():
+        pyxel.images[0].load(0, 0, 'assets/sprites/Sprite_sheet_Menu.png')
         pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet.png')
+        pyxel.images[2].load(0, 0, 'assets/sprites/Sprite_sheet_UI.png')
 
     def Colors():
         pyxel.colors[5] = 0x545454
