@@ -1,5 +1,8 @@
+import pyxel
 import random
 import numpy as np
+
+import gameFiles.Data as Data
 
 class AppInfo:
     ScreenWidth = 256
@@ -68,3 +71,33 @@ class PerlinNoise:
         u, v = PerlinNoise.fade(x - x0), PerlinNoise.fade(y - y0)
         
         return PerlinNoise.lerp(PerlinNoise.lerp(g00, g10, u), PerlinNoise.lerp(g01, g11, u), v)
+
+class Button:
+    def __init__(self, x, y, w, h, text, callback, color=5, text_color=7):
+        self.x, self.y = x, y
+        self.w, self.h = w, h
+        self.text = text
+        self.callback = callback
+        self.color = color
+        self.text_color = text_color
+        self.hovered = False
+
+    def is_hovered(self):
+        return self.x <= pyxel.mouse_x <= self.x + self.w and self.y <= pyxel.mouse_y <= self.y + self.h
+
+    def update(self):
+        self.hovered = self.is_hovered()
+        if self.hovered and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            self.callback()
+
+    def draw(self):
+        color = self.color
+        border_color = 7 if self.hovered else 0
+        text_color = self.text_color
+
+        pyxel.rect(self.x - 1, self.y - 1, self.w + 2, self.h + 2, border_color)
+        pyxel.rect(self.x, self.y, self.w, self.h, color)
+
+        text_x = self.x + (self.w - len(self.text)*5) // 2
+        text_y = self.y + (self.h - 8) // 2
+        pyxel.text(text_x, text_y, self.text, text_color, font=Data.GameData.spleen5_font)

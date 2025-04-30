@@ -76,8 +76,8 @@ class Mouse:
 
     cursors = {
         "Default": {"local_x": 0, "local_y": 240, "offset_x": 0, "offset_y": 0},
-        "Hand":    {"local_x": 0, "local_y": 0, "offset_x": 0, "offset_y": 0},
-        "Sword":   {"local_x": 0, "local_y": 0, "offset_x": 0, "offset_y": 0},
+        "Hand":    {"local_x": 0, "local_y": 248, "offset_x": -3, "offset_y": 0},
+        "Sword":   {"local_x": 8, "local_y": 240, "offset_x": 0, "offset_y": 0},
     }
 
     def DrawMouse():
@@ -90,7 +90,7 @@ class Mouse:
         offset_x = Mouse.cursors[Mouse.actual_cursor]["offset_x"]
         offset_y = Mouse.cursors[Mouse.actual_cursor]["offset_y"]
 
-        pyxel.blt(x, y, 1, local_x, local_y, 8, 8, 2)
+        pyxel.blt(x + offset_x, y + offset_y, 1, local_x, local_y, 8, 8, 2)
 
 
 class App:
@@ -115,8 +115,6 @@ class App:
         MainMenu.Update()
     
     def draw(self):
-        pyxel.cls(0)
-
         MainMenu.Draw()
         Mouse.DrawMouse()
 

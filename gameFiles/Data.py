@@ -42,6 +42,8 @@ class GameData():
     crafting_data = None
     smelting_data = None
 
+    spleen5_font = None
+
     def GameData():
         with open('D:/Projects/Avela/Pyxel/PyxelMeetsCraft/assets/data/blocks_id.json', 'r') as f:
             blocks_list = json.load(f)
@@ -65,7 +67,11 @@ class GameData():
     def Colors():
         pyxel.colors[5] = 0x545454
 
+    def Fonts():
+        GameData.spleen5_font = pyxel.Font('assets/fonts/spleen-5x8.bdf')
+
     def Start():
         GameData.GameData()
         GameData.Images()
         GameData.Colors()
+        GameData.Fonts()

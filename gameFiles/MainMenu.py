@@ -1,61 +1,92 @@
 import pyxel
+import random
 
-class Status:
+import gameFiles.Data as Data
+import gameFiles.WorldGen as WorldGen
+import gameFiles.Renderer as Renderer
+import gameFiles.GameManager as GameManager
+
+class MainScreen:
     Started = False
+    Buttons = [
+        GameManager.Button(72, 88, 112, 16, "Play", lambda: print("Play")),
+        GameManager.Button(72, 112, 112, 16, "Options", lambda: Manager.ChangeScreen("Options")),
+        GameManager.Button(72, 136, 112, 16, "Exit", lambda: pyxel.quit())
+    ]
 
-class Hierarchy:
-    buttons = []
+    splash_texts = [
+        "Awesome!",
+        "Limited edition!",
+        "Made with pyxel",
+        "Indev!",
+        "It's a game!",
+        "Made in Brazil!",
+        "1337"
+    ]
 
-class Button:
-    def __init__(self, x, y, w, h, text, callback, color_idle=5, color_hover=13, color_text_idle=7, color_text_hover=10):
-        self.x, self.y = x, y
-        self.w, self.h = w, h
-        self.text = text
-        self.callback = callback
-        self.color_idle = color_idle
-        self.color_hover = color_hover
-        self.color_text_idle = color_text_idle
-        self.color_text_hover = color_text_hover
-        self.hovered = False
+    splash_text = random.choice(splash_texts)
 
-    def is_hovered(self):
-        return self.x <= pyxel.mouse_x <= self.x + self.w and self.y <= pyxel.mouse_y <= self.y + self.h
+    def Start():
+        if not MainScreen.Started:
+            print("Started Main")
+            MainScreen.Started = True
+    
+    def Update():
+        MainScreen.Start()
 
-    def drawVisual(self):
-        pyxel.rect(self.x, self.y -1, self.w, 1, 0)
-        pyxel.rect(self.x, self.y + self.h, self.w, 1, 0)
-        pyxel.rect(self.x - 1, self.y, 1, self.h, 0)
-        pyxel.rect(self.x + self.w, self.y, 1, self.h, 0)
+        for button in MainScreen.Buttons:
+            button.update()
 
-    def update(self):
-        self.hovered = self.is_hovered()
-        if self.hovered and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            self.callback()
+    def Draw():
+        pyxel.cls(0)
+    
+        pyxel.blt(64, 64, 0, 0, 128, 128, 128, 2, scale=2)
+        pyxel.blt(37, 32, 0, 0, 0, 182, 41, 2)
 
-    def draw(self):
-        color = self.color_hover if self.hovered else self.color_idle
-        text_color = self.color_text_hover if self.hovered else self.color_text_idle
-        pyxel.rect(self.x, self.y, self.w, self.h, color)
-        self.drawVisual()
-        text_x = self.x + (self.w - len(self.text)*4) // 2
-        text_y = self.y + (self.h - 6) // 2
-        pyxel.text(text_x, text_y, self.text, text_color)
+        pyxel.text(152, 65, MainScreen.splash_text, 9, font=Data.GameData.spleen5_font)
+        pyxel.text(152, 64, MainScreen.splash_text, 10, font=Data.GameData.spleen5_font)
 
-def Start():
-    if not Status.Started:
-        Hierarchy.buttons.append(Button(52, 148, 152, 16, "Play", lambda: print("Play clicked")))
-        Status.Started = True
+        for button in MainScreen.Buttons:
+            button.draw()
+
+class OptionsScreen:
+    Started = False
+    Buttons = [
+        GameManager.Button(72, 216, 112, 16, "Back", lambda: Manager.ChangeScreen("Main"))
+    ]
+
+    def Start():
+        if not OptionsScreen.Started:
+            print("Started Options")
+            OptionsScreen.Started = True
+
+    def Update():
+        OptionsScreen.Start()
+
+        for button in OptionsScreen.Buttons:
+            button.update()
+
+    def Draw():
+        pyxel.cls(0)
+
+        pyxel.blt(64, 64, 0, 128, 128, 128, 128, 2, scale=2)
+
+        for button in OptionsScreen.Buttons:
+            button.draw()
+
+class Manager:
+    ActualScreen = "Main"
+
+    def ChangeScreen(screen):
+        MainScreen.Started = False
+        OptionsScreen.Started = False
+            
+        Manager.ActualScreen = screen
 
 def Update():
-    Start()
-    for button in Hierarchy.buttons:
-        button.update()
+    if   (Manager.ActualScreen == "Main"): MainScreen.Update()
+    elif (Manager.ActualScreen == "Options"): OptionsScreen.Update()
 
 def Draw():
-    pyxel.cls(0)
-    
-    pyxel.blt(64, 64, 0, 0, 128, 128, 128, 2, scale=2)
-    pyxel.blt(37, 32, 0, 0, 0, 182, 41, 2)
-
-    for button in Hierarchy.buttons:
-        button.draw()
+    if   (Manager.ActualScreen == "Main"): MainScreen.Draw()
+    elif (Manager.ActualScreen == "Options"): OptionsScreen.Draw()
