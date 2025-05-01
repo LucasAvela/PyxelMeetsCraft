@@ -1,0 +1,935 @@
+{
+    "Crafts": [
+        {
+            "result": "Wood_Planks_block_item",
+            "amount": 4,
+            "size": [
+                1,
+                1
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Log_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Stick",
+            "amount": 4,
+            "size": [
+                1,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Workbench_block_item",
+            "amount": 1,
+            "size": [
+                2,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Chest_block_item",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "shaped": true,
+            "craft": [
+                [
+                    "Wood_Planks_block_item.Wood_Planks_block_item.Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    null,
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item.Wood_Planks_block_item.Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Furnace_block_item",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "shaped": true,
+            "craft": [
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Cobblestone_block_item",
+                    null,
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Door_item",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Bed_item",
+            "amount": 1,
+            "size": [
+                3,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wool_White_block_item",
+                    "Wool_White_block_item",
+                    "Wool_White_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Bed_item",
+            "amount": 1,
+            "size": [
+                3,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wool_Black_block_item",
+                    "Wool_Black_block_item",
+                    "Wool_Black_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Bed_item",
+            "amount": 1,
+            "size": [
+                3,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wool_Red_block_item",
+                    "Wool_Red_block_item",
+                    "Wool_Red_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Bed_item",
+            "amount": 1,
+            "size": [
+                3,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wool_Yellow_block_item",
+                    "Wool_Yellow_block_item",
+                    "Wool_Yellow_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Bed_item",
+            "amount": 1,
+            "size": [
+                3,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wool_Blue_block_item",
+                    "Wool_Blue_block_item",
+                    "Wool_Blue_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Bed_item",
+            "amount": 1,
+            "size": [
+                3,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wool_Green_block_item",
+                    "Wool_Green_block_item",
+                    "Wool_Green_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Wooden_Pickaxe",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "shaped": true,
+            "craft": [
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Stone_Pickaxe",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "shaped": true,
+            "craft": [
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Iron_Pickaxe",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "shaped": true,
+            "craft": [
+                [
+                    "Iron",
+                    "Iron",
+                    "Iron"
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Golden_Pickaxe",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "shaped": true,
+            "craft": [
+                [
+                    "Gold",
+                    "Gold",
+                    "Gold"
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Diamond_Pickaxe",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "shaped": true,
+            "craft": [
+                [
+                    "Diamond",
+                    "Diamond",
+                    "Diamond"
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ],
+                [
+                    null,
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Wooden_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Stick"
+                ],
+                [
+                    null,
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Wooden_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Stick",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Stone_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Cobblestone_block_item",
+                    "Stick"
+                ],
+                [
+                    null,
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Stone_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Stick",
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Iron_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Iron",
+                    "Iron"
+                ],
+                [
+                    "Iron",
+                    "Stick"
+                ],
+                [
+                    null,
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Iron_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Iron",
+                    "Iron"
+                ],
+                [
+                    "Stick",
+                    "Iron"
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Golden_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Gold",
+                    "Gold"
+                ],
+                [
+                    "Gold",
+                    "Stick"
+                ],
+                [
+                    null,
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Golden_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Gold",
+                    "Gold"
+                ],
+                [
+                    "Stick",
+                    "Gold"
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Diamond_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Diamond",
+                    "Diamond"
+                ],
+                [
+                    "Diamond",
+                    "Stick"
+                ],
+                [
+                    null,
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Diamond_Axe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Diamond",
+                    "Diamond"
+                ],
+                [
+                    "Stick",
+                    "Diamond"
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Wooden_Shovel",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Stone_Shovel",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Iron_Shovel",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Iron"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Golden_Shovel",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Gold"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Diamond_Shovel",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Diamond"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Wooden_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Stone_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Iron_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Iron",
+                    "Iron"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Golden_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Gold",
+                    "Gold"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Diamond_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Diamond",
+                    "Diamond"
+                ],
+                [
+                    "Stick"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Wooden_Sword",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Stone_Sword",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Iron_Sword",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Iron"
+                ],
+                [
+                    "Iron"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Golden_Sword",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Gold"
+                ],
+                [
+                    "Gold"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Diamond_Sword",
+            "amount": 1,
+            "size": [
+                1,
+                3
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    "Diamond"
+                ],
+                [
+                    "Diamond"
+                ],
+                [
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Shears",
+            "amount": 1,
+            "size": [
+                2,
+                2
+            ],
+            "shaped": false,
+            "craft": [
+                [
+                    null,
+                    "Iron"
+                ],
+                [
+                    "Iron",
+                    null
+                ]
+            ]
+        }
+    ]
+}

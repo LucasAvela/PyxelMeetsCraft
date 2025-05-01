@@ -290,7 +290,7 @@
         },
         {
             "name": "Bed_block_Top",
-            "drop": "Bed_item",
+            "drop": "Special",
             "tool": "Any",
             "level": 0,
             "local": {
@@ -302,7 +302,7 @@
         },
         {
             "name": "Bed_block_Bottom",
-            "drop": "Bed_item",
+            "drop": "Special",
             "tool": "Any",
             "level": 0,
             "local": {
@@ -314,7 +314,7 @@
         },
         {
             "name": "Door_block_Top",
-            "drop": "Door_item",
+            "drop": "Special",
             "tool": "Axe",
             "level": 0,
             "local": {
@@ -326,7 +326,7 @@
         },
         {
             "name": "Door_block_Bottom",
-            "drop": "Door_item",
+            "drop": "Special",
             "tool": "Axe",
             "level": 0,
             "local": {
