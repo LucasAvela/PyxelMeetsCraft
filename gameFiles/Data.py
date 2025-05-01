@@ -2,7 +2,7 @@ import pyxel
 import json
 from enum import Enum
 
-class Blocks(Enum):
+class Blocks:
     Air = "Air"
     Grass_block = "Grass_block"
     Dirt_block = "Dirt_block"
@@ -14,7 +14,7 @@ class Blocks(Enum):
     Gold_Ore_block = "Gold_Ore_block"
     Diamond_Ore_block = "Diamond_Ore_block"
     Emerald_Ore_block = "Emerald_Ore_block"
-    Stone_Bricks_block = "StoneBricks_block"
+    StoneBricks_block = "StoneBricks_block"
     Iron_block = "Iron_block"
     Gold_block = "Gold_block"
     Diamond_block = "Diamond_block"
@@ -34,7 +34,6 @@ class Blocks(Enum):
 class GameStates(Enum):
     MainMenu = 0
     Gameplay = 1
-    Menu = 2
 
 class GameData():
     block_data = None

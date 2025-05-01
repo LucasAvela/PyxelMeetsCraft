@@ -106,9 +106,7 @@ class App:
         
         Data.GameData.Start()
         
-        WorldGen.GetGameData()
         Renderer.GetGameData()
-
         pyxel.run(self.update, self.draw)
         
     def update(self):

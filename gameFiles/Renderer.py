@@ -3,17 +3,12 @@ import gameFiles.GameManager as GameManager
 import gameFiles.Data as Data
 import gameFiles.WorldGen as WorldGen
 
-class BlocksStr:
-    Air = ""
-
 class GameData:
     block_size = 0
     block_height = 0
     max_layer = 0
 
 def GetGameData():
-    BlocksStr.Air = Data.Blocks.Air.value
-
     GameData.block_size = GameManager.GameInfo.BlockSize
     GameData.block_height = GameManager.GameInfo.BlockHeight
     GameData.max_layer = GameManager.GameInfo.MaxLayer
@@ -24,20 +19,20 @@ def ModifyMaxRenderLayer(layervalue):
 def WorldRenderer():
     start_x, end_x, start_y, end_y = GameManager.ChunkCalc.GetGenerationChunkArea()
 
-    is_air = lambda t: t is None or t['Block'] == BlocksStr.Air
+    is_air = lambda t: t is None or t['Block'] == Data.Blocks.Air
 
     for layer in range(GameData.max_layer):
         for y in range(start_y, end_y):
             for x in range(start_x, end_x):
                 pos = (x, y, layer)
                 tile = WorldGen.World.get(pos)
-                if tile is None or tile['Block'] == BlocksStr.Air:
+                if tile is None or tile['Block'] == Data.Blocks.Air:
                     continue
 
                 above_tile = WorldGen.World.get((x, y, layer + 1))
                 fwrd_tile = WorldGen.World.get((x, y + 1, layer))
-                if above_tile is not None and above_tile['Block'] != BlocksStr.Air:
-                    if fwrd_tile is not None and fwrd_tile['Block'] != BlocksStr.Air:
+                if above_tile is not None and above_tile['Block'] != Data.Blocks.Air:
+                    if fwrd_tile is not None and fwrd_tile['Block'] != Data.Blocks.Air:
                         continue
 
                 block = Data.GameData.block_data[tile['Block']]

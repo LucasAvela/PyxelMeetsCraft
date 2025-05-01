@@ -28,9 +28,9 @@ class Inputs:
                 target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
                 adj_y = target_y + (layer // 2)
 
-                if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air.value:
-                    if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air.value):
-                        WorldGen.World[(target_x, adj_y, layer)]['Block'] = Data.Blocks.Air.value
+                if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
+                    if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air):
+                        WorldGen.World[(target_x, adj_y, layer)]['Block'] = Data.Blocks.Air
                         break
     
     def PlaceBlock():
@@ -43,12 +43,12 @@ class Inputs:
                 target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
                 adj_y = target_y + (layer // 2)
 
-                if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air.value:
+                if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
                     if (target_x, adj_y, layer + 1) not in WorldGen.World:
-                        WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": Data.Blocks.Stone_Bricks_block.value, "Solid": True}
+                        WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": Data.Blocks.StoneBricks_block, "Solid": True}
                     
-                    if WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air.value:
-                        WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] = Data.Blocks.Stone_Bricks_block.value
+                    if WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air:
+                        WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] = Data.Blocks.StoneBricks_block
                     
                     break
 
@@ -67,8 +67,8 @@ class Player:
             target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
             adj_y = target_y + (layer // 2)
 
-            if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air.value:
-                if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air.value):
+            if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
+                if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air):
                     pyxel.blt(target_x * GameManager.GameInfo.BlockSize, 
                             (target_y * GameManager.GameInfo.BlockSize) - ((layer % 2) * GameManager.GameInfo.BlockHeight), 
                             1, 
