@@ -69,6 +69,7 @@ class GameData():
 
     def Fonts():
         GameData.spleen5_font = pyxel.Font('assets/fonts/spleen-5x8.bdf')
+        GameData.spleen6_font = pyxel.Font('assets/fonts/spleen-6x12.bdf')
 
     def Start():
         GameData.GameData()

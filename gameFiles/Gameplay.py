@@ -5,11 +5,20 @@ import gameFiles.WorldGen as WorldGen
 import gameFiles.Renderer as Renderer
 import gameFiles.GameManager as GameManager
 
-import gameFiles.MainMenu as MainMenu
-import gameFiles.Gameplay as Gameplay
+class Inputs:
+    def CameraMove():
+        if pyxel.btn(pyxel.KEY_W) or pyxel.btn(pyxel.KEY_UP):
+            GameManager.Camera.Move(0, -GameManager.GameInfo.CameraSpeed)
+        if pyxel.btn(pyxel.KEY_S) or pyxel.btn(pyxel.KEY_DOWN):
+            GameManager.Camera.Move(0, GameManager.GameInfo.CameraSpeed)
+        if pyxel.btn(pyxel.KEY_A) or pyxel.btn(pyxel.KEY_LEFT):
+            GameManager.Camera.Move(-GameManager.GameInfo.CameraSpeed, 0)
+        if pyxel.btn(pyxel.KEY_D) or pyxel.btn(pyxel.KEY_RIGHT):
+            GameManager.Camera.Move(GameManager.GameInfo.CameraSpeed, 0)
 
-class Debug:
-    def UpdateDebug():
+        pyxel.camera(GameManager.Camera.Position[0], GameManager.Camera.Position[1],)
+
+    def BreakBlock():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
             position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
@@ -23,7 +32,8 @@ class Debug:
                     if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air.value):
                         WorldGen.World[(target_x, adj_y, layer)]['Block'] = Data.Blocks.Air.value
                         break
-        
+    
+    def PlaceBlock():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
             position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
             position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
@@ -41,14 +51,14 @@ class Debug:
                         WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] = Data.Blocks.Stone_Bricks_block.value
                     
                     break
-        
-        if pyxel.btnp(pyxel.KEY_EQUALS):
-            Renderer.ModifyMaxRenderLayer(1)
-        
-        if pyxel.btnp(pyxel.KEY_MINUS):
-            Renderer.ModifyMaxRenderLayer(-1)
 
-    def DrawDebug():
+    def Update():
+        Inputs.CameraMove()
+        Inputs.BreakBlock()
+        Inputs.PlaceBlock()
+
+class Player:
+    def DrawArea():
         position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
         position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
 
@@ -66,58 +76,14 @@ class Debug:
                             240, 
                             GameManager.GameInfo.BlockSize, 
                             GameManager.GameInfo.BlockSize, 2)
-
-                    pyxel.camera(0, 0)
-                    pyxel.text(2, 2, f"X: {target_x} Y: {adj_y} L: {layer}", 7)
-                    pyxel.text(2, 10, f"{WorldGen.World[(target_x, adj_y, layer)]['Block']}", 7)
                 break
 
-class Mouse:
-    actual_cursor = "Default"
+def Update():
+    Inputs.Update()
+    WorldGen.GenWorld()
 
-    cursors = {
-        "Default": {"local_x": 0, "local_y": 240, "offset_x": 0, "offset_y": 0},
-        "Hand":    {"local_x": 0, "local_y": 248, "offset_x": -3, "offset_y": 0},
-        "Sword":   {"local_x": 8, "local_y": 240, "offset_x": 0, "offset_y": 0},
-    }
+def Draw():
+    pyxel.cls(0)
 
-    def DrawMouse():
-        x = pyxel.mouse_x
-        y = pyxel.mouse_y
-
-        local_x = Mouse.cursors[Mouse.actual_cursor]["local_x"]
-        local_y = Mouse.cursors[Mouse.actual_cursor]["local_y"]
-
-        offset_x = Mouse.cursors[Mouse.actual_cursor]["offset_x"]
-        offset_y = Mouse.cursors[Mouse.actual_cursor]["offset_y"]
-
-        pyxel.camera(0, 0)
-        pyxel.blt(x + offset_x, y + offset_y, 1, local_x, local_y, 8, 8, 2)
-
-
-class App:
-    def __init__(self):
-        pyxel.init(
-            width  = GameManager.AppInfo.ScreenWidth, 
-            height = GameManager.AppInfo.ScreenHeight, 
-            title  = GameManager.AppInfo.WindowTitle, 
-            fps    = GameManager.AppInfo.Fps
-        )
-        
-        Data.GameData.Start()
-        
-        WorldGen.GetGameData()
-        Renderer.GetGameData()
-
-        pyxel.run(self.update, self.draw)
-        
-    def update(self):
-        if   GameManager.GameState.current == Data.GameStates.MainMenu.value: MainMenu.Update()
-        elif GameManager.GameState.current == Data.GameStates.Gameplay.value: Gameplay.Update()
-    
-    def draw(self):
-        if   GameManager.GameState.current == Data.GameStates.MainMenu.value: MainMenu.Draw()
-        elif GameManager.GameState.current == Data.GameStates.Gameplay.value: Gameplay.Draw()
-        Mouse.DrawMouse()
-
-App()
+    Renderer.WorldRenderer()
+    Player.DrawArea()

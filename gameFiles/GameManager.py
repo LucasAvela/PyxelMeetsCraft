@@ -8,7 +8,7 @@ class AppInfo:
     ScreenWidth = 256
     ScreenHeight = 256
     WindowTitle = "Pyxel Meets Craft"
-    Fps = 60
+    Fps = 64
     Tps = 3
 
 class GameInfo:
@@ -16,11 +16,25 @@ class GameInfo:
     BlockHeight = 4
     ViewDistance = 32
     MaxLayer = 24
+    CameraSpeed = 1
+
+class GameState:
+    current = Data.GameStates.MainMenu.value
+
+    def Set(state):
+        GameState.current = state
 
 class Camera:
     Position = [0, 0]
 
-    def GetCameraPosition(offset):
+    def Move(x, y):
+        Camera.Position[0] += x
+        Camera.Position[1] += y
+
+    def GetCameraPosition():
+        return Camera.Position
+
+    def SetCameraPosition(offset):
         Camera.position = offset
 
 class ChunkCalc:
