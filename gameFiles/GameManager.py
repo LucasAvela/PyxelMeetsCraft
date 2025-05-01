@@ -14,9 +14,11 @@ class AppInfo:
 class GameInfo:
     BlockSize = 8
     BlockHeight = 4
+    ItemSize = 16
     ViewDistance = 32
     MaxLayer = 24
     CameraSpeed = 1
+    InvetorySize = 36
 
 class GameState:
     current = Data.GameStates.MainMenu.value
@@ -36,6 +38,15 @@ class Camera:
 
     def SetCameraPosition(offset):
         Camera.position = offset
+
+class Properties:
+    def InitPlayerInventory(dictionary):
+        for i in range(4 * 9):
+            dictionary[i] = {
+                'Item': None, 
+                'Amount': 0
+            }
+
 
 class ChunkCalc:
     def GetGenerationChunkArea():

@@ -14,7 +14,7 @@
         },
         {
             "name": "Grass_block",
-            "drop": "Grass_block",
+            "drop": "Grass_block_item",
             "tool": "Shovel",
             "level": 0,
             "local": {
@@ -26,7 +26,7 @@
         },
         {
             "name": "Dirt_block",
-            "drop": "Dirt_block",
+            "drop": "Dirt_block_item",
             "tool": "Shovel",
             "level": 0,
             "local": {
@@ -38,7 +38,7 @@
         },
         {
             "name": "Stone_block",
-            "drop": "Stone_block",
+            "drop": "Stone_block_item",
             "tool": "Pickaxe",
             "level": 1,
             "local": {
@@ -50,7 +50,7 @@
         },
         {
             "name": "Cobblestone_block",
-            "drop": "Cobblestone_block",
+            "drop": "Cobblestone_block_item",
             "tool": "Pickaxe",
             "level": 1,
             "local": {
@@ -62,7 +62,7 @@
         },
         {
             "name": "Bedrock_block",
-            "drop": "Bedrock_block",
+            "drop": "Bedrock_block_item",
             "tool": "Pickaxe",
             "level": 10,
             "local": {
@@ -74,7 +74,7 @@
         },
         {
             "name": "Farmland_block",
-            "drop": "Farmland_block",
+            "drop": "Farmland_block_item",
             "tool": "Shovel",
             "level": 0,
             "local": {
@@ -86,7 +86,7 @@
         },
         {
             "name": "StoneBricks_block",
-            "drop": "StoneBricks_block",
+            "drop": "StoneBricks_block_item",
             "tool": "Pickaxe",
             "level": 1,
             "local": {
@@ -98,7 +98,7 @@
         },
         {
             "name": "Coal_Ore_block",
-            "drop": "Coal_Ore_block",
+            "drop": "Coal_Ore_block_item",
             "tool": "Pickaxe",
             "level": 1,
             "local": {
@@ -110,7 +110,7 @@
         },
         {
             "name": "Iron_Ore_block",
-            "drop": "Iron_Ore_block",
+            "drop": "Iron_Ore_block_item",
             "tool": "Pickaxe",
             "level": 2,
             "local": {
@@ -122,7 +122,7 @@
         },
         {
             "name": "Gold_Ore_block",
-            "drop": "Gold_Ore_block",
+            "drop": "Gold_Ore_block_item",
             "tool": "Pickaxe",
             "level": 2,
             "local": {
@@ -134,7 +134,7 @@
         },
         {
             "name": "Diamond_Ore_block",
-            "drop": "Diamond_Ore_block",
+            "drop": "Diamond_Ore_block_item",
             "tool": "Pickaxe",
             "level": 3,
             "local": {
@@ -146,7 +146,7 @@
         },
         {
             "name": "Emerald_Ore_block",
-            "drop": "Emerald_Ore_block",
+            "drop": "Emerald_Ore_block_item",
             "tool": "Pickaxe",
             "level": 3,
             "local": {
@@ -158,7 +158,7 @@
         },
         {
             "name": "Iron_block",
-            "drop": "Iron_block",
+            "drop": "Iron_block_item",
             "tool": "Pickaxe",
             "level": 3,
             "local": {
@@ -170,7 +170,7 @@
         },
         {
             "name": "Gold_block",
-            "drop": "Gold_block",
+            "drop": "Gold_block_item",
             "tool": "Pickaxe",
             "level": 3,
             "local": {
@@ -182,7 +182,7 @@
         },
         {
             "name": "Diamond_block",
-            "drop": "Diamond_block",
+            "drop": "Diamond_block_item",
             "tool": "Pickaxe",
             "level": 3,
             "local": {
@@ -194,7 +194,7 @@
         },
         {
             "name": "Emerald_block",
-            "drop": "Emerald_block",
+            "drop": "Emerald_block_item",
             "tool": "Pickaxe",
             "level": 3,
             "local": {
@@ -206,7 +206,7 @@
         },
         {
             "name": "Wood_Planks_block",
-            "drop": "Wood_Planks_block",
+            "drop": "Wood_Planks_block_item",
             "tool": "Axe",
             "level": 0,
             "local": {
@@ -218,7 +218,7 @@
         },
         {
             "name": "Wood_Log_block",
-            "drop": "Wood_Log_block",
+            "drop": "Wood_Log_block_item",
             "tool": "Axe",
             "level": 0,
             "local": {
@@ -230,7 +230,7 @@
         },
         {
             "name": "Leaves_block",
-            "drop": "Leaves_block",
+            "drop": "Leaves_block_item",
             "tool": "Scissors",
             "level": 1,
             "local": {
@@ -242,7 +242,7 @@
         },
         {
             "name": "Workbench_block",
-            "drop": "Workbench_block",
+            "drop": "Workbench_block_item",
             "tool": "Axe",
             "level": 0,
             "local": {
@@ -254,7 +254,7 @@
         },
         {
             "name": "Furnace_block",
-            "drop": "Furnace_block",
+            "drop": "Furnace_block_item",
             "tool": "Pickaxe",
             "level": 1,
             "local": {
@@ -266,7 +266,7 @@
         },
         {
             "name": "Chest_block",
-            "drop": "Chest_block",
+            "drop": "Chest_block_item",
             "tool": "Axe",
             "level": 0,
             "local": {
@@ -278,7 +278,7 @@
         },
         {
             "name": "Glass_block",
-            "drop": "Glass_block",
+            "drop": "Glass_block_item",
             "tool": "Hoe",
             "level": 4,
             "local": {
@@ -290,7 +290,7 @@
         },
         {
             "name": "Bed_block_Top",
-            "drop": "Bed_block_Top",
+            "drop": "Bed_item",
             "tool": "Any",
             "level": 0,
             "local": {
@@ -302,7 +302,7 @@
         },
         {
             "name": "Bed_block_Bottom",
-            "drop": "Bed_block_Bottom",
+            "drop": "Bed_item",
             "tool": "Any",
             "level": 0,
             "local": {
@@ -314,7 +314,7 @@
         },
         {
             "name": "Door_block_Top",
-            "drop": "Door_block_Top",
+            "drop": "Door_item",
             "tool": "Axe",
             "level": 0,
             "local": {
@@ -326,7 +326,7 @@
         },
         {
             "name": "Door_block_Bottom",
-            "drop": "Bed_block_Bottom",
+            "drop": "Door_item",
             "tool": "Axe",
             "level": 0,
             "local": {
@@ -338,7 +338,7 @@
         },
         {
             "name": "Wool_White_block",
-            "drop": "Wool_White_block",
+            "drop": "Wool_White_block_item",
             "tool": "Scissors",
             "level": 0,
             "local": {
@@ -350,7 +350,7 @@
         },
         {
             "name": "Wool_Black_block",
-            "drop": "Wool_Black_block",
+            "drop": "Wool_Black_block_item",
             "tool": "Scissors",
             "level": 0,
             "local": {
@@ -362,7 +362,7 @@
         },
         {
             "name": "Wool_Red_block",
-            "drop": "Wool_Red_block",
+            "drop": "Wool_Red_block_item",
             "tool": "Scissors",
             "level": 0,
             "local": {
@@ -374,7 +374,7 @@
         },
         {
             "name": "Wool_Yellow_block",
-            "drop": "Wool_Yellow_block",
+            "drop": "Wool_Yellow_block_item",
             "tool": "Scissors",
             "level": 0,
             "local": {
@@ -386,7 +386,7 @@
         },
         {
             "name": "Wool_Blue_block",
-            "drop": "Wool_Blue_block",
+            "drop": "Wool_Blue_block_item",
             "tool": "Scissors",
             "level": 0,
             "local": {
@@ -398,7 +398,7 @@
         },
         {
             "name": "Wool_Green_block",
-            "drop": "Wool_Green_block",
+            "drop": "Wool_Green_block_item",
             "tool": "Scissors",
             "level": 0,
             "local": {

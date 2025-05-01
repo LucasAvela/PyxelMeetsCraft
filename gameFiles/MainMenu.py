@@ -6,6 +6,8 @@ import gameFiles.WorldGen as WorldGen
 import gameFiles.Renderer as Renderer
 import gameFiles.GameManager as GameManager
 
+import gameFiles.Gameplay as Gameplay
+
 class MainScreen:
     Started = False
     Buttons = [
