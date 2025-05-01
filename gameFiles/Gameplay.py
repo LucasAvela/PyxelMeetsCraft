@@ -29,6 +29,13 @@ class Inputs:
         if pyxel.btnp(pyxel.KEY_8): Player.hotbar_selected = 7
         if pyxel.btnp(pyxel.KEY_9): Player.hotbar_selected = 8
 
+        if pyxel.mouse_wheel < 0:
+            Player.hotbar_selected += 1
+            if Player.hotbar_selected > 8: Player.hotbar_selected = 0
+        elif pyxel.mouse_wheel > 0:
+            Player.hotbar_selected -= 1
+            if Player.hotbar_selected < 0: Player.hotbar_selected = 8
+
     def DebugAddItem():
         if pyxel.btnp(pyxel.KEY_KP_1):
             Player.AddItem(Data.Items.Grass_block_item, 1)
@@ -86,7 +93,6 @@ class Player:
         itemData = Data.GameData.item_data[item]
 
         if itemData['type'] == "Block":
-            Player.RemoveItem(key, 1)
             Player.PlaceBlock(itemData['block'])
 
 
@@ -119,10 +125,12 @@ class Player:
             if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
                 if (target_x, adj_y, layer + 1) not in WorldGen.World:
                     WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": block, "Solid": True}
+                    Player.RemoveItem(Player.hotbar_selected, 1)
                 
                 if WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air:
                     WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] = block
-                
+                    Player.RemoveItem(Player.hotbar_selected, 1)
+
                 break
 
 class UI:
@@ -150,14 +158,7 @@ class UI:
         pyxel.camera(0, 0)
         pyxel.blt(46, 228, 2, 46, 228, 164, 20, 2)
         
-        pyxel.blt(Player.hotbar_postions[Player.hotbar_selected] - 3,
-                230 - 3,
-                2,
-                0,
-                234,
-                22,
-                22,
-                2)
+        pyxel.blt(Player.hotbar_postions[Player.hotbar_selected] - 3, 230 - 3, 2, 0, 234, 22, 22, 2)
         
         for i in range(9):
             item = Player.inventory[i]['Item']
