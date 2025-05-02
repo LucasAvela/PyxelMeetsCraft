@@ -40,12 +40,37 @@ class Inputs:
         if pyxel.btnp(pyxel.KEY_KP_1):
             Player.AddItem(Data.Items.Bed_item, 1)
 
+    def SelectBlock():
+        position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
+        position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
+
+        for layer in range(GameManager.GameInfo.MaxLayer, 0, -1):
+            target_x = position_x // GameManager.GameInfo.BlockSize
+            target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
+            adj_y = target_y + (layer // 2)
+
+            if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
+                if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air):
+                    Player.selectBlock = [target_x, adj_y, layer]
+                    break
+
+        else: Player.selectBlock = None
+
+    def LeftInputAction():
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            if Player.selectBlock is None: return
+            Player.BreakBlock(Player.selectBlock[0], Player.selectBlock[1], Player.selectBlock[2])
+
+    def RightInputAction():
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
+            Player.UseItem(Player.hotbar_selected)
+
     def Update():
         Inputs.CameraMove()
         Inputs.SelectHotbar()
-
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): Player.BreakBlock()
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT): Player.UseItem(Player.hotbar_selected)
+        Inputs.SelectBlock()
+        Inputs.LeftInputAction()
+        Inputs.RightInputAction()
 
         Inputs.DebugAddItem()
 
@@ -54,6 +79,8 @@ class Player:
     hotbar_selected = 0
     hotbar_postions = [48, 66, 84, 102, 120, 138, 156, 174, 192]
     hotbat_amounts_positions = [58, 76, 94, 112, 130, 148, 166, 184, 202]
+
+    selectBlock = None
 
     def AddItem(item, amount):
         itemData = Data.GameData.item_data[item]
@@ -93,120 +120,70 @@ class Player:
         itemData = Data.GameData.item_data[item]
 
         if itemData['action'] == "Place":
-            Player.PlaceBlock(itemData['block'])
+            if Player.selectBlock is None: return
+            Player.PlaceBlock(Player.selectBlock[0], Player.selectBlock[1], Player.selectBlock[2], itemData['block'])
             return
         elif itemData['action'] == "PlaceSpecial":
-            Player.PlaceSpecialBlock(itemData)
+            if Player.selectBlock is None: return
+            Player.PlaceSpecialBlock(Player.selectBlock[0], Player.selectBlock[1], Player.selectBlock[2], itemData)
             return
 
+    def BreakBlock(x, y, layer):
+        block = WorldGen.World[(x, y, layer)]
+        blockData = Data.GameData.block_data[block['Block']]
+        item = blockData['drop']
 
+        if item == "Special": 
+            Player.BreakSpecialBlock(x, y, layer, blockData)
+            return
 
-    def BreakBlock():
-        position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
-        position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
-
-        for layer in range(GameManager.GameInfo.MaxLayer, 0, -1):
-            target_x = position_x // GameManager.GameInfo.BlockSize
-            target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
-            adj_y = target_y + (layer // 2)
-
-            if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
-                if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air):
-                    blockData = Data.GameData.block_data[WorldGen.World[(target_x, adj_y, layer)]['Block']]
-                    item = blockData['drop']
-                    if item == "Special": 
-                        Player.BreakSpecialBlock(blockData)
-                        break
-                    WorldGen.World[(target_x, adj_y, layer)]['Block'] = Data.Blocks.Air
-                    Player.AddItem(item, 1)
-                    break
+        block['Block'] = Data.Blocks.Air
+        Player.AddItem(item, 1)
     
-    def BreakSpecialBlock(blockData):
+    def BreakSpecialBlock(x, y, layer, blockData):
         if blockData['name'] == "Bed_block_Bottom":
-            position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
-            position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
-
-            for layer in range(GameManager.GameInfo.MaxLayer, 0, -1):
-                target_x = position_x // GameManager.GameInfo.BlockSize
-                target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
-                adj_y = target_y + (layer // 2)
-
-                if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
-                    if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air):
-                        WorldGen.World[(target_x, adj_y, layer)] = {"Block": Data.Blocks.Air, "Solid": True}
-                        WorldGen.World[(target_x, adj_y - 1, layer)] = {"Block": Data.Blocks.Air, "Solid": True}
-                        Player.AddItem("Bed_item", 1)
-                        break
-        
+            WorldGen.World[(x, y, layer)]['Block'] = Data.Blocks.Air
+            WorldGen.World[(x, y - 1, layer)]['Block'] = Data.Blocks.Air
+            Player.AddItem("Bed_item", 1)
+            return
         elif blockData['name'] == "Bed_block_Top":
-            position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
-            position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
-
-            for layer in range(GameManager.GameInfo.MaxLayer, 0, -1):
-                target_x = position_x // GameManager.GameInfo.BlockSize
-                target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
-                adj_y = target_y + (layer // 2)
-
-                if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
-                    if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air):
-                        WorldGen.World[(target_x, adj_y, layer)] = {"Block": Data.Blocks.Air, "Solid": True}
-                        WorldGen.World[(target_x, adj_y + 1, layer)] = {"Block": Data.Blocks.Air, "Solid": True}
-                        Player.AddItem("Bed_item", 1)
-                        break
+            WorldGen.World[(x, y, layer)]['Block'] = Data.Blocks.Air
+            WorldGen.World[(x, y + 1, layer)]['Block'] = Data.Blocks.Air
+            Player.AddItem("Bed_item", 1)
+            return
     
-    def PlaceBlock(block):
-        position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
-        position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
-
-        for layer in range(GameManager.GameInfo.MaxLayer, 0, -1):
-            target_x = position_x // GameManager.GameInfo.BlockSize
-            target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
-            adj_y = target_y + (layer // 2)
-
-            if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
-                if (target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air:
-                    WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": block, "Solid": True}
-                    Player.RemoveItem(Player.hotbar_selected, 1)
-                break
+    def PlaceBlock(x, y, layer, block):
+        if layer + 1 < GameManager.GameInfo.MaxLayer:
+            WorldGen.World[(x, y, layer + 1)] = {"Block": block, "Solid": True}
+            Player.RemoveItem(Player.hotbar_selected, 1)
     
-    def PlaceSpecialBlock(itemData):
+    def PlaceSpecialBlock(x, y, layer, itemData):
         if itemData['name'] == "Bed_item":
-            position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
-            position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
-
-            for layer in range(GameManager.GameInfo.MaxLayer, 0, -1):
-                target_x = position_x // GameManager.GameInfo.BlockSize
-                target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
-                adj_y = target_y + (layer // 2)
-
-                if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
-                    if (target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air:
-                        if (target_x, adj_y - 1, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y - 1, layer + 1)]['Block'] == Data.Blocks.Air:
-                            WorldGen.World[(target_x, adj_y, layer + 1)] = {"Block": "Bed_block_Bottom", "Solid": True}
-                            WorldGen.World[(target_x, adj_y - 1, layer + 1)] = {"Block": "Bed_block_Top", "Solid": True}
-                            Player.RemoveItem(Player.hotbar_selected, 1)
-                    break
+            if layer + 1 < GameManager.GameInfo.MaxLayer:
+                if (x, y - 1, layer + 1) not in WorldGen.World or WorldGen.World[(x, y - 1, layer + 1)]['Block'] == Data.Blocks.Air:
+                    WorldGen.World[(x, y, layer + 1)] = {"Block": "Bed_block_Bottom", "Solid": True}
+                    WorldGen.World[(x, y - 1, layer + 1)] = {"Block": "Bed_block_Top", "Solid": True}
+                    Player.RemoveItem(Player.hotbar_selected, 1)
 
 class UI:
     def DrawArea():
-        position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
-        position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
+        if Player.selectBlock is None: return
+        
+        target_x = Player.selectBlock[0]
+        adj_y = Player.selectBlock[1]
+        layer = Player.selectBlock[2]
 
-        for layer in range(GameManager.GameInfo.MaxLayer, 0, -1):
-            target_x = position_x // GameManager.GameInfo.BlockSize
-            target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
-            adj_y = target_y + (layer // 2)
+        target_y = adj_y - (layer // 2)
 
-            if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
-                if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air):
-                    pyxel.blt(target_x * GameManager.GameInfo.BlockSize, 
-                            (target_y * GameManager.GameInfo.BlockSize) - ((layer % 2) * GameManager.GameInfo.BlockHeight), 
-                            1, 
-                            48,
-                            240, 
-                            GameManager.GameInfo.BlockSize, 
-                            GameManager.GameInfo.BlockSize, 2)
-                break
+        pyxel.blt(
+            target_x * GameManager.GameInfo.BlockSize, 
+            (target_y * GameManager.GameInfo.BlockSize) - ((layer % 2) * GameManager.GameInfo.BlockHeight), 
+            1, 
+            48, 
+            240, 
+            GameManager.GameInfo.BlockSize, 
+            GameManager.GameInfo.BlockSize, 
+            2)
 
     def DrawHotbar():
         pyxel.camera(0, 0)
@@ -243,7 +220,6 @@ class UI:
                        242,
                        str(amount) if amount >= 10 else " " + str(amount),
                        7)
-        
 
 class Status:
     Started = False
