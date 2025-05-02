@@ -121,8 +121,33 @@ class NewGameScreen:
         GameManager.Button(72, 192, 112, 16, "Create", lambda: Manager.NewGame()),
         GameManager.Button(72, 216, 112, 16, "Back", lambda: Manager.ChangeScreen("Play"))
     ]
+    TextInputs = [
+        GameManager.TextInputField(64, 16, 128, 16, 24, "Save Name", lambda text: NewGameScreen.ChangeWorldName(text), "New World", 0, 7),
+        GameManager.TextInputField(64, 48, 128, 16, 24, "Generation Seed", lambda text: NewGameScreen.ChangeWorldSeed(text), "", 0, 7)
+    ]
 
+    name = ""
     seed = 128
+
+    def ChangeWorldName(newName):
+        NewGameScreen.name = newName
+        print(NewGameScreen.name)
+    
+    def ChangeWorldSeed(newSeed):
+        seed = ""
+
+        for char in newSeed:
+            if char.isdigit():
+                seed += char
+            elif char.isalpha():
+                value = ord(char.upper()) - ord('A') + 10
+                seed += str(value)
+            else:
+                seed += "0"
+        
+        if seed != '':
+            NewGameScreen.seed = int(seed)
+        print(NewGameScreen.seed)
 
     def Start():
         if not NewGameScreen.Started:
@@ -136,6 +161,9 @@ class NewGameScreen:
         for button in NewGameScreen.Buttons:
             button.update()
 
+        for textInput in NewGameScreen.TextInputs:
+            textInput.update()
+
     def Draw():
         pyxel.cls(0)
 
@@ -143,6 +171,9 @@ class NewGameScreen:
 
         for button in NewGameScreen.Buttons:
             button.draw()
+
+        for textInput in NewGameScreen.TextInputs:
+            textInput.draw()
 
 class Animation:
     dither = 0

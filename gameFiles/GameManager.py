@@ -47,7 +47,6 @@ class Properties:
                 'Amount': 0
             }
 
-
 class ChunkCalc:
     def GetGenerationChunkArea():
         start_x = Camera.Position[0] // GameInfo.BlockSize
@@ -126,3 +125,65 @@ class Button:
         text_x = self.x + (self.w - len(self.text)*5) // 2
         text_y = self.y + (self.h - 8) // 2
         pyxel.text(text_x, text_y, self.text, text_color, font=Data.GameData.spleen5_font)
+
+class TextInputField:
+    def __init__(self, x, y, w, h, max, title, callback, placeHolder="", color=0, text_color=7):
+        self.x, self.y = x, y
+        self.w, self.h = w, h
+        self.max = max
+        self.title = title
+        self.callback = callback
+        self.color = color
+        self.text_color = text_color
+        self.writing = False
+        self.text = placeHolder
+
+    def Select(self):
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            if self.x <= pyxel.mouse_x <= self.x + self.w and self.y <= pyxel.mouse_y <= self.y + self.h:
+                self.writing = True
+            elif self.writing:
+                self.callback(self.text)
+                self.writing = False
+
+        if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_RETURN2):
+            if self.writing:
+                self.callback(self.text)
+                self.writing = False
+
+    def Write(self):
+        if self.writing:
+            for i in range(32, 127):
+                if pyxel.btnp(i) and len(self.text) < self.max:
+                    self.text += chr(i).upper()
+
+            if pyxel.btnp(pyxel.KEY_BACKSPACE):
+                self.text = self.text[:-1]
+
+    def update(self):
+        self.Select()
+        self.Write()
+
+    def draw(self):
+        color = self.color
+        text_color = self.text_color
+        title = self.title
+
+        pyxel.text(self.x, self.y - 10 + 1, title, 0, font=Data.GameData.spleen5_font)
+        pyxel.text(self.x + 1, self.y - 10, title, 0, font=Data.GameData.spleen5_font)
+        pyxel.text(self.x, self.y - 10, title, text_color, font=Data.GameData.spleen5_font)
+
+        pyxel.rect(self.x - 1, self.y - 1, self.w + 2, self.h + 2, text_color)
+        pyxel.rect(self.x, self.y, self.w, self.h, color)
+
+        text_x = self.x + 2
+        text_y = self.y + (self.h - 8) // 2
+
+        pyxel.text(text_x, text_y, self.text, text_color, font=Data.GameData.spleen5_font)
+
+        if self.writing:
+            text_width = len(self.text) * 5
+            
+            if (pyxel.frame_count // 30) % 2 == 0:
+                cursor_x = text_x + text_width
+                pyxel.text(cursor_x, text_y, "|", text_color, font=Data.GameData.spleen5_font)

@@ -44,7 +44,7 @@ class Inputs:
         position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
         position_y = pyxel.mouse_y + GameManager.Camera.Position[1]
 
-        for layer in range(GameManager.GameInfo.MaxLayer, 0, -1):
+        for layer in range(GameManager.GameInfo.MaxLayer, -1, -1):
             target_x = position_x // GameManager.GameInfo.BlockSize
             target_y = (position_y + ((layer % 2) * GameManager.GameInfo.BlockHeight)) // GameManager.GameInfo.BlockSize
             adj_y = target_y + (layer // 2)
@@ -267,13 +267,17 @@ def Start():
 
 def Update():
     Start()
+
+    if not Status.Started: return
+
     Inputs.Update()
     WorldGen.GenWorld()
 
 def Draw():
     pyxel.cls(0)
 
-    if Status.Started:
-        Renderer.WorldRenderer()
-        UI.DrawArea()
-        UI.DrawHotbar()
+    if not Status.Started: return
+
+    Renderer.WorldRenderer()
+    UI.DrawArea()
+    UI.DrawHotbar()
