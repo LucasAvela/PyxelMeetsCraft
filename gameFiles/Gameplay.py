@@ -38,7 +38,7 @@ class Inputs:
 
     def DebugAddItem():
         if pyxel.btnp(pyxel.KEY_KP_1):
-            Player.AddItem(Data.Items.Bed_item, 1)
+            Player.AddItem(Data.Items.Iron_block_item, 16)
 
     def SelectBlock():
         position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
@@ -51,10 +51,21 @@ class Inputs:
 
             if (target_x, adj_y, layer) in WorldGen.World and WorldGen.World[(target_x, adj_y, layer)]['Block'] != Data.Blocks.Air:
                 if ((target_x, adj_y, layer + 1) not in WorldGen.World or WorldGen.World[(target_x, adj_y, layer + 1)]['Block'] == Data.Blocks.Air):
-                    Player.selectBlock = [target_x, adj_y, layer]
-                    break
+                    if not Player.modifier:
+                        Player.selectBlock = [target_x, adj_y, layer]
+                        break
+                    elif (target_x, adj_y - 1, layer + 1) in WorldGen.World and WorldGen.World[(target_x, adj_y - 1, layer + 1)]['Block'] != Data.Blocks.Air:
+                        Player.selectBlock = [target_x, adj_y - 1, layer + 1]
+                        break
 
         else: Player.selectBlock = None
+
+    def SelectionModifier():
+        if pyxel.btnp(pyxel.KEY_SHIFT):
+            Player.modifier = True
+        
+        if pyxel.btnr(pyxel.KEY_SHIFT):
+            Player.modifier = False
 
     def LeftInputAction():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -69,6 +80,7 @@ class Inputs:
         Inputs.CameraMove()
         Inputs.SelectHotbar()
         Inputs.SelectBlock()
+        Inputs.SelectionModifier()
         Inputs.LeftInputAction()
         Inputs.RightInputAction()
 
@@ -81,6 +93,7 @@ class Player:
     hotbat_amounts_positions = [58, 76, 94, 112, 130, 148, 166, 184, 202]
 
     selectBlock = None
+    modifier = False
 
     def AddItem(item, amount):
         itemData = Data.GameData.item_data[item]
@@ -153,11 +166,21 @@ class Player:
             return
     
     def PlaceBlock(x, y, layer, block):
+        if Player.modifier:
+            x = x
+            y = y + 1
+            layer = layer - 1
+
         if layer + 1 < GameManager.GameInfo.MaxLayer:
             WorldGen.World[(x, y, layer + 1)] = {"Block": block, "Solid": True}
             Player.RemoveItem(Player.hotbar_selected, 1)
     
     def PlaceSpecialBlock(x, y, layer, itemData):
+        if Player.modifier:
+            x = x
+            y = y + 1
+            layer = layer - 1
+
         if itemData['name'] == "Bed_item":
             if layer + 1 < GameManager.GameInfo.MaxLayer:
                 if (x, y - 1, layer + 1) not in WorldGen.World or WorldGen.World[(x, y - 1, layer + 1)]['Block'] == Data.Blocks.Air:
@@ -175,12 +198,22 @@ class UI:
 
         target_y = adj_y - (layer // 2)
 
+        draw_x = target_x * GameManager.GameInfo.BlockSize
+        draw_y = (target_y * GameManager.GameInfo.BlockSize) - ((layer % 2) * GameManager.GameInfo.BlockHeight)
+
+        area_local_x = 48
+        area_local_y = 240
+
+        if Player.modifier:
+            draw_y += 8
+            area_local_y = 252
+
         pyxel.blt(
-            target_x * GameManager.GameInfo.BlockSize, 
-            (target_y * GameManager.GameInfo.BlockSize) - ((layer % 2) * GameManager.GameInfo.BlockHeight), 
+            draw_x, 
+            draw_y, 
             1, 
-            48, 
-            240, 
+            area_local_x, 
+            area_local_y, 
             GameManager.GameInfo.BlockSize, 
             GameManager.GameInfo.BlockSize, 
             2)
