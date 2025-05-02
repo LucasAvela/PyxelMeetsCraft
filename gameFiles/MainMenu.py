@@ -146,7 +146,7 @@ class NewGameScreen:
                 seed += "0"
         
         if seed != '':
-            NewGameScreen.seed = int(seed)
+            NewGameScreen.seed = int(seed) % (2**32)
         print(NewGameScreen.seed)
 
     def Start():
