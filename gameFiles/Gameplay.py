@@ -262,6 +262,11 @@ class UI:
                        7)
 
 class Menu:
+    Buttons = [
+        GameManager.Button(57, 61, 60, 16, "Save World", lambda: print("Saved"), 13, 7, 7, 5),
+        GameManager.Button(57, 79, 60, 16, "Main Menu", lambda: print("Main Menu"), 13, 7, 7, 5)
+    ]
+
     inventory_positions = [
         [47, 183], [65, 183], [83, 183], [101, 183], [119, 183], [137, 183], [155, 183], [173, 183], [191, 183], 
         [47, 127], [65, 127], [83, 127], [101, 127], [119, 127], [137, 127], [155, 127], [173, 127], [191, 127], 
@@ -269,11 +274,82 @@ class Menu:
         [47, 163], [65, 163], [83, 163], [101, 163], [119, 163], [137, 163], [155, 163], [173, 163], [191, 163], 
     ]
 
-    def Update():
-        if pyxel.btnp(pyxel.KEY_E): Status.inMenu = False
+    mouse_item = {
+        'Item': None, 
+        'Amount': 0
+    }
 
-    def Draw():
-        pyxel.camera(0, 0)
+    def MouseGetItem(itemPosition, amount):
+        inventoryItem = Player.inventory[itemPosition]
+        if inventoryItem['Item'] is None or amount <= 0: return
+        Menu.mouse_item['Item'] = inventoryItem['Item']
+        Menu.mouse_item['Amount'] = amount
+        inventoryItem['Amount'] -= amount
+        if inventoryItem['Amount'] <= 0:
+            inventoryItem['Item'] = None
+            inventoryItem['Amount'] = 0
+    
+    def MouseDropItem(itemPosition, amount):
+        inventoryItem = Player.inventory[itemPosition]
+
+        if inventoryItem['Item'] is None:
+            Player.inventory[itemPosition]['Item'] = Menu.mouse_item['Item']
+            Player.inventory[itemPosition]['Amount'] = amount
+        elif inventoryItem['Item'] == Menu.mouse_item['Item']:
+            Player.inventory[itemPosition]['Amount'] += amount
+        else:
+            Player.inventory[itemPosition] = Menu.mouse_item
+            Menu.mouse_item = inventoryItem
+            return
+            
+        Menu.mouse_item['Amount'] -= amount
+        if Menu.mouse_item['Amount'] <= 0:
+            Menu.mouse_item['Item'] = None
+            Menu.mouse_item['Amount'] = 0
+    
+    def MouseDeleteItem(amount):
+        Menu.mouse_item['Amount'] -= amount
+        if Menu.mouse_item['Amount'] <= 0:
+            Menu.mouse_item['Item'] = None
+            Menu.mouse_item['Amount'] = 0
+
+    def LeftClick():
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            mx, my = pyxel.mouse_x, pyxel.mouse_y
+
+            for idx, (x, y) in enumerate(Menu.inventory_positions):
+                if x <= mx < x + GameManager.GameInfo.ItemSize and y <= my < y + GameManager.GameInfo.ItemSize:
+                    if Menu.mouse_item['Item'] == None:
+                        Menu.MouseGetItem(idx, Player.inventory[idx]['Amount'])
+                    else:
+                        Menu.MouseDropItem(idx, Menu.mouse_item['Amount'])
+                    break
+            
+            if 225 <= mx <= 240 and 221 <= my <= 236:
+                if Menu.mouse_item['Item'] != None:
+                    Menu.MouseDeleteItem(Menu.mouse_item['Amount'])
+
+    def RightClick():
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
+            mx, my = pyxel.mouse_x, pyxel.mouse_y
+
+            for idx, (x, y) in enumerate(Menu.inventory_positions):
+                if x <= mx < x + GameManager.GameInfo.ItemSize and y <= my < y + GameManager.GameInfo.ItemSize:
+                    if Menu.mouse_item['Item'] == None:
+                        Menu.MouseGetItem(idx, Player.inventory[idx]['Amount'] // 2)
+                    else:
+                        Menu.MouseDropItem(idx, 1)
+                    break
+            
+            if 225 <= mx <= 240 and 221 <= my <= 236:
+                if Menu.mouse_item['Item'] != None:
+                    Menu.MouseDeleteItem(1)
+
+    def CloseMenu():
+        if pyxel.btnp(pyxel.KEY_E): 
+            Status.inMenu = False
+
+    def DrawInventory():
         pyxel.blt(42, 48 , 2, 42, 48, 172, 158, 2)
         pyxel.blt(222, 218 , 2, 222, 218, 29, 33, 2)
 
@@ -311,6 +387,56 @@ class Menu:
                 str(amount) if amount >= 10 else " " + str(amount),
                 7
             )
+    
+    def DrawMouseItem():
+        if Menu.mouse_item['Item'] != None:
+            item = Menu.mouse_item['Item']
+            amount = Menu.mouse_item['Amount']
+            itemData = Data.GameData.item_data[item]
+
+            mx, my = pyxel.mouse_x, pyxel.mouse_y
+
+            pyxel.blt(
+                mx + 4,
+                my + 4,
+                1,
+                itemData['local']['x'],
+                itemData['local']['y'],
+                GameManager.GameInfo.ItemSize,
+                GameManager.GameInfo.ItemSize,
+                2
+            )
+
+            if amount == 1: return
+
+            pyxel.text(mx + GameManager.GameInfo.ItemSize + 1, my + GameManager.GameInfo.ItemSize, str(amount) if amount >= 10 else " " + str(amount), 0)
+            pyxel.text(mx + GameManager.GameInfo.ItemSize, my + GameManager.GameInfo.ItemSize + 1, str(amount) if amount >= 10 else " " + str(amount), 0)
+            pyxel.text(mx + GameManager.GameInfo.ItemSize + 1, my + GameManager.GameInfo.ItemSize + 1, str(amount) if amount >= 10 else " " + str(amount), 0)
+
+            pyxel.text(
+                mx + GameManager.GameInfo.ItemSize,
+                my + GameManager.GameInfo.ItemSize,
+                str(amount) if amount >= 10 else " " + str(amount),
+                7
+            )
+
+    def Update():
+        Menu.CloseMenu()
+        Menu.LeftClick()
+        Menu.RightClick()
+
+        for button in Menu.Buttons:
+            button.update()
+
+    def Draw():
+        pyxel.camera(0, 0)
+        Menu.DrawInventory()
+        
+        for button in Menu.Buttons:
+            button.draw()
+        
+        Menu.DrawMouseItem()
+
 
 class Status:
     Started = False
