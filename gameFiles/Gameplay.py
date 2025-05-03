@@ -318,7 +318,16 @@ class Menu:
             inventoryItem['Item'] = Menu.mouse_item['Item']
             inventoryItem['Amount'] = amount
         elif inventoryItem['Item'] == Menu.mouse_item['Item']:
-            inventoryItem['Amount'] += amount
+            itemData = Data.GameData.item_data[Menu.mouse_item['Item']]
+            if inventoryItem['Amount'] + amount <= itemData['stack']:
+                inventoryItem['Amount'] += amount
+            else:
+                if (inventoryItem['Amount'] < itemData['stack']):
+                    diff = (inventoryItem['Amount'] + amount) - itemData['stack']
+                    inventoryItem['Amount'] = itemData['stack']
+                    Menu.mouse_item['Amount'] = diff
+                    return
+                return
         else:
             Menu.mouse_item, Menu._get_storage(source)[itemPosition] = inventoryItem, Menu.mouse_item
             return
@@ -396,7 +405,7 @@ class Menu:
 
     def DrawInventory():
         pyxel.blt(42, 48 , 2, 42, 48, 172, 158, 2)
-        pyxel.blt(119, 210 , 2, 231, 181, 21, 25, 2)
+        pyxel.blt(119, 210, 2, 216, 195, 21, 25, 2)
 
         for i in range(GameManager.GameInfo.InvetorySize):
             item = Player.inventory[i]['Item']
