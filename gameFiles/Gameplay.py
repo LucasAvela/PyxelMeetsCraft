@@ -274,14 +274,31 @@ class Menu:
         [47, 163], [65, 163], [83, 163], [101, 163], [119, 163], [137, 163], [155, 163], [173, 163], [191, 163], 
     ]
 
+    craft_grid = {
+        0: {'Item': None, 'Amount': 0},
+        1: {'Item': None, 'Amount': 0},
+        2: {'Item': None, 'Amount': 0},
+        3: {'Item': None, 'Amount': 0},
+    }
+
+    craft_grid_positions = [[128, 62], [146, 62], [128, 80], [146, 80]]
+
     mouse_item = {
         'Item': None, 
         'Amount': 0
     }
 
-    def MouseGetItem(itemPosition, amount):
-        inventoryItem = Player.inventory[itemPosition]
-        if inventoryItem['Item'] is None or amount <= 0: return
+    def MouseGetItem(itemPosition, amount, source):
+        if source == "inventory":
+            inventoryItem = Player.inventory[itemPosition]
+        elif source == "craft":
+            inventoryItem = Menu.craft_grid[itemPosition]
+        else:
+            return
+
+        if inventoryItem['Item'] is None or amount <= 0:
+            return
+
         Menu.mouse_item['Item'] = inventoryItem['Item']
         Menu.mouse_item['Amount'] = amount
         inventoryItem['Amount'] -= amount
@@ -289,19 +306,23 @@ class Menu:
             inventoryItem['Item'] = None
             inventoryItem['Amount'] = 0
     
-    def MouseDropItem(itemPosition, amount):
-        inventoryItem = Player.inventory[itemPosition]
+    def MouseDropItem(itemPosition, amount, source):
+        if source == "inventory":
+            inventoryItem = Player.inventory[itemPosition]
+        elif source == "craft":
+            inventoryItem = Menu.craft_grid[itemPosition]
+        else:
+            return
 
         if inventoryItem['Item'] is None:
-            Player.inventory[itemPosition]['Item'] = Menu.mouse_item['Item']
-            Player.inventory[itemPosition]['Amount'] = amount
+            inventoryItem['Item'] = Menu.mouse_item['Item']
+            inventoryItem['Amount'] = amount
         elif inventoryItem['Item'] == Menu.mouse_item['Item']:
-            Player.inventory[itemPosition]['Amount'] += amount
+            inventoryItem['Amount'] += amount
         else:
-            Player.inventory[itemPosition] = Menu.mouse_item
-            Menu.mouse_item = inventoryItem
+            Menu.mouse_item, Menu._get_storage(source)[itemPosition] = inventoryItem, Menu.mouse_item
             return
-            
+
         Menu.mouse_item['Amount'] -= amount
         if Menu.mouse_item['Amount'] <= 0:
             Menu.mouse_item['Item'] = None
@@ -313,20 +334,36 @@ class Menu:
             Menu.mouse_item['Item'] = None
             Menu.mouse_item['Amount'] = 0
 
+    def _get_storage(source):
+        if source == "inventory":
+            return Player.inventory
+        elif source == "craft":
+            return Menu.craft_grid
+        else:
+            return {}
+
     def LeftClick():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             mx, my = pyxel.mouse_x, pyxel.mouse_y
 
             for idx, (x, y) in enumerate(Menu.inventory_positions):
                 if x <= mx < x + GameManager.GameInfo.ItemSize and y <= my < y + GameManager.GameInfo.ItemSize:
-                    if Menu.mouse_item['Item'] == None:
-                        Menu.MouseGetItem(idx, Player.inventory[idx]['Amount'])
+                    if Menu.mouse_item['Item'] is None:
+                        Menu.MouseGetItem(idx, Player.inventory[idx]['Amount'], "inventory")
                     else:
-                        Menu.MouseDropItem(idx, Menu.mouse_item['Amount'])
-                    break
+                        Menu.MouseDropItem(idx, Menu.mouse_item['Amount'], "inventory")
+                    return
             
-            if 225 <= mx <= 240 and 221 <= my <= 236:
-                if Menu.mouse_item['Item'] != None:
+            for idx, (x, y) in enumerate(Menu.craft_grid_positions):
+                if x <= mx < x + GameManager.GameInfo.ItemSize and y <= my < y + GameManager.GameInfo.ItemSize:
+                    if Menu.mouse_item['Item'] is None:
+                        Menu.MouseGetItem(idx, Menu.craft_grid[idx]['Amount'], "craft")
+                    else:
+                        Menu.MouseDropItem(idx, Menu.mouse_item['Amount'], "craft")
+                    return
+            
+            if 122 <= mx <= 129 and 213 <= my <= 220:
+                if Menu.mouse_item['Item'] is not None:
                     Menu.MouseDeleteItem(Menu.mouse_item['Amount'])
 
     def RightClick():
@@ -335,14 +372,22 @@ class Menu:
 
             for idx, (x, y) in enumerate(Menu.inventory_positions):
                 if x <= mx < x + GameManager.GameInfo.ItemSize and y <= my < y + GameManager.GameInfo.ItemSize:
-                    if Menu.mouse_item['Item'] == None:
-                        Menu.MouseGetItem(idx, Player.inventory[idx]['Amount'] // 2)
+                    if Menu.mouse_item['Item'] is None:
+                        Menu.MouseGetItem(idx, Player.inventory[idx]['Amount'] // 2, source="inventory")
                     else:
-                        Menu.MouseDropItem(idx, 1)
-                    break
-            
-            if 225 <= mx <= 240 and 221 <= my <= 236:
-                if Menu.mouse_item['Item'] != None:
+                        Menu.MouseDropItem(idx, 1, source="inventory")
+                    return
+                
+            for idx, (x, y) in enumerate(Menu.craft_grid_positions):
+                if x <= mx < x + GameManager.GameInfo.ItemSize and y <= my < y + GameManager.GameInfo.ItemSize:
+                    if Menu.mouse_item['Item'] is None:
+                        Menu.MouseGetItem(idx, Menu.craft_grid[idx]['Amount'] // 2, source="craft")
+                    else:
+                        Menu.MouseDropItem(idx, 1, source="craft")
+                    return
+
+            if 122 <= mx <= 129 and 213 <= my <= 220:
+                if Menu.mouse_item['Item'] is not None:
                     Menu.MouseDeleteItem(1)
 
     def CloseMenu():
@@ -351,7 +396,7 @@ class Menu:
 
     def DrawInventory():
         pyxel.blt(42, 48 , 2, 42, 48, 172, 158, 2)
-        pyxel.blt(222, 218 , 2, 222, 218, 29, 33, 2)
+        pyxel.blt(119, 210 , 2, 231, 181, 21, 25, 2)
 
         for i in range(GameManager.GameInfo.InvetorySize):
             item = Player.inventory[i]['Item']
@@ -387,6 +432,40 @@ class Menu:
                 str(amount) if amount >= 10 else " " + str(amount),
                 7
             )
+
+    def DrawCrafting():
+        for i in range(4):
+            item = Menu.craft_grid[i]['Item']
+            amount = Menu.craft_grid[i]['Amount']
+
+            if item is None or amount < 1:
+                continue
+
+            itemData = Data.GameData.item_data[item]
+            item_x = itemData['local']['x']
+            item_y = itemData['local']['y']
+
+            pyxel.blt(
+                Menu.craft_grid_positions[i][0],
+                Menu.craft_grid_positions[i][1],
+                1,
+                item_x,
+                item_y,
+                GameManager.GameInfo.ItemSize,
+                GameManager.GameInfo.ItemSize,
+                2
+            )
+
+            if amount == 1: continue
+
+            px = Menu.craft_grid_positions[i][0]
+            py = Menu.craft_grid_positions[i][1]
+
+            txt = str(amount) if amount >= 10 else " " + str(amount)
+            pyxel.text(px + 10, py + 11, txt, 0)
+            pyxel.text(px + 10, py + 12, txt, 0)
+            pyxel.text(px +  9, py + 12, txt, 0)
+            pyxel.text(px +  9, py + 11, txt, 7)
     
     def DrawMouseItem():
         if Menu.mouse_item['Item'] != None:
@@ -431,6 +510,7 @@ class Menu:
     def Draw():
         pyxel.camera(0, 0)
         Menu.DrawInventory()
+        Menu.DrawCrafting()
         
         for button in Menu.Buttons:
             button.draw()

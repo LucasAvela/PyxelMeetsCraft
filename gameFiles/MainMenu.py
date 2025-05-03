@@ -127,7 +127,7 @@ class NewGameScreen:
     ]
 
     name = ""
-    seed = 128
+    seed = 128 # Mudar Aqui
 
     def ChangeWorldName(newName):
         NewGameScreen.name = newName
