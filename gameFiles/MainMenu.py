@@ -22,8 +22,8 @@ class MainScreen:
         "Made with pyxel",
         "Indev!",
         "It's a game!",
-        "Made in Brazil!",
-        "1337"
+        "CP4E",
+        "Learn Python",
     ]
 
     splash_text = random.choice(splash_texts)
@@ -122,8 +122,8 @@ class NewGameScreen:
         GameManager.Button(72, 216, 112, 16, "Back", lambda: Manager.ChangeScreen("Play"))
     ]
     TextInputs = [
-        GameManager.TextInputField(64, 16, 128, 16, 24, "Save Name", lambda text: NewGameScreen.ChangeWorldName(text), "New World", 0, 7),
-        GameManager.TextInputField(64, 48, 128, 16, 24, "Generation Seed", lambda text: NewGameScreen.ChangeWorldSeed(text), "", 0, 7)
+        GameManager.TextInputField(46, 32, 164, 16, 32, " Save Name", lambda text: NewGameScreen.ChangeWorldName(text), "New World", 0, 7),
+        GameManager.TextInputField(46, 64, 164, 16, 32, " Generation Seed", lambda text: NewGameScreen.ChangeWorldSeed(text), "", 0, 7)
     ]
 
     name = ""

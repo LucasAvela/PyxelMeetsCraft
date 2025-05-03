@@ -17,6 +17,7 @@ def ModifyMaxRenderLayer(layervalue):
     GameData.max_layer += layervalue
 
 def WorldRenderer():
+    pyxel.camera(GameManager.Camera.GetCameraPosition()[0], GameManager.Camera.GetCameraPosition()[1])
     start_x, end_x, start_y, end_y = GameManager.ChunkCalc.GetGenerationChunkArea()
 
     is_air = lambda t: t is None or t['Block'] == Data.Blocks.Air

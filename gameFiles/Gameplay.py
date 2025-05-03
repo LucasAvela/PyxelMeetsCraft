@@ -38,7 +38,7 @@ class Inputs:
 
     def DebugAddItem():
         if pyxel.btnp(pyxel.KEY_KP_1):
-            Player.AddItem(Data.Items.Iron_block_item, 16)
+            Player.AddItem(Data.Items.Gold, 48)
 
     def SelectBlock():
         position_x = pyxel.mouse_x + GameManager.Camera.Position[0]
@@ -67,6 +67,10 @@ class Inputs:
         if pyxel.btnr(pyxel.KEY_SHIFT):
             Player.modifier = False
 
+    def AccessMenu():
+        if pyxel.btnp(pyxel.KEY_E):
+            Status.inMenu = True
+
     def LeftInputAction():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             if Player.selectBlock is None: return
@@ -81,6 +85,7 @@ class Inputs:
         Inputs.SelectHotbar()
         Inputs.SelectBlock()
         Inputs.SelectionModifier()
+        Inputs.AccessMenu()
         Inputs.LeftInputAction()
         Inputs.RightInputAction()
 
@@ -235,14 +240,16 @@ class UI:
             item_x = itemData['local']['x']
             item_y = itemData['local']['y']
 
-            pyxel.blt(Player.hotbar_postions[i],
-                    230,
-                    1,
-                    item_x,
-                    item_y,
-                    GameManager.GameInfo.ItemSize,
-                    GameManager.GameInfo.ItemSize,
-                    2)
+            pyxel.blt(
+                Player.hotbar_postions[i],
+                230,
+                1,
+                item_x,
+                item_y,
+                GameManager.GameInfo.ItemSize,
+                GameManager.GameInfo.ItemSize,
+                2
+            )
             
             if amount == 1: continue
 
@@ -254,8 +261,60 @@ class UI:
                        str(amount) if amount >= 10 else " " + str(amount),
                        7)
 
+class Menu:
+    inventory_positions = [
+        [47, 183], [65, 183], [83, 183], [101, 183], [119, 183], [137, 183], [155, 183], [173, 183], [191, 183], 
+        [47, 127], [65, 127], [83, 127], [101, 127], [119, 127], [137, 127], [155, 127], [173, 127], [191, 127], 
+        [47, 145], [65, 145], [83, 145], [101, 145], [119, 145], [137, 145], [155, 145], [173, 145], [191, 145], 
+        [47, 163], [65, 163], [83, 163], [101, 163], [119, 163], [137, 163], [155, 163], [173, 163], [191, 163], 
+    ]
+
+    def Update():
+        if pyxel.btnp(pyxel.KEY_E): Status.inMenu = False
+
+    def Draw():
+        pyxel.camera(0, 0)
+        pyxel.blt(42, 48 , 2, 42, 48, 172, 158, 2)
+        pyxel.blt(222, 218 , 2, 222, 218, 29, 33, 2)
+
+        for i in range(GameManager.GameInfo.InvetorySize):
+            item = Player.inventory[i]['Item']
+            amount = Player.inventory[i]['Amount']
+
+            if item is None or amount < 1:
+                continue
+
+            itemData = Data.GameData.item_data[item]
+            item_x = itemData['local']['x']
+            item_y = itemData['local']['y']
+
+            pyxel.blt(
+                Menu.inventory_positions[i][0],
+                Menu.inventory_positions[i][1],
+                1,
+                item_x,
+                item_y,
+                GameManager.GameInfo.ItemSize,
+                GameManager.GameInfo.ItemSize,
+                2
+            )
+
+            if amount == 1: continue
+
+            pyxel.text(Menu.inventory_positions[i][0] + 10, Menu.inventory_positions[i][1] + 11, str(amount) if amount >= 10 else " " + str(amount), 0)
+            pyxel.text(Menu.inventory_positions[i][0] + 10, Menu.inventory_positions[i][1] + 12, str(amount) if amount >= 10 else " " + str(amount), 0)
+            pyxel.text(Menu.inventory_positions[i][0] +  9, Menu.inventory_positions[i][1] + 12, str(amount) if amount >= 10 else " " + str(amount), 0)
+
+            pyxel.text(
+                Menu.inventory_positions[i][0] + 9,
+                Menu.inventory_positions[i][1] + 11,
+                str(amount) if amount >= 10 else " " + str(amount),
+                7
+            )
+
 class Status:
     Started = False
+    inMenu = False
 
 def Start():
     if not Status.Started:
@@ -270,14 +329,22 @@ def Update():
 
     if not Status.Started: return
 
-    Inputs.Update()
     WorldGen.GenWorld()
+
+    if not Status.inMenu:
+        Inputs.Update()
+    else:
+        Menu.Update()
 
 def Draw():
     pyxel.cls(0)
 
     if not Status.Started: return
-
+    
     Renderer.WorldRenderer()
-    UI.DrawArea()
-    UI.DrawHotbar()
+
+    if not Status.inMenu:
+        UI.DrawArea()
+        UI.DrawHotbar()
+    else:
+        Menu.Draw()

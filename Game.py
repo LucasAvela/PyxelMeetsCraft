@@ -30,7 +30,6 @@ class Mouse:
         pyxel.camera(0, 0)
         pyxel.blt(x + offset_x, y + offset_y, 1, local_x, local_y, 8, 8, 2)
 
-
 class App:
     def __init__(self):
         pyxel.init(

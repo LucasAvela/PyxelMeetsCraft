@@ -97,13 +97,15 @@ class PerlinNoise:
         return PerlinNoise.lerp(PerlinNoise.lerp(g00, g10, u), PerlinNoise.lerp(g01, g11, u), v)
 
 class Button:
-    def __init__(self, x, y, w, h, text, callback, color=5, text_color=7):
+    def __init__(self, x, y, w, h, text, callback, color=5, text_color=7, border_color=0, highlight_color=7):
         self.x, self.y = x, y
         self.w, self.h = w, h
         self.text = text
         self.callback = callback
         self.color = color
         self.text_color = text_color
+        self.border_color = border_color
+        self.highlight_color = highlight_color
         self.hovered = False
 
     def is_hovered(self):
@@ -116,7 +118,7 @@ class Button:
 
     def draw(self):
         color = self.color
-        border_color = 7 if self.hovered else 0
+        border_color = self.highlight_color if self.hovered else self.border_color
         text_color = self.text_color
 
         pyxel.rect(self.x - 1, self.y - 1, self.w + 2, self.h + 2, border_color)
