@@ -1,20 +1,59 @@
 import random
 import numpy
+import json
 
 import gameFiles.AppManager as AppManager
 
-class Properties:
-    def InitPlayerInventory(dictionary):
-        for i in range(AppManager.GameInfo.InvetorySize):
-            dictionary[i] = {
-                'Item': None, 
-                'Amount': 0
-            }
+class SceneController:
+    actualScene = "MainMenu"
+
+    def ChangeScene(newScene):
+        SceneController.actualScene = newScene
+
+class Load:
+    Camera = []
+    World = {}
+    Entities = {}
+    Inventory = {}
+
+    SaveFile = None
+
+    def NewWorld(saveFile, worldName, Seed):
+        data = {
+            "Name": worldName,
+            "Seed": Seed,
+            'Camera': [0, 0],
+            "World": {},
+            "Entities": {},
+            "Inventory": {}
+        }
+
+        data_path = "gameFiles/Saves/" + saveFile + ".json"
+
+        with open(data_path, 'w') as json_file:
+            json.dump(data, json_file, indent=4)
+
+        Load.LoadWorld(saveFile)
+    
+    def LoadWorld(saveFile):
+        data_path = "gameFiles/Saves/" + saveFile + ".json"
+
+        with open(data_path, 'r') as json_file:
+            data = json.load(json_file)
+
+        Load.Camera = data["Camera"]
+        Load.World = {eval(k): v for k, v in data["World"].items()}
+        Load.Entities = data["Entities"]
+        Load.Inventory = {int(k): v for k, v in data["Inventory"].items()}
+        Load.SaveFile = data_path
+
+        PerlinNoise.init_seed(seed=data["Seed"])
+        SceneController.ChangeScene("Gameplay")
 
 class ChunkCalc:
     def GetGenerationChunkArea(camera_x, camera_y):
-        start_x = camera_x // AppManager.GameInfo.BlockSize
-        end_x = start_x + (AppManager.GameInfo.ViewDistance) + 2
+        start_x = (camera_x // AppManager.GameInfo.BlockSize) - 2
+        end_x = start_x + AppManager.GameInfo.ViewDistance + 4
         start_y = camera_y // AppManager.GameInfo.BlockSize + 4
         end_y = start_y + (AppManager.GameInfo.ViewDistance) + 4
  
