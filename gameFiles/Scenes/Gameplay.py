@@ -98,11 +98,16 @@ class Input:
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             if not Status.InMenu:
                 if Player.SelectBlock is not None: Player.BreakBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2])
+            else:
+                Player.MoveItem("left")
 
     def RightInputAction():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
             if not Status.InMenu:
                 Player.UseItem(Player.SelectHotbarSlot)
+            else:
+                Player.MoveItem("right")
+
 
     def Update():
         if not Status.InMenu:
@@ -168,6 +173,49 @@ class Player:
         elif itemData['action'] == "PlaceSpecial":
             if Player.SelectBlock is None: return
             Player.PlaceSpecialBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2], itemData)
+
+    def MoveItem(input):
+        for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots:
+            if itemSlot.clicked() is not None: 
+                if input == "left":
+                    if Game.MouseItem["Item"] is None:
+                        Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
+                        itemSlot.Storage[itemSlot.i] = {"Item": None, "Amount": 0}
+                    else:
+                        if itemSlot.result: return
+                        if itemSlot.Item is None:
+                            itemSlot.Storage[itemSlot.i] = Game.MouseItem
+                            Game.MouseItem = {"Item": None, "Amount": 0}
+                        else:
+                            if itemSlot.Item == Game.MouseItem["Item"]:
+                                total = itemSlot.Storage[itemSlot.i]["Amount"] + Game.MouseItem["Amount"]
+                                if total > Data.GameData.item_data[itemSlot.Item]["stack"]:
+                                    itemSlot.Storage[itemSlot.i]["Amount"] = Data.GameData.item_data[itemSlot.Item]["stack"]
+                                    Game.MouseItem["Amount"] = total - Data.GameData.item_data[itemSlot.Item]["stack"]
+                                else:
+                                    itemSlot.Storage[itemSlot.i]["Amount"] += Game.MouseItem["Amount"]
+                                    Game.MouseItem = {"Item": None, "Amount": 0}
+                            else:
+                                mouseitem = Game.MouseItem
+                                Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
+                                itemSlot.Storage[itemSlot.i] = mouseitem
+        
+                if input == "right":
+                    if Game.MouseItem["Item"] is None:
+                        getAmout = itemSlot.Amount // 2
+                        if getAmout < 1: getAmout = 1
+                        Game.MouseItem = {"Item": itemSlot.Item, "Amount": getAmout}
+                        itemSlot.Storage[itemSlot.i]["Amount"] -= getAmout
+                    else:
+                        if itemSlot.Item is None:
+                            itemSlot.Storage[itemSlot.i] = {"Item": Game.MouseItem["Item"], "Amount": 1}
+                            Game.MouseItem["Amount"] -= 1
+                            if Game.MouseItem["Amount"] < 1: Game.MouseItem = {"Item": None, "Amount": 0}
+                        else:
+                            if itemSlot.Item != Game.MouseItem["Item"] or itemSlot.Storage[itemSlot.i]["Amount"] + 1 > Data.GameData.item_data[itemSlot.Item]["stack"]: return
+                            itemSlot.Storage[itemSlot.i]["Amount"] += 1
+                            Game.MouseItem["Amount"] -= 1
+                            if Game.MouseItem["Amount"] < 1: Game.MouseItem = {"Item": None, "Amount": 0}
 
     def BreakBlock(x, y, layer):
         block = Game.World[(x, y, layer)]
@@ -286,6 +334,12 @@ class UI:
         pyxel.text(x + 12, y + 14, str(amount) if amount >= 10 else " " + str(amount), 0)
         pyxel.text(x + 11, y + 14, str(amount) if amount >= 10 else " " + str(amount), 0)
         pyxel.text(x + 11, y + 13, str(amount) if amount >= 10 else " " + str(amount), 7)
+
+    def DeleteMouseItem():
+        Game.MouseItem = {
+                'Item': None,
+                'Amount': 0
+            }
     
     def Draw():
         if not Status.InMenu:
@@ -302,18 +356,6 @@ class UI:
         else:
             for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots + UI.InventoryButtons:
                 itemSlot.update()
-            
-            if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-                for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots:
-                    if itemSlot.clicked() is not None: 
-                        if not itemSlot.result:
-                            mouseitem = Game.MouseItem
-                            Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
-                            itemSlot.Storage[itemSlot.i] = mouseitem
-                        elif Game.MouseItem["Item"] is None:
-                            mouseitem = Game.MouseItem
-                            Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
-                            itemSlot.Storage[itemSlot.i] = mouseitem
 
 class World:
     def Generation():
@@ -513,6 +555,7 @@ def Start():
 
         UI.InventoryButtons.append(GameObjects.ButtonText(57, 71, 56, 16, "Save", lambda: SaveData.Save(), 13, 7, 7, 5))
         UI.InventoryButtons.append(GameObjects.ButtonText(57, 89, 56, 16, "Main Menu", lambda: End(), 13, 7, 7, 5))
+        UI.InventoryButtons.append(GameObjects.ButtonSprite(224, 176, 32, 32, 0, 224, 2, lambda: UI.DeleteMouseItem()))
 
         for i in range(4):
             row = i // 2
