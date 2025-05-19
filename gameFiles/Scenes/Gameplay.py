@@ -12,6 +12,8 @@ class Game:
     World = {}
     Entities = {}
     Inventory = {}
+    InventoryCraft = {}
+    MouseItem = None
 
 class SaveData:
     SaveFile = None
@@ -24,6 +26,8 @@ class SaveData:
         data['World'] = {str(k): v for k, v in Game.World.items()}
         data['Entities'] = Game.Entities
         data['Inventory'] = Game.Inventory
+        data['InventoryCraft'] = Game.InventoryCraft
+        data['MouseItem'] = Game.MouseItem
 
         with open(SaveData.SaveFile, 'w') as f:
             json.dump(data, f, indent=4)
@@ -85,27 +89,32 @@ class Input:
         
         if pyxel.btnr(pyxel.KEY_SHIFT):
             Player.MineModifier = False
+
+    def MenuState():
+        if pyxel.btnp(pyxel.KEY_E):
+            Status.InMenu = not Status.InMenu
         
     def LeftInputAction():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            if Player.SelectBlock is None: return
-            Player.BreakBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2])
+            if not Status.InMenu:
+                if Player.SelectBlock is not None: Player.BreakBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2])
 
     def RightInputAction():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
-            Player.UseItem(Player.SelectHotbarSlot)
+            if not Status.InMenu:
+                Player.UseItem(Player.SelectHotbarSlot)
 
     def Update():
-        Input.CameraMove()
-        Input.SelectHotbar()
-        Input.SelectBlock()
-        Input.SelectionModifier()
+        if not Status.InMenu:
+            Input.CameraMove()
+            Input.SelectHotbar()
+            Input.SelectBlock()
+            Input.SelectionModifier()
+        
         Input.LeftInputAction()
         Input.RightInputAction()
-
-        if pyxel.btnp(pyxel.KEY_KP_0):
-            SaveData.Save()
-            print("Saved Successfully")
+        
+        Input.MenuState()
 
         if pyxel.btnp(pyxel.KEY_KP_1): Player.AddItem(Data.Items.Bed_item, 1)
         if pyxel.btnp(pyxel.KEY_KP_2): Player.AddItem(Data.Items.Apple, 7)
@@ -209,6 +218,9 @@ class Player:
 
 class UI:
     HotbarSlots = []
+    InventorySlots = []
+    InventoryCraftSlots = []
+    InventoryButtons = []
 
     def DrawArea():
         if Player.SelectBlock is None: return
@@ -229,15 +241,7 @@ class UI:
             draw_y += 8
             area_local_y = 28
 
-        pyxel.blt(
-            draw_x, 
-            draw_y, 
-            2, 
-            area_local_x, 
-            area_local_y, 
-            AppManager.GameInfo.BlockSize, 
-            AppManager.GameInfo.BlockSize, 
-            2)
+        pyxel.blt(draw_x, draw_y, 2, area_local_x, area_local_y, AppManager.GameInfo.BlockSize, AppManager.GameInfo.BlockSize, 2)
         
     def DrawHotbar():
         pyxel.camera(0, 0)
@@ -245,19 +249,71 @@ class UI:
         y = 228
 
         pyxel.blt(x, y, 2, 0, 160, 164, 20, 2)
-    
-    def Draw():
-        UI.DrawArea()
-        UI.DrawHotbar()
 
         for itemSlot in UI.HotbarSlots:
             itemSlot.draw()
 
         pyxel.blt(48 - 3 + (Player.SelectHotbarSlot * 18), 227, 2, 176, 0, 22, 22, 2)
 
+    def DrawMenu():
+        pyxel.camera(0, 0)
+        x = 43
+        y = 48
+
+        pyxel.blt(x, y, 2, 0, 0, 172, 158, 2)
+        pyxel.blt(165, 80, 2, 64, 224, 16, 16, 2)
+        pyxel.text(48, 118, "Inventory", 5, Data.GameData.spleen5_font)
+        pyxel.text(126, 58, "Crafting", 5, Data.GameData.spleen5_font)
+
+        for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots + UI.InventoryButtons:
+            itemSlot.draw()
+
+    def DrawMouseItem():
+        pyxel.camera(0, 0)
+        if Game.MouseItem["Item"] is None: return
+        x = pyxel.mouse_x
+        y = pyxel.mouse_y
+
+        itemData = Data.GameData.item_data[Game.MouseItem["Item"]]
+        amount = Game.MouseItem["Amount"]
+
+        item_x = itemData['local']['x']
+        item_y = itemData['local']['y']
+
+        pyxel.blt(x+2, y+2, 1, item_x, item_y, 16, 16, 2)
+        if amount <= 1: return
+        pyxel.text(x + 12, y + 13, str(amount) if amount >= 10 else " " + str(amount), 0)
+        pyxel.text(x + 12, y + 14, str(amount) if amount >= 10 else " " + str(amount), 0)
+        pyxel.text(x + 11, y + 14, str(amount) if amount >= 10 else " " + str(amount), 0)
+        pyxel.text(x + 11, y + 13, str(amount) if amount >= 10 else " " + str(amount), 7)
+    
+    def Draw():
+        if not Status.InMenu:
+            UI.DrawArea()
+            UI.DrawHotbar()
+        else:
+            UI.DrawMenu()
+            UI.DrawMouseItem()
+
     def Update():
-        for itemSlot in UI.HotbarSlots:
-            itemSlot.update()
+        if not Status.InMenu:
+            for itemSlot in UI.HotbarSlots: 
+                itemSlot.update()
+        else:
+            for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots + UI.InventoryButtons:
+                itemSlot.update()
+            
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+                for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots:
+                    if itemSlot.clicked() is not None: 
+                        if not itemSlot.result:
+                            mouseitem = Game.MouseItem
+                            Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
+                            itemSlot.Storage[itemSlot.i] = mouseitem
+                        elif Game.MouseItem["Item"] is None:
+                            mouseitem = Game.MouseItem
+                            Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
+                            itemSlot.Storage[itemSlot.i] = mouseitem
 
 class World:
     def Generation():
@@ -402,23 +458,27 @@ class World:
 class Status:
     Started = False
     dither = 0
+    InMenu = False
 
 def End():
     Status.Started = False
+    Status.dither = 0
+    Status.InMenu = False
+    Player.SelectHotbarSlot = 0
     UI.HotbarSlots.clear()
+    UI.InventorySlots.clear()
+    UI.InventoryCraftSlots.clear()
+    UI.InventoryButtons.clear()
+    GameManager.SceneController.ChangeScene("MainMenu")
 
 def Start():
     if not Status.Started:
-        if Status.dither < 1:
-            Status.dither += 0.02
-            pyxel.dither(Status.dither)
-            return
-
         Game.Camera = GameManager.Load.Camera
         Game.World = GameManager.Load.World
         Game.Entities = GameManager.Load.Entities
         Game.Inventory = GameManager.Load.Inventory
-
+        Game.InventoryCraft = GameManager.Load.InventoryCraft
+        Game.MouseItem = GameManager.Load.MouseItem
         SaveData.SaveFile = GameManager.Load.SaveFile
 
         if not Game.Inventory:
@@ -427,20 +487,55 @@ def Start():
                     'Item': None,
                     'Amount': 0
                 }
+        if not Game.InventoryCraft:
+            for i in range(5):
+                Game.InventoryCraft[i] = {
+                    'Item': None,
+                    'Amount': 0
+                }
+        
+        if not Game.MouseItem:
+            Game.MouseItem = {
+                'Item': None,
+                'Amount': 0
+            }
 
         for i in range(9):
             UI.HotbarSlots.append(GameObjects.ItemSlot(48 + (i * 18), 230, i, Game.Inventory, 5, hotbar=True))
+            UI.InventorySlots.append(GameObjects.ItemSlot(48 + (i * 18), 183, i, Game.Inventory, 13))
 
+        for i in range(9, AppManager.GameInfo.InvetorySize):
+            row = (i // 9) - 1
+            col = i % 9
+            x = 48 + (col * 18)
+            y = 127 + (18 * row)
+            UI.InventorySlots.append(GameObjects.ItemSlot(x, y, i, Game.Inventory, 13))
+
+        UI.InventoryButtons.append(GameObjects.ButtonText(57, 71, 56, 16, "Save", lambda: SaveData.Save(), 13, 7, 7, 5))
+        UI.InventoryButtons.append(GameObjects.ButtonText(57, 89, 56, 16, "Main Menu", lambda: End(), 13, 7, 7, 5))
+
+        for i in range(4):
+            row = i // 2
+            col = i % 2
+            x = 129 + (col * 18)
+            y = 71 + (18 * row)
+            UI.InventoryCraftSlots.append(GameObjects.ItemSlot(x, y, i, Game.InventoryCraft, 13))
+        UI.InventoryCraftSlots.append(GameObjects.ItemSlot(183, 80, 4, Game.InventoryCraft, 13, result=True))
+
+        print("Start")
         Status.Started = True
+
+    if Status.dither < 1:
+        Status.dither += 0.02
+        pyxel.dither(Status.dither)
+        return
 
 def Update():
     Start()
-    if not Status.Started: return
+    Input.Update()
     World.Generation()
     UI.Update()
-    Input.Update()
 
 def Draw():
-    if not Status.Started: return
     World.Renderer()
     UI.Draw()

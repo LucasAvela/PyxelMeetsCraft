@@ -15,6 +15,8 @@ class Load:
     World = {}
     Entities = {}
     Inventory = {}
+    InventoryCraft = {}
+    MouseItem = None
 
     SaveFile = None
 
@@ -25,7 +27,9 @@ class Load:
             'Camera': [0, 0],
             "World": {},
             "Entities": {},
-            "Inventory": {}
+            "Inventory": {},
+            "InventoryCraft": {},
+            "MouseItem": None
         }
 
         data_path = "gameFiles/Saves/" + saveFile + ".json"
@@ -45,6 +49,8 @@ class Load:
         Load.World = {eval(k): v for k, v in data["World"].items()}
         Load.Entities = data["Entities"]
         Load.Inventory = {int(k): v for k, v in data["Inventory"].items()}
+        Load.InventoryCraft = {int(k): v for k, v in data["InventoryCraft"].items()}
+        Load.MouseItem = data["MouseItem"]
         Load.SaveFile = data_path
 
         PerlinNoise.init_seed(seed=data["Seed"])

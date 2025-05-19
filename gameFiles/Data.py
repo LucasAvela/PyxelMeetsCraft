@@ -127,8 +127,8 @@ class GameData:
         with open('assets/data/crafts_recipes.json', 'r') as h:
             GameData.crafting_data = json.load(h)
 
-        # with open('D:/Projects/Avela/Pyxel/PyxelMeetsCraft/assets/data/smelting_recipes.json', 'r') as i:
-        #     GameData.smelting_data = json.load(i)
+        with open('assets/data/smelts_recipes.json', 'r') as i:
+            GameData.smelting_data = json.load(i)
 
     def SaveFiles():
         try:

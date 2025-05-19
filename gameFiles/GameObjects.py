@@ -148,7 +148,7 @@ class TextInputField:
                 pyxel.text(cursor_x, text_y, "|", text_color, font=Data.GameData.spleen5_font)
 
 class ItemSlot:
-    def __init__(self, x, y, i, storage, color, hotbar=False):
+    def __init__(self, x, y, i, storage, color, hotbar=False, result=False):
         self.x, self.y = x, y
         self.i = i
         self.Storage = storage
@@ -157,19 +157,19 @@ class ItemSlot:
         self.Amount = 0
         self.ItemData = None
         self.hotbar = hotbar
+        self.result = result
     
+    def clicked(self):
+        if self.x <= pyxel.mouse_x <= self.x + 16 and self.y <= pyxel.mouse_y <= self.y + 16:
+            return self.Storage[self.i]
+
     def update(self):
         self.Item = self.Storage[self.i]["Item"]
         self.Amount = self.Storage[self.i]["Amount"]
 
         if self.Item is not None: self.ItemData = Data.GameData.item_data[self.Item]
         else: self.ItemData = None
-
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) and not self.hotbar:
-            if self.x <= pyxel.mouse_x <= self.x + 16 and self.y <= pyxel.mouse_y <= self.y + 16:
-                print(f"slot: {self.i}")
-                return self.i
-
+            
     def draw(self):
         pyxel.rect(self.x, self.y, 16, 16, self.color)
 

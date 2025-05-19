@@ -143,6 +143,32 @@ def Craft():
 
     print("craft_id.json created successfully!")
 
+def Smelt():
+    df = pd.read_excel('assets\\data\\SheetTable.xlsx', sheet_name='Smelt')
+
+    recipes = []
+
+    for _, row in df.iterrows():
+        result = row['Result']
+        item = row['Item']
+
+        recipe = {
+            "result": result,
+            "item": item
+        }
+
+        recipes.append(recipe)
+    
+    data = {
+        "Recipes": recipes
+    }
+
+    with open('assets\\data\\smelts_recipes.json', 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+    print("smelt_id.json created successfully!")
+
 Blocks()
 Items()
 Craft()
+Smelt()

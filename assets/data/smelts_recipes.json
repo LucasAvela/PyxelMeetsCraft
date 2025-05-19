@@ -1,0 +1,44 @@
+{
+    "Recipes": [
+        {
+            "result": "Coal",
+            "item": "Wood_Log_block_item"
+        },
+        {
+            "result": "Coal",
+            "item": "Coal_Ore_block_item"
+        },
+        {
+            "result": "Iron",
+            "item": "Iron_Ore_block_item"
+        },
+        {
+            "result": "Iron",
+            "item": "Raw_Iron"
+        },
+        {
+            "result": "Gold",
+            "item": "Gold_Ore_block_item"
+        },
+        {
+            "result": "Gold",
+            "item": "Raw_Gold"
+        },
+        {
+            "result": "Diamond",
+            "item": "Diamond_Ore_block_item"
+        },
+        {
+            "result": "Emerald",
+            "item": "Emerald_Ore_block_item"
+        },
+        {
+            "result": "Cooked_Steak",
+            "item": "Raw_Steak"
+        },
+        {
+            "result": "Stone_block_item",
+            "item": "Cobblestone_block_item"
+        }
+    ]
+}
