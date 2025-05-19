@@ -24,7 +24,7 @@ class SaveData:
         
         data['Camera'] = Game.Camera
         data['World'] = {str(k): v for k, v in Game.World.items()}
-        data['Entities'] = Game.Entities
+        data['Entities'] = {str(k): v for k, v in Game.Entities.items()}
         data['Inventory'] = Game.Inventory
         data['InventoryCraft'] = Game.InventoryCraft
         data['MouseItem'] = Game.MouseItem
@@ -90,9 +90,32 @@ class Input:
         if pyxel.btnr(pyxel.KEY_SHIFT):
             Player.MineModifier = False
 
-    def MenuState():
+    def AccessInventory():
         if pyxel.btnp(pyxel.KEY_E):
+            if Status.InMenu:
+                UI.EntitySlots.clear()
+
             Status.InMenu = not Status.InMenu
+            UI.MenuType = "Inventory"
+    
+    def AccessMenu(Menu, key):
+        Status.InMenu = True
+        
+        if Menu == "Workbench":
+            pass
+        
+        if Menu == "Furnace":
+            pass
+
+        if Menu == "Chest":
+            for i in range(27):
+                row = i // 9
+                col = i % 9
+                x = 48 + (col * 18)
+                y = 62 + (18 * row)
+                UI.EntitySlots.append(GameObjects.ItemSlot(x, y, i, Game.Entities[key]['Inventory'], 13))
+        
+        UI.MenuType = Menu
         
     def LeftInputAction():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -104,7 +127,13 @@ class Input:
     def RightInputAction():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
             if not Status.InMenu:
-                Player.UseItem(Player.SelectHotbarSlot)
+                if Player.SelectBlock is not None:
+                    key = (Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2])
+                    if key in Game.Entities:
+                        Input.AccessMenu(Game.Entities[key]['Entity'], key)
+                        return
+                    
+                    Player.UseItem(Player.SelectHotbarSlot)
             else:
                 Player.MoveItem("right")
 
@@ -119,12 +148,11 @@ class Input:
         Input.LeftInputAction()
         Input.RightInputAction()
         
-        Input.MenuState()
+        Input.AccessInventory()
 
-        if pyxel.btnp(pyxel.KEY_KP_1): Player.AddItem(Data.Items.Bed_item, 1)
-        if pyxel.btnp(pyxel.KEY_KP_2): Player.AddItem(Data.Items.Apple, 7)
-        if pyxel.btnp(pyxel.KEY_KP_4): Player.RemoveItem(0, 1)
-        if pyxel.btnp(pyxel.KEY_KP_5): Player.RemoveItem(0, 3)
+        if pyxel.btnp(pyxel.KEY_KP_1): Player.AddItem(Data.Items.Workbench_block_item, 1)
+        if pyxel.btnp(pyxel.KEY_KP_2): Player.AddItem(Data.Items.Chest_block_item, 1)
+        if pyxel.btnp(pyxel.KEY_KP_3): Player.AddItem(Data.Items.Furnace_block_item, 1)
 
 class Player:
     SelectBlock = None
@@ -175,7 +203,13 @@ class Player:
             Player.PlaceSpecialBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2], itemData)
 
     def MoveItem(input):
-        for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots:
+        auxSlots = None
+        if UI.MenuType == "Inventory":
+            auxSlots = UI.InventoryCraftSlots
+        else:
+            auxSlots = UI.EntitySlots
+
+        for itemSlot in UI.InventorySlots + auxSlots:
             if itemSlot.clicked() is not None: 
                 if input == "left":
                     if Game.MouseItem["Item"] is None:
@@ -235,11 +269,19 @@ class Player:
             Game.World[(x, y - 1, layer)]['Block'] = Data.Blocks.Air
             Player.AddItem("Bed_item", 1)
             return
-        elif blockData['name'] == "Bed_block_Top":
+        
+        if blockData['name'] == "Bed_block_Top":
             Game.World[(x, y, layer)]['Block'] = Data.Blocks.Air
             Game.World[(x, y + 1, layer)]['Block'] = Data.Blocks.Air
             Player.AddItem("Bed_item", 1)
             return
+        
+        if blockData['name'] == "Workbench_block" or blockData['name'] == "Furnace_block" or blockData['name'] == "Chest_block":
+            Game.World[(x, y, layer)]['Block'] = Data.Blocks.Air
+            del Game.Entities[(x, y, layer)]
+            if blockData['name'] == "Workbench_block": Player.AddItem("Workbench_block_item", 1)
+            if blockData['name'] == "Furnace_block": Player.AddItem("Furnace_block_item", 1)
+            if blockData['name'] == "Chest_block": Player.AddItem("Chest_block_item", 1)
 
     def PlaceBlock(x, y, layer, block):
         if Player.MineModifier:
@@ -262,13 +304,47 @@ class Player:
                 if (x, y - 1, layer + 1) not in Game.World or Game.World[(x, y - 1, layer + 1)]['Block'] == Data.Blocks.Air:
                     Game.World[(x, y, layer + 1)] = {"Block": "Bed_block_Bottom", "Solid": True}
                     Game.World[(x, y - 1, layer + 1)] = {"Block": "Bed_block_Top", "Solid": True}
-                    Player.RemoveItem(Player.SelectHotbarSlot, 1)
+
+        if itemData['name'] == "Workbench_block_item":
+            Game.World[(x, y, layer + 1)] = {"Block": "Workbench_block", "Solid": True}
+            Game.Entities[(x, y, layer + 1)] = {"Entity": "Workbench", "Inventory": {}}
+            for i in range(10):
+                Game.Entities[(x, y, layer + 1)]["Inventory"][i] = {
+                    'Item': None,
+                    'Amount': 0
+                }
+
+        if itemData['name'] == "Furnace_block_item":
+            Game.World[(x, y, layer + 1)] = {"Block": "Furnace_block", "Solid": True}
+            Game.Entities[(x, y, layer + 1)] = {"Entity": "Furnace", "Inventory": {}}
+            for i in range(3):
+                Game.Entities[(x, y, layer + 1)]["Inventory"][i] = {
+                    'Item': None,
+                    'Amount': 0
+                }
+
+        if itemData['name'] == "Chest_block_item":
+            Game.World[(x, y, layer + 1)] = {"Block": "Chest_block", "Solid": True}
+            Game.Entities[(x, y, layer + 1)] = {"Entity": "Chest", "Inventory": {}}
+            for i in range(27):
+                Game.Entities[(x, y, layer + 1)]["Inventory"][i] = {
+                    'Item': None,
+                    'Amount': 0
+                }
+        
+        Player.RemoveItem(Player.SelectHotbarSlot, 1)
 
 class UI:
     HotbarSlots = []
+
+    MenuType = None
+    EntityKey = None
+
     InventorySlots = []
     InventoryCraftSlots = []
     InventoryButtons = []
+
+    EntitySlots = []
 
     def DrawArea():
         if Player.SelectBlock is None: return
@@ -309,12 +385,27 @@ class UI:
         y = 48
 
         pyxel.blt(x, y, 2, 0, 0, 172, 158, 2)
-        pyxel.blt(165, 80, 2, 64, 224, 16, 16, 2)
-        pyxel.text(48, 118, "Inventory", 5, Data.GameData.spleen5_font)
-        pyxel.text(126, 58, "Crafting", 5, Data.GameData.spleen5_font)
+        pyxel.text(48, 116, "Inventory", 5, Data.GameData.spleen5_font)
 
-        for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots + UI.InventoryButtons:
+        for itemSlot in UI.InventorySlots:
             itemSlot.draw()
+
+        if UI.MenuType == "Inventory":
+            pyxel.blt(165, 80, 2, 64, 224, 16, 16, 2)
+            pyxel.text(127, 60, "Crafting", 5, Data.GameData.spleen5_font)
+            for itemSlot in UI.InventoryCraftSlots + UI.InventoryButtons:
+                itemSlot.draw()
+        
+        if UI.MenuType == "Workbench":
+            pass
+
+        if UI.MenuType == "Furnace":
+            pass
+
+        if UI.MenuType == "Chest":
+            pyxel.text(48, 52, "Chest", 5, Data.GameData.spleen5_font)
+            for itemSlot in UI.EntitySlots:
+                itemSlot.draw()
 
     def DrawMouseItem():
         pyxel.camera(0, 0)
@@ -337,9 +428,9 @@ class UI:
 
     def DeleteMouseItem():
         Game.MouseItem = {
-                'Item': None,
-                'Amount': 0
-            }
+            'Item': None,
+            'Amount': 0
+        }
     
     def Draw():
         if not Status.InMenu:
@@ -354,8 +445,15 @@ class UI:
             for itemSlot in UI.HotbarSlots: 
                 itemSlot.update()
         else:
-            for itemSlot in UI.InventorySlots + UI.InventoryCraftSlots + UI.InventoryButtons:
+            for itemSlot in UI.InventorySlots:
                 itemSlot.update()
+            
+            if UI.MenuType == "Inventory":
+                for itemSlot in UI.InventoryCraftSlots + UI.InventoryButtons:
+                    itemSlot.update()
+            else:
+                for itemSlot in UI.EntitySlots:
+                    itemSlot.update()
 
 class World:
     def Generation():
@@ -529,6 +627,7 @@ def Start():
                     'Item': None,
                     'Amount': 0
                 }
+
         if not Game.InventoryCraft:
             for i in range(5):
                 Game.InventoryCraft[i] = {
@@ -566,6 +665,7 @@ def Start():
         UI.InventoryCraftSlots.append(GameObjects.ItemSlot(183, 80, 4, Game.InventoryCraft, 13, result=True))
 
         print("Start")
+        print(Game.Entities)
         Status.Started = True
 
     if Status.dither < 1:

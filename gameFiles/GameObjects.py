@@ -180,7 +180,7 @@ class ItemSlot:
         
         pyxel.blt(self.x, self.y, 1, self.ItemData['local']['x'], self.ItemData['local']['y'], 16, 16, 2)
 
-        #if self.Amount <= 1: return
+        if self.Amount <= 1: return
 
         pyxel.text(self.x + 10, self.y + 11, str(self.Amount) if self.Amount >= 10 else " " + str(self.Amount), 0)
         pyxel.text(self.x + 10, self.y + 12, str(self.Amount) if self.Amount >= 10 else " " + str(self.Amount), 0)

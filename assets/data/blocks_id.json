@@ -242,7 +242,7 @@
         },
         {
             "name": "Workbench_block",
-            "drop": "Workbench_block_item",
+            "drop": "Special",
             "tool": "Axe",
             "level": 0,
             "local": {
@@ -254,7 +254,7 @@
         },
         {
             "name": "Furnace_block",
-            "drop": "Furnace_block_item",
+            "drop": "Special",
             "tool": "Pickaxe",
             "level": 1,
             "local": {
@@ -266,7 +266,7 @@
         },
         {
             "name": "Chest_block",
-            "drop": "Chest_block_item",
+            "drop": "Special",
             "tool": "Axe",
             "level": 0,
             "local": {

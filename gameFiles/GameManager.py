@@ -47,7 +47,7 @@ class Load:
 
         Load.Camera = data["Camera"]
         Load.World = {eval(k): v for k, v in data["World"].items()}
-        Load.Entities = data["Entities"]
+        Load.Entities = {eval(k): {**v, "Inventory": {int(ik): iv for ik, iv in v["Inventory"].items()}} for k, v in data["Entities"].items()}
         Load.Inventory = {int(k): v for k, v in data["Inventory"].items()}
         Load.InventoryCraft = {int(k): v for k, v in data["InventoryCraft"].items()}
         Load.MouseItem = data["MouseItem"]

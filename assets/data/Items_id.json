@@ -747,7 +747,7 @@
             "level": 0,
             "stack": 64,
             "fuel": 0,
-            "action": "Place",
+            "action": "PlaceSpecial",
             "block": "Workbench_block",
             "local": {
                 "x": 128,
