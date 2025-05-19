@@ -282,6 +282,8 @@ class LoadingScreen:
             elif LoadingScreen.Game == "Load":
                 LoadingScreen.LoadGameWorld()
             ScreenManager.ChangeScreen("Menu")
+            LoadingScreen.Finish = False
+            
 
     def Draw():
         pyxel.blt(64, 64, 0, 128, 128, 128, 128, 2, scale=2) # Background

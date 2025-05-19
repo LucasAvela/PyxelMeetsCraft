@@ -654,29 +654,29 @@ def Start():
             }
 
         for i in range(9):
-            UI.HotbarSlots.append(GameObjects.ItemSlot(48 + (i * 18), 230, i, Game.Inventory, 5, hotbar=True))
-            UI.InventorySlots.append(GameObjects.ItemSlot(48 + (i * 18), 183, i, Game.Inventory, 13))
-
+            x = 48 + (i * 18)
+            UI.HotbarSlots.append(GameObjects.ItemSlot(x, 230, i, Game.Inventory, 5, hotbar=True))
+            UI.InventorySlots.append(GameObjects.ItemSlot(x, 183, i, Game.Inventory, 13))
+        
         for i in range(9, AppManager.GameInfo.InvetorySize):
             row = (i // 9) - 1
             col = i % 9
             x = 48 + (col * 18)
             y = 127 + (18 * row)
             UI.InventorySlots.append(GameObjects.ItemSlot(x, y, i, Game.Inventory, 13))
-
-        UI.InventoryButtons.append(GameObjects.ButtonText(57, 71, 56, 16, "Save", lambda: SaveData.Save(), 13, 7, 7, 5))
-        UI.InventoryButtons.append(GameObjects.ButtonText(57, 89, 56, 16, "Main Menu", lambda: End(), 13, 7, 7, 5))
-        UI.InventoryButtons.append(GameObjects.ButtonSprite(224, 176, 32, 32, 0, 224, 2, lambda: UI.DeleteMouseItem()))
+        
+        UI.InventoryButtons += [
+            GameObjects.ButtonText(57, 71, 56, 16, "Save", lambda: SaveData.Save(), 13, 7, 7, 5),
+            GameObjects.ButtonText(57, 89, 56, 16, "Main Menu", lambda: End(), 13, 7, 7, 5),
+            GameObjects.ButtonSprite(224, 176, 32, 32, 0, 224, 2, lambda: UI.DeleteMouseItem())
+        ]
 
         for i in range(4):
-            row = i // 2
-            col = i % 2
-            x = 129 + (col * 18)
-            y = 71 + (18 * row)
+            x = 129 + (i % 2) * 18
+            y = 71 + (i // 2) * 18
             UI.InventoryCraftSlots.append(GameObjects.ItemSlot(x, y, i, Game.InventoryCraft, 13))
         UI.InventoryCraftSlots.append(GameObjects.ItemSlot(183, 80, 4, Game.InventoryCraft, 13, result=True))
 
-        print(Game.Entities)
         Status.Started = True
 
     if Status.dither < 1:
