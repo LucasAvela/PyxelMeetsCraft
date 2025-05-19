@@ -102,10 +102,18 @@ class Input:
         Status.InMenu = True
         
         if Menu == "Workbench":
-            pass
+            for i in range(9):
+                row = i // 3
+                col = i % 3
+                x = 75 + (col * 18)
+                y = 62 + (18 * row)
+                UI.EntitySlots.append(GameObjects.ItemSlot(x, y, i, Game.Entities[key]['Inventory'], 13))
+            UI.EntitySlots.append(GameObjects.ItemSlot(165, 80, 9, Game.Entities[key]['Inventory'], 13, result=True))
         
         if Menu == "Furnace":
-            pass
+            UI.EntitySlots.append(GameObjects.ItemSlot(94, 62, 0, Game.Entities[key]['Inventory'], 13))
+            UI.EntitySlots.append(GameObjects.ItemSlot(94, 98, 1, Game.Entities[key]['Inventory'], 13))
+            UI.EntitySlots.append(GameObjects.ItemSlot(147, 80, 2, Game.Entities[key]['Inventory'], 13, result=True))
 
         if Menu == "Chest":
             for i in range(27):
@@ -395,17 +403,21 @@ class UI:
             pyxel.text(127, 60, "Crafting", 5, Data.GameData.spleen5_font)
             for itemSlot in UI.InventoryCraftSlots + UI.InventoryButtons:
                 itemSlot.draw()
+        else:
+            for itemSlot in UI.EntitySlots:
+                itemSlot.draw()
         
         if UI.MenuType == "Workbench":
-            pass
+            pyxel.blt(138, 81, 2, 64, 224, 16, 16, 2)
+            pyxel.text(80, 52, "Crafting", 5, Data.GameData.spleen5_font)
 
         if UI.MenuType == "Furnace":
-            pass
+            pyxel.blt(120, 80, 2, 64, 224, 16, 16, 2)
+            pyxel.blt(94, 80, 2, 32, 224, 16, 16, 2)
+            pyxel.text(110, 52, "Furnace", 5, Data.GameData.spleen5_font)
 
         if UI.MenuType == "Chest":
             pyxel.text(48, 52, "Chest", 5, Data.GameData.spleen5_font)
-            for itemSlot in UI.EntitySlots:
-                itemSlot.draw()
 
     def DrawMouseItem():
         pyxel.camera(0, 0)
@@ -664,7 +676,6 @@ def Start():
             UI.InventoryCraftSlots.append(GameObjects.ItemSlot(x, y, i, Game.InventoryCraft, 13))
         UI.InventoryCraftSlots.append(GameObjects.ItemSlot(183, 80, 4, Game.InventoryCraft, 13, result=True))
 
-        print("Start")
         print(Game.Entities)
         Status.Started = True
 
