@@ -7,7 +7,6 @@
                 1,
                 1
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Log_block_item"
@@ -21,7 +20,6 @@
                 1,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Planks_block_item"
@@ -38,7 +36,6 @@
                 2,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Planks_block_item",
@@ -57,10 +54,11 @@
                 3,
                 3
             ],
-            "shaped": true,
             "craft": [
                 [
-                    "Wood_Planks_block_item.Wood_Planks_block_item.Wood_Planks_block_item"
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
                 ],
                 [
                     "Wood_Planks_block_item",
@@ -79,7 +77,6 @@
                 3,
                 3
             ],
-            "shaped": true,
             "craft": [
                 [
                     "Cobblestone_block_item",
@@ -105,7 +102,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Planks_block_item",
@@ -128,7 +124,6 @@
                 3,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wool_White_block_item",
@@ -149,7 +144,6 @@
                 3,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wool_Black_block_item",
@@ -170,7 +164,6 @@
                 3,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wool_Red_block_item",
@@ -191,7 +184,6 @@
                 3,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wool_Yellow_block_item",
@@ -212,7 +204,6 @@
                 3,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wool_Blue_block_item",
@@ -233,7 +224,6 @@
                 3,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wool_Green_block_item",
@@ -254,7 +244,6 @@
                 3,
                 3
             ],
-            "shaped": true,
             "craft": [
                 [
                     "Wood_Planks_block_item",
@@ -280,7 +269,6 @@
                 3,
                 3
             ],
-            "shaped": true,
             "craft": [
                 [
                     "Cobblestone_block_item",
@@ -306,7 +294,6 @@
                 3,
                 3
             ],
-            "shaped": true,
             "craft": [
                 [
                     "Iron",
@@ -332,7 +319,6 @@
                 3,
                 3
             ],
-            "shaped": true,
             "craft": [
                 [
                     "Gold",
@@ -358,7 +344,6 @@
                 3,
                 3
             ],
-            "shaped": true,
             "craft": [
                 [
                     "Diamond",
@@ -384,7 +369,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Planks_block_item",
@@ -407,7 +391,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Planks_block_item",
@@ -430,7 +413,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Cobblestone_block_item",
@@ -453,7 +435,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Cobblestone_block_item",
@@ -476,7 +457,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Iron",
@@ -499,7 +479,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Iron",
@@ -522,7 +501,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Gold",
@@ -545,7 +523,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Gold",
@@ -568,7 +545,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Diamond",
@@ -591,7 +567,6 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Diamond",
@@ -614,7 +589,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Planks_block_item"
@@ -634,7 +608,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Cobblestone_block_item"
@@ -654,7 +627,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Iron"
@@ -674,7 +646,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Gold"
@@ -694,7 +665,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Diamond"
@@ -714,16 +684,61 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Planks_block_item",
                     "Wood_Planks_block_item"
                 ],
                 [
+                    null,
                     "Stick"
                 ],
                 [
+                    null,
+                    "Stick"
+                ]
+            ]
+        },
+        {
+            "result": "Wooden_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "craft": [
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Stick",
+                    null
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Stone_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "craft": [
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ],
+                [
+                    null,
+                    "Stick"
+                ],
+                [
+                    null,
                     "Stick"
                 ]
             ]
@@ -735,16 +750,39 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Cobblestone_block_item",
                     "Cobblestone_block_item"
                 ],
                 [
+                    "Stick",
+                    null
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Iron_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "craft": [
+                [
+                    "Iron",
+                    "Iron"
+                ],
+                [
+                    null,
                     "Stick"
                 ],
                 [
+                    null,
                     "Stick"
                 ]
             ]
@@ -756,16 +794,39 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Iron",
                     "Iron"
                 ],
                 [
+                    "Stick",
+                    null
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Golden_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "craft": [
+                [
+                    "Gold",
+                    "Gold"
+                ],
+                [
+                    null,
                     "Stick"
                 ],
                 [
+                    null,
                     "Stick"
                 ]
             ]
@@ -777,16 +838,39 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Gold",
                     "Gold"
                 ],
                 [
+                    "Stick",
+                    null
+                ],
+                [
+                    "Stick",
+                    null
+                ]
+            ]
+        },
+        {
+            "result": "Diamond_Hoe",
+            "amount": 1,
+            "size": [
+                2,
+                3
+            ],
+            "craft": [
+                [
+                    "Diamond",
+                    "Diamond"
+                ],
+                [
+                    null,
                     "Stick"
                 ],
                 [
+                    null,
                     "Stick"
                 ]
             ]
@@ -798,17 +882,18 @@
                 2,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Diamond",
                     "Diamond"
                 ],
                 [
-                    "Stick"
+                    "Stick",
+                    null
                 ],
                 [
-                    "Stick"
+                    "Stick",
+                    null
                 ]
             ]
         },
@@ -819,7 +904,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Wood_Planks_block_item"
@@ -839,7 +923,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Cobblestone_block_item"
@@ -859,7 +942,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Iron"
@@ -879,7 +961,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Gold"
@@ -899,7 +980,6 @@
                 1,
                 3
             ],
-            "shaped": false,
             "craft": [
                 [
                     "Diamond"
@@ -919,7 +999,6 @@
                 2,
                 2
             ],
-            "shaped": false,
             "craft": [
                 [
                     null,

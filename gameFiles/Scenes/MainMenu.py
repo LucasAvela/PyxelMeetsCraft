@@ -277,21 +277,34 @@ class LoadingScreen:
 
         if LoadingScreen.Finish:
             time.sleep(0.5)
+            ScreenManager.ChangeScreen("Menu")
+            LoadingScreen.Started = False
+            LoadingScreen.Finish = False
+            Status.Started = False
+            Status.dither = 0
             if LoadingScreen.Game == "New":
                 LoadingScreen.CreateNewWorld()
             elif LoadingScreen.Game == "Load":
                 LoadingScreen.LoadGameWorld()
-            ScreenManager.ChangeScreen("Menu")
-            LoadingScreen.Finish = False
             
 
     def Draw():
         pyxel.blt(64, 64, 0, 128, 128, 128, 128, 2, scale=2) # Background
 
+class Status:
+    Started = False
+    dither = 0
+
 def Start():
-    pass
+    if not Status.Started:
+        if Status.dither < 1:
+            Status.dither += 0.02
+            pyxel.dither(Status.dither)
+            return
+        Status.Started
 
 def Update():
+    Start()
     if   ScreenManager.actualScreen == "Menu": MainScreen.Update()
     elif ScreenManager.actualScreen == "Options": OptionsScreen.Update()
     elif ScreenManager.actualScreen == "Play": PlayScreen.Update()

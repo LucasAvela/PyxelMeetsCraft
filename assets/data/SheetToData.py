@@ -98,7 +98,6 @@ def Craft():
         amount = row['Amount']
         size_x = int(row['Size_X'])
         size_y = int(row['Size_Y'])
-        Shaped = bool(row['Shaped'])
         craft_0 = str(row['Craft_0'])
         craft_1 = str(row['Craft_1'])
         craft_2 = str(row['Craft_2'])
@@ -128,7 +127,6 @@ def Craft():
             "result": result,
             "amount": int(amount),
             "size": size,
-            "shaped": Shaped,
             "craft": mold
         }
 

@@ -1,5 +1,6 @@
 import pyxel
 import json
+import time
 
 import gameFiles.AppManager as AppManager
 import gameFiles.GameManager as GameManager
@@ -124,6 +125,7 @@ class Input:
                 UI.EntitySlots.append(GameObjects.ItemSlot(x, y, i, Game.Entities[key]['Inventory'], 13))
         
         UI.MenuType = Menu
+        UI.EntityKey = key
         
     def LeftInputAction():
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -197,19 +199,6 @@ class Player:
         else:
             Game.Inventory[key]['Amount'] -= amount
 
-    def UseItem(key):
-        item = Game.Inventory[key]['Item']
-        if item is None: return
-        itemData = Data.GameData.item_data[item]
-
-        if itemData['action'] == "Place": 
-            if Player.SelectBlock is None: return
-            Player.PlaceBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2], itemData['block'])
-            return
-        elif itemData['action'] == "PlaceSpecial":
-            if Player.SelectBlock is None: return
-            Player.PlaceSpecialBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2], itemData)
-
     def MoveItem(input):
         auxSlots = None
         if UI.MenuType == "Inventory":
@@ -244,11 +233,16 @@ class Player:
         
                 if input == "right":
                     if Game.MouseItem["Item"] is None:
+                        if itemSlot.result:
+                            Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
+                            itemSlot.Storage[itemSlot.i] = {"Item": None, "Amount": 0}
+                            return
                         getAmout = itemSlot.Amount // 2
                         if getAmout < 1: getAmout = 1
                         Game.MouseItem = {"Item": itemSlot.Item, "Amount": getAmout}
                         itemSlot.Storage[itemSlot.i]["Amount"] -= getAmout
                     else:
+                        if itemSlot.result: return
                         if itemSlot.Item is None:
                             itemSlot.Storage[itemSlot.i] = {"Item": Game.MouseItem["Item"], "Amount": 1}
                             Game.MouseItem["Amount"] -= 1
@@ -259,6 +253,19 @@ class Player:
                             Game.MouseItem["Amount"] -= 1
                             if Game.MouseItem["Amount"] < 1: Game.MouseItem = {"Item": None, "Amount": 0}
 
+    def UseItem(key):
+        item = Game.Inventory[key]['Item']
+        if item is None: return
+        itemData = Data.GameData.item_data[item]
+
+        if itemData['action'] == "Place": 
+            if Player.SelectBlock is None: return
+            Player.PlaceBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2], itemData['block'])
+            return
+        elif itemData['action'] == "PlaceSpecial":
+            if Player.SelectBlock is None: return
+            Player.PlaceSpecialBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2], itemData)
+    
     def BreakBlock(x, y, layer):
         block = Game.World[(x, y, layer)]
         blockData = Data.GameData.block_data[block['Block']]
@@ -393,7 +400,7 @@ class UI:
         y = 48
 
         pyxel.blt(x, y, 2, 0, 0, 172, 158, 2)
-        pyxel.text(48, 116, "Inventory", 5, Data.GameData.spleen5_font)
+        pyxel.text(48, 117, "Inventory", 5, Data.GameData.spleen5_font)
 
         for itemSlot in UI.InventorySlots:
             itemSlot.draw()
@@ -438,6 +445,19 @@ class UI:
         pyxel.text(x + 11, y + 14, str(amount) if amount >= 10 else " " + str(amount), 0)
         pyxel.text(x + 11, y + 13, str(amount) if amount >= 10 else " " + str(amount), 7)
 
+    def InventoryCraft():
+        matrix = [[Game.InventoryCraft[0]['Item'], Game.InventoryCraft[1]['Item']],
+                  [Game.InventoryCraft[2]['Item'], Game.InventoryCraft[3]['Item']]]
+        
+        Game.InventoryCraft[4]['Item'], Game.InventoryCraft[4]['Amount'] = GameManager.Crafting.Check(matrix)
+
+    def WorkbenchCraft(Inventory):
+        matrix = [[Inventory[0]['Item'], Inventory[1]['Item'], Inventory[2]['Item']], 
+                  [Inventory[3]['Item'], Inventory[4]['Item'], Inventory[5]['Item']], 
+                  [Inventory[6]['Item'], Inventory[7]['Item'], Inventory[8]['Item']]]
+        
+        Inventory[9]['Item'], Inventory[9]['Amount'] = GameManager.Crafting.Check(matrix)
+
     def DeleteMouseItem():
         Game.MouseItem = {
             'Item': None,
@@ -461,9 +481,11 @@ class UI:
                 itemSlot.update()
             
             if UI.MenuType == "Inventory":
+                UI.InventoryCraft()
                 for itemSlot in UI.InventoryCraftSlots + UI.InventoryButtons:
                     itemSlot.update()
             else:
+                if UI.MenuType == "Workbench": UI.WorkbenchCraft(Game.Entities[UI.EntityKey]['Inventory'])
                 for itemSlot in UI.EntitySlots:
                     itemSlot.update()
 
@@ -611,16 +633,36 @@ class Status:
     Started = False
     dither = 0
     InMenu = False
+    Enter = False
+    Exit = False
+    
+    def ExitAction():
+        Status.Exit = True
+
+    def ExitAnimation():
+        if Status.Exit:
+            if Status.dither > 0:
+                Status.dither -= 0.02
+                pyxel.dither(Status.dither)
+                return
+            else:
+                End()
+
+    def Update():
+        Status.ExitAnimation()
 
 def End():
     Status.Started = False
     Status.dither = 0
     Status.InMenu = False
+    Status.Enter = False
+    Status.Exit = False
     Player.SelectHotbarSlot = 0
     UI.HotbarSlots.clear()
     UI.InventorySlots.clear()
     UI.InventoryCraftSlots.clear()
     UI.InventoryButtons.clear()
+    time.sleep(0.5)
     GameManager.SceneController.ChangeScene("MainMenu")
 
 def Start():
@@ -667,7 +709,7 @@ def Start():
         
         UI.InventoryButtons += [
             GameObjects.ButtonText(57, 71, 56, 16, "Save", lambda: SaveData.Save(), 13, 7, 7, 5),
-            GameObjects.ButtonText(57, 89, 56, 16, "Main Menu", lambda: End(), 13, 7, 7, 5),
+            GameObjects.ButtonText(57, 89, 56, 16, "Main Menu", lambda: Status.ExitAction(), 13, 7, 7, 5),
             GameObjects.ButtonSprite(224, 176, 32, 32, 0, 224, 2, lambda: UI.DeleteMouseItem())
         ]
 
@@ -679,16 +721,19 @@ def Start():
 
         Status.Started = True
 
-    if Status.dither < 1:
+    if Status.dither < 1 and not Status.Enter:
         Status.dither += 0.02
         pyxel.dither(Status.dither)
         return
+
+    Status.Enter = True
 
 def Update():
     Start()
     Input.Update()
     World.Generation()
     UI.Update()
+    Status.Update()
 
 def Draw():
     World.Renderer()

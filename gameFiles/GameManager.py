@@ -3,6 +3,7 @@ import numpy
 import json
 
 import gameFiles.AppManager as AppManager
+import gameFiles.Data as Data
 
 class SceneController:
     actualScene = "MainMenu"
@@ -64,6 +65,43 @@ class ChunkCalc:
         end_y = start_y + (AppManager.GameInfo.ViewDistance) + 4
  
         return start_x, end_x, start_y, end_y
+    
+class Crafting:
+    def Check(Matrix):
+        if all(cell is None for row in Matrix for cell in row): return None, 0
+        Craft = []
+        
+        rowCount = len(Matrix)
+        colCount = len(Matrix[0])
+
+        min_row = rowCount
+        min_col = colCount
+        max_row = -1
+        max_col = -1
+
+        for i in range(rowCount):
+            for j in range(colCount):
+                if Matrix[i][j]:
+                    if i < min_row: min_row = i
+                    if j < min_col: min_col = j
+                    if i > max_row: max_row = i
+                    if j > max_col: max_col = j
+
+        for i in range(min_row, max_row + 1):
+            new_row = []
+            for j in range(min_col, max_col + 1):
+                new_row.append(Matrix[i][j])
+            Craft.append(new_row)
+
+        CraftSize = [len(Craft[0]), len(Craft)]
+
+        for recipe in Data.GameData.crafting_data["Crafts"]:
+            if recipe['size'] != CraftSize: continue
+
+            if recipe['craft'] == Craft:
+                return recipe['result'], recipe['amount']
+           
+        return None, 0
     
 class PerlinNoise:
     permutation = []
