@@ -148,7 +148,7 @@ class TextInputField:
                 pyxel.text(cursor_x, text_y, "|", text_color, font=Data.GameData.spleen5_font)
 
 class ItemSlot:
-    def __init__(self, x, y, i, storage, color, hotbar=False, result=False):
+    def __init__(self, x, y, i, storage, color, hotbar=False, result=False, crafting=False):
         self.x, self.y = x, y
         self.i = i
         self.Storage = storage
@@ -158,6 +158,7 @@ class ItemSlot:
         self.ItemData = None
         self.hotbar = hotbar
         self.result = result
+        self.crafting = crafting
     
     def clicked(self):
         if self.x <= pyxel.mouse_x <= self.x + 16 and self.y <= pyxel.mouse_y <= self.y + 16:

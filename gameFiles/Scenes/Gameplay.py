@@ -108,7 +108,7 @@ class Input:
                 col = i % 3
                 x = 75 + (col * 18)
                 y = 62 + (18 * row)
-                UI.EntitySlots.append(GameObjects.ItemSlot(x, y, i, Game.Entities[key]['Inventory'], 13))
+                UI.EntitySlots.append(GameObjects.ItemSlot(x, y, i, Game.Entities[key]['Inventory'], 13, crafting=True))
             UI.EntitySlots.append(GameObjects.ItemSlot(165, 80, 9, Game.Entities[key]['Inventory'], 13, result=True))
         
         if Menu == "Furnace":
@@ -126,27 +126,27 @@ class Input:
         
         UI.MenuType = Menu
         UI.EntityKey = key
-        
-    def LeftInputAction():
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            if not Status.InMenu:
-                if Player.SelectBlock is not None: Player.BreakBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2])
-            else:
-                Player.MoveItem("left")
+    
+    def HandleMouseInput():
+        left = pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)
+        right = pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT)
 
-    def RightInputAction():
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT):
-            if not Status.InMenu:
+        if not Status.InMenu:
+            if left:
+                if Player.SelectBlock is not None:
+                    Player.BreakBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2])
+            elif right:
                 if Player.SelectBlock is not None:
                     key = (Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2])
                     if key in Game.Entities:
                         Input.AccessMenu(Game.Entities[key]['Entity'], key)
-                        return
-                    
-                    Player.UseItem(Player.SelectHotbarSlot)
-            else:
+                    else:
+                        Player.UseItem(Player.SelectHotbarSlot)
+        else:
+            if left:
+                Player.MoveItem("left")
+            elif right:
                 Player.MoveItem("right")
-
 
     def Update():
         if not Status.InMenu:
@@ -155,14 +155,8 @@ class Input:
             Input.SelectBlock()
             Input.SelectionModifier()
         
-        Input.LeftInputAction()
-        Input.RightInputAction()
-        
+        Input.HandleMouseInput()
         Input.AccessInventory()
-
-        if pyxel.btnp(pyxel.KEY_KP_1): Player.AddItem(Data.Items.Workbench_block_item, 1)
-        if pyxel.btnp(pyxel.KEY_KP_2): Player.AddItem(Data.Items.Chest_block_item, 1)
-        if pyxel.btnp(pyxel.KEY_KP_3): Player.AddItem(Data.Items.Furnace_block_item, 1)
 
 class Player:
     SelectBlock = None
@@ -209,49 +203,71 @@ class Player:
         for itemSlot in UI.InventorySlots + auxSlots:
             if itemSlot.clicked() is not None: 
                 if input == "left":
-                    if Game.MouseItem["Item"] is None:
+                    if Game.MouseItem["Item"] is None and itemSlot.Item is not None:
                         Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
                         itemSlot.Storage[itemSlot.i] = {"Item": None, "Amount": 0}
-                    else:
-                        if itemSlot.result: return
-                        if itemSlot.Item is None:
-                            itemSlot.Storage[itemSlot.i] = Game.MouseItem
-                            Game.MouseItem = {"Item": None, "Amount": 0}
+                        if itemSlot.result:
+                            for slot in auxSlots:
+                                if slot.crafting:
+                                    slot.Storage[slot.i]["Amount"] -= 1
+                                    if slot.Storage[slot.i]["Amount"] <= 0:
+                                        slot.Storage[slot.i]["Item"] = None
+                                        slot.Storage[slot.i]["Amount"] = 0
+                        return
+
+                    if itemSlot.result:return 
+                    if itemSlot.Item is None:
+                        itemSlot.Storage[itemSlot.i] = Game.MouseItem
+                        Game.MouseItem = {"Item": None, "Amount": 0}
+                        return
+                    if itemSlot.Item == Game.MouseItem["Item"]:
+                        total = itemSlot.Storage[itemSlot.i]["Amount"] + Game.MouseItem["Amount"]
+                        max_stack = Data.GameData.item_data[itemSlot.Item]["stack"]
+                        if total > max_stack:
+                            itemSlot.Storage[itemSlot.i]["Amount"] = max_stack
+                            Game.MouseItem["Amount"] = total - max_stack
                         else:
-                            if itemSlot.Item == Game.MouseItem["Item"]:
-                                total = itemSlot.Storage[itemSlot.i]["Amount"] + Game.MouseItem["Amount"]
-                                if total > Data.GameData.item_data[itemSlot.Item]["stack"]:
-                                    itemSlot.Storage[itemSlot.i]["Amount"] = Data.GameData.item_data[itemSlot.Item]["stack"]
-                                    Game.MouseItem["Amount"] = total - Data.GameData.item_data[itemSlot.Item]["stack"]
-                                else:
-                                    itemSlot.Storage[itemSlot.i]["Amount"] += Game.MouseItem["Amount"]
-                                    Game.MouseItem = {"Item": None, "Amount": 0}
-                            else:
-                                mouseitem = Game.MouseItem
-                                Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
-                                itemSlot.Storage[itemSlot.i] = mouseitem
-        
+                            itemSlot.Storage[itemSlot.i]["Amount"] += Game.MouseItem["Amount"]
+                            Game.MouseItem = {"Item": None, "Amount": 0}
+                        return
+                    else:
+                        mouseitem = Game.MouseItem
+                        Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
+                        itemSlot.Storage[itemSlot.i] = mouseitem
+                        return
+
                 if input == "right":
-                    if Game.MouseItem["Item"] is None:
+                    if Game.MouseItem["Item"] is None and itemSlot.Item is not None:
                         if itemSlot.result:
                             Game.MouseItem = {"Item": itemSlot.Item, "Amount": itemSlot.Amount}
                             itemSlot.Storage[itemSlot.i] = {"Item": None, "Amount": 0}
+                            for slot in auxSlots:
+                                if slot.crafting:
+                                    slot.Storage[slot.i]["Amount"] -= 1
+                                    if slot.Storage[slot.i]["Amount"] <= 0:
+                                        slot.Storage[slot.i]["Item"] = None
+                                        slot.Storage[slot.i]["Amount"] = 0
                             return
-                        getAmout = itemSlot.Amount // 2
-                        if getAmout < 1: getAmout = 1
-                        Game.MouseItem = {"Item": itemSlot.Item, "Amount": getAmout}
-                        itemSlot.Storage[itemSlot.i]["Amount"] -= getAmout
+                        getAmount = itemSlot.Amount // 2
+                        if getAmount < 1: getAmount = 1
+                        Game.MouseItem = {"Item": itemSlot.Item, "Amount": getAmount}
+                        itemSlot.Storage[itemSlot.i]["Amount"] -= getAmount
+                        return
+
+                    if itemSlot.result:return
+                    if itemSlot.Item is None:
+                        itemSlot.Storage[itemSlot.i] = {"Item": Game.MouseItem["Item"], "Amount": 1}
+                        Game.MouseItem["Amount"] -= 1
+                        if Game.MouseItem["Amount"] < 1:
+                            Game.MouseItem = {"Item": None, "Amount": 0}
+                        return
                     else:
-                        if itemSlot.result: return
-                        if itemSlot.Item is None:
-                            itemSlot.Storage[itemSlot.i] = {"Item": Game.MouseItem["Item"], "Amount": 1}
-                            Game.MouseItem["Amount"] -= 1
-                            if Game.MouseItem["Amount"] < 1: Game.MouseItem = {"Item": None, "Amount": 0}
-                        else:
-                            if itemSlot.Item != Game.MouseItem["Item"] or itemSlot.Storage[itemSlot.i]["Amount"] + 1 > Data.GameData.item_data[itemSlot.Item]["stack"]: return
-                            itemSlot.Storage[itemSlot.i]["Amount"] += 1
-                            Game.MouseItem["Amount"] -= 1
-                            if Game.MouseItem["Amount"] < 1: Game.MouseItem = {"Item": None, "Amount": 0}
+                        if itemSlot.Item != Game.MouseItem["Item"]: return
+                        if itemSlot.Storage[itemSlot.i]["Amount"] + 1 > Data.GameData.item_data[itemSlot.Item]["stack"]: return
+                        itemSlot.Storage[itemSlot.i]["Amount"] += 1
+                        Game.MouseItem["Amount"] -= 1
+                        if Game.MouseItem["Amount"] < 1: Game.MouseItem = {"Item": None, "Amount": 0}
+                        return
 
     def UseItem(key):
         item = Game.Inventory[key]['Item']
@@ -716,7 +732,7 @@ def Start():
         for i in range(4):
             x = 129 + (i % 2) * 18
             y = 71 + (i // 2) * 18
-            UI.InventoryCraftSlots.append(GameObjects.ItemSlot(x, y, i, Game.InventoryCraft, 13))
+            UI.InventoryCraftSlots.append(GameObjects.ItemSlot(x, y, i, Game.InventoryCraft, 13, crafting=True))
         UI.InventoryCraftSlots.append(GameObjects.ItemSlot(183, 80, 4, Game.InventoryCraft, 13, result=True))
 
         Status.Started = True

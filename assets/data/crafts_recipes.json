@@ -1009,6 +1009,158 @@
                     null
                 ]
             ]
+        },
+        {
+            "result": "Iron",
+            "amount": 9,
+            "size": [
+                1,
+                1
+            ],
+            "craft": [
+                [
+                    "Iron_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Gold",
+            "amount": 9,
+            "size": [
+                1,
+                1
+            ],
+            "craft": [
+                [
+                    "Gold_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Diamond",
+            "amount": 9,
+            "size": [
+                1,
+                1
+            ],
+            "craft": [
+                [
+                    "Diamond_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Emerald",
+            "amount": 9,
+            "size": [
+                1,
+                1
+            ],
+            "craft": [
+                [
+                    "Emerald_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Iron_block_item",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "craft": [
+                [
+                    "Iron",
+                    "Iron",
+                    "Iron"
+                ],
+                [
+                    "Iron",
+                    "Iron",
+                    "Iron"
+                ],
+                [
+                    "Iron",
+                    "Iron",
+                    "Iron"
+                ]
+            ]
+        },
+        {
+            "result": "Gold_block_item",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "craft": [
+                [
+                    "Gold",
+                    "Gold",
+                    "Gold"
+                ],
+                [
+                    "Gold",
+                    "Gold",
+                    "Gold"
+                ],
+                [
+                    "Gold",
+                    "Gold",
+                    "Gold"
+                ]
+            ]
+        },
+        {
+            "result": "Diamond_block_item",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "craft": [
+                [
+                    "Diamond",
+                    "Diamond",
+                    "Diamond"
+                ],
+                [
+                    "Diamond",
+                    "Diamond",
+                    "Diamond"
+                ],
+                [
+                    "Diamond",
+                    "Diamond",
+                    "Diamond"
+                ]
+            ]
+        },
+        {
+            "result": "Emerald_block_item",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "craft": [
+                [
+                    "Emerald",
+                    "Emerald",
+                    "Emerald"
+                ],
+                [
+                    "Emerald",
+                    "Emerald",
+                    "Emerald"
+                ],
+                [
+                    "Emerald",
+                    "Emerald",
+                    "Emerald"
+                ]
+            ]
         }
     ]
 }
