@@ -1161,6 +1161,24 @@
                     "Emerald"
                 ]
             ]
+        },
+        {
+            "result": "StoneBricks_block_item",
+            "amount": 4,
+            "size": [
+                2,
+                2
+            ],
+            "craft": [
+                [
+                    "Stone_block_item",
+                    "Stone_block_item"
+                ],
+                [
+                    "Stone_block_item",
+                    "Stone_block_item"
+                ]
+            ]
         }
     ]
 }

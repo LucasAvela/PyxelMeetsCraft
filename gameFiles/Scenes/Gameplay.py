@@ -449,11 +449,6 @@ class UI:
             pyxel.blt(94, 80, 2, 32, 224, 16, (16 - fuelValue * 16), 2)
             pyxel.text(110, 52, "Furnace", 5, Data.GameData.spleen5_font)
 
-            pyxel.text(2, 2, f"{Game.Entities[UI.EntityKey]["Smelting"]}", 8, Data.GameData.spleen5_font)
-            pyxel.text(2, 12, f"{Game.Entities[UI.EntityKey]["Progress"]}", 8, Data.GameData.spleen5_font)
-            pyxel.text(2, 22, f"{Game.Entities[UI.EntityKey]["Fuel"]}", 8, Data.GameData.spleen5_font)
-            pyxel.text(2, 32, f"{fuelValue}", 8, Data.GameData.spleen5_font)
-
         if UI.MenuType == "Chest":
             pyxel.text(48, 52, "Chest", 5, Data.GameData.spleen5_font)
 
@@ -688,10 +683,10 @@ class Entities:
         if entity["Smelting"]:
             try: 
                 materialData = Data.GameData.smelting_data[materialSlot["Item"]]
+                if resultSlot["Item"] is not None and materialData["result"] != resultSlot["Item"] or resultSlot["Amount"] >= Data.GameData.item_data[materialData["result"]]["stack"]:
+                    entity["Progress"] = 0
             except KeyError:
-                entity["Smelting"] = False
                 entity["Progress"] = 0
-                return
 
             if entity['Fuel'] > 0:
                 entity['Fuel'] -= 0.04
@@ -718,13 +713,28 @@ class Entities:
                         entity["MaxFuel"] = 0
                         return
 
+                    if materialSlot["Item"] is None:
+                        if entity["Fuel"] <= 0:
+                            entity["Smelting"] = False
+                            entity["Progress"] = 0
+                            entity["Fuel"] = 0
+                            entity["MaxFuel"] = 0
+                            return
+                        
+                    if materialData is not None and materialData["result"] != resultSlot["Item"]:
+                        entity["Smelting"] = False
+                        entity["Progress"] = 0
+                        entity["Fuel"] = 0
+                        entity["MaxFuel"] = 0
+                        return
+
                     entity["MaxFuel"] = fuelData["fuel"]
                     entity["Fuel"] = fuelData["fuel"]
                     fuelSlot["Amount"] -= 1
                     if fuelSlot["Amount"] <= 0:
                         fuelSlot["Item"] = None
                         fuelSlot["Amount"] = 0
-                    return
+    
                 else:
                     entity["Smelting"] = False
                     entity["Progress"] = 0
