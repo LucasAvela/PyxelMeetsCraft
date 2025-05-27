@@ -8,6 +8,7 @@ def Blocks():
 
     for _, row in df.iterrows():
         name = row['Name']
+        blockDrop = row['Block']
         drop = row['Drop']
         tool = row['Tool']
         level = row['Level']
@@ -23,6 +24,7 @@ def Blocks():
 
         block = {
             "name": name,
+            "blockDrop": blockDrop,
             "drop": drop,
             "tool": tool,
             "level": int(level),

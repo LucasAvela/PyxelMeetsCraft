@@ -128,7 +128,8 @@ class GameData:
             GameData.crafting_data = json.load(h)
 
         with open('assets/data/smelts_recipes.json', 'r') as i:
-            GameData.smelting_data = json.load(i)
+            smelt_list = json.load(i)
+            GameData.smelting_data = { smelt["item"]: smelt for smelt in smelt_list["Recipes"] }
 
     def SaveFiles():
         try:

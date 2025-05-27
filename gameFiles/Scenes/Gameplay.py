@@ -283,6 +283,7 @@ class Player:
             Player.PlaceSpecialBlock(Player.SelectBlock[0], Player.SelectBlock[1], Player.SelectBlock[2], itemData)
     
     def BreakBlock(x, y, layer):
+        if layer <= 0: return
         block = Game.World[(x, y, layer)]
         blockData = Data.GameData.block_data[block['Block']]
         item = blockData['drop']
@@ -349,6 +350,10 @@ class Player:
             Game.World[(x, y, layer + 1)] = {"Block": "Furnace_block", "Solid": True}
             Game.Entities[(x, y, layer + 1)] = {"Entity": "Furnace", "Inventory": {}}
             for i in range(3):
+                Game.Entities[(x, y, layer + 1)]["MaxFuel"] = 0
+                Game.Entities[(x, y, layer + 1)]["Fuel"] = 0
+                Game.Entities[(x, y, layer + 1)]["Progress"] = 0
+                Game.Entities[(x, y, layer + 1)]["Smelting"] = False
                 Game.Entities[(x, y, layer + 1)]["Inventory"][i] = {
                     'Item': None,
                     'Amount': 0
@@ -435,9 +440,19 @@ class UI:
             pyxel.text(80, 52, "Crafting", 5, Data.GameData.spleen5_font)
 
         if UI.MenuType == "Furnace":
+            progressValue = Game.Entities[UI.EntityKey]["Progress"]
+            fuelValue = (Game.Entities[UI.EntityKey]["Fuel"] / Game.Entities[UI.EntityKey]["MaxFuel"]) if Game.Entities[UI.EntityKey]["MaxFuel"] > 0 else 0
+            fuelValue = 0.1 if 0 < fuelValue < 0.1 else fuelValue
             pyxel.blt(120, 80, 2, 64, 224, 16, 16, 2)
-            pyxel.blt(94, 80, 2, 32, 224, 16, 16, 2)
+            pyxel.blt(120, 80, 2, 64, 240, 16 * progressValue, 16, 2)
+            pyxel.blt(94, 80, 2, 32, 240, 16, 16, 2)
+            pyxel.blt(94, 80, 2, 32, 224, 16, (16 - fuelValue * 16), 2)
             pyxel.text(110, 52, "Furnace", 5, Data.GameData.spleen5_font)
+
+            pyxel.text(2, 2, f"{Game.Entities[UI.EntityKey]["Smelting"]}", 8, Data.GameData.spleen5_font)
+            pyxel.text(2, 12, f"{Game.Entities[UI.EntityKey]["Progress"]}", 8, Data.GameData.spleen5_font)
+            pyxel.text(2, 22, f"{Game.Entities[UI.EntityKey]["Fuel"]}", 8, Data.GameData.spleen5_font)
+            pyxel.text(2, 32, f"{fuelValue}", 8, Data.GameData.spleen5_font)
 
         if UI.MenuType == "Chest":
             pyxel.text(48, 52, "Chest", 5, Data.GameData.spleen5_font)
@@ -645,6 +660,83 @@ class World:
                         if is_air(bottom) and is_air(bottom_right):
                             pyxel.rect(world_x + AppManager.GameInfo.BlockSize, world_y + AppManager.GameInfo.BlockSize, 1, AppManager.GameInfo.BlockHeight, 0)
 
+class Entities:
+    def FurnaceEntity(key):
+        entity = Game.Entities[key]
+        materialSlot = entity["Inventory"][0]
+        fuelSlot = entity["Inventory"][1]
+        resultSlot = entity["Inventory"][2]
+
+        if not entity["Smelting"]:
+            if materialSlot["Item"] is not None and fuelSlot["Item"] is not None:
+                try: 
+                    materialData = Data.GameData.smelting_data[materialSlot["Item"]]
+                    fuelData = Data.GameData.item_data[fuelSlot["Item"]]
+                except KeyError: return
+
+                if resultSlot["Item"] is None or resultSlot["Item"] == materialData["result"]:
+                    entity["MaxFuel"] = fuelData["fuel"]
+                    entity["Fuel"] = fuelData["fuel"]
+                    
+                    fuelSlot["Amount"] -= 1
+                    if fuelSlot["Amount"] <= 0:
+                        fuelSlot["Item"] = None
+                        fuelSlot["Amount"] = 0
+                    
+                    entity["Smelting"] = True
+
+        if entity["Smelting"]:
+            try: 
+                materialData = Data.GameData.smelting_data[materialSlot["Item"]]
+            except KeyError:
+                entity["Smelting"] = False
+                entity["Progress"] = 0
+                return
+
+            if entity['Fuel'] > 0:
+                entity['Fuel'] -= 0.04
+                if materialSlot["Item"] is not None:
+                    entity["Progress"] += 0.04
+                    if entity["Progress"] >= 1:
+                        entity["Progress"] = 0
+                        if resultSlot["Item"] is None:
+                            resultSlot["Item"] = materialData["result"]
+                            resultSlot["Amount"] = 1
+                        elif resultSlot["Item"] == materialData["result"]:
+                            resultSlot["Amount"] += 1
+                        materialSlot["Amount"] -= 1
+                        if materialSlot["Amount"] <= 0:
+                            materialSlot["Item"] = None
+                            materialSlot["Amount"] = 0
+            else:
+                if fuelSlot["Item"] is not None:
+                    try: fuelData = Data.GameData.item_data[fuelSlot["Item"]]
+                    except KeyError:
+                        entity["Smelting"] = False
+                        entity["Progress"] = 0
+                        entity["Fuel"] = 0
+                        entity["MaxFuel"] = 0
+                        return
+
+                    entity["MaxFuel"] = fuelData["fuel"]
+                    entity["Fuel"] = fuelData["fuel"]
+                    fuelSlot["Amount"] -= 1
+                    if fuelSlot["Amount"] <= 0:
+                        fuelSlot["Item"] = None
+                        fuelSlot["Amount"] = 0
+                    return
+                else:
+                    entity["Smelting"] = False
+                    entity["Progress"] = 0
+                    entity["Fuel"] = 0
+                    entity["MaxFuel"] = 0
+                    return
+                
+
+    def Update():
+        for key, entity in Game.Entities.items():
+            if entity["Entity"] == "Furnace": Entities.FurnaceEntity(key)
+
 class Status:
     Started = False
     dither = 0
@@ -744,8 +836,13 @@ def Start():
 
     Status.Enter = True
 
+def TickUpdate():
+    if pyxel.frame_count % (AppManager.Settings.Fps // AppManager.Settings.Tps) == 0:
+        Entities.Update()
+
 def Update():
     Start()
+    TickUpdate()
     Input.Update()
     World.Generation()
     UI.Update()
