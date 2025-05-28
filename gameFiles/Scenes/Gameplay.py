@@ -215,7 +215,16 @@ class Player:
                                         slot.Storage[slot.i]["Amount"] = 0
                         return
 
-                    if itemSlot.result:return 
+                    if itemSlot.result:
+                        if Game.MouseItem["Item"] == itemSlot.Item and Game.MouseItem["Amount"] + itemSlot.Amount <= Data.GameData.item_data[itemSlot.Item]["stack"]:
+                            Game.MouseItem["Amount"] += itemSlot.Amount
+                            for slot in auxSlots:
+                                if slot.crafting:
+                                    slot.Storage[slot.i]["Amount"] -= 1
+                                    if slot.Storage[slot.i]["Amount"] <= 0:
+                                        slot.Storage[slot.i]["Item"] = None
+                                        slot.Storage[slot.i]["Amount"] = 0
+                        return
                     if itemSlot.Item is None:
                         itemSlot.Storage[itemSlot.i] = Game.MouseItem
                         Game.MouseItem = {"Item": None, "Amount": 0}
@@ -690,7 +699,7 @@ class Entities:
                     fuelData = Data.GameData.item_data[fuelSlot["Item"]]
                 except KeyError: return
 
-                if resultSlot["Item"] is None or resultSlot["Item"] == materialData["result"]:
+                if resultSlot["Item"] is None or resultSlot["Item"] == materialData["result"] and resultSlot["Amount"] < Data.GameData.item_data[materialData["result"]]["stack"]:
                     entity["MaxFuel"] = fuelData["fuel"]
                     entity["Fuel"] = fuelData["fuel"]
                     
@@ -742,7 +751,7 @@ class Entities:
                             entity["MaxFuel"] = 0
                             return
                         
-                    if materialData is not None and materialData["result"] != resultSlot["Item"]:
+                    if materialData is not None and materialData["result"] != resultSlot["Item"] or resultSlot["Amount"] >= Data.GameData.item_data[materialData["result"]]["stack"]:
                         entity["Smelting"] = False
                         entity["Progress"] = 0
                         entity["Fuel"] = 0
