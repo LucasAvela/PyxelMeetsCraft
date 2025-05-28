@@ -3,7 +3,7 @@ class Settings:
     ScreenWidth = 256
     ScreenHeight = 256
     Fps = 60
-    Tps = 20
+    Tps = 5
 
 class GameInfo:
     BlockSize = 8

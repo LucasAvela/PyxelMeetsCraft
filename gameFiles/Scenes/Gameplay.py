@@ -308,6 +308,18 @@ class Player:
             Player.AddItem("Bed_item", 1)
             return
         
+        if blockData['name'] == "Door_block_Bottom":
+            Game.World[(x, y, layer)]['Block'] = Data.Blocks.Air
+            Game.World[(x, y, layer + 1)]['Block'] = Data.Blocks.Air
+            Player.AddItem("Door_item", 1)
+            return
+            
+        if blockData['name'] == "Door_block_Top":
+            Game.World[(x, y, layer)]['Block'] = Data.Blocks.Air
+            Game.World[(x, y, layer - 1)]['Block'] = Data.Blocks.Air
+            Player.AddItem("Door_item", 1)
+            return
+
         if blockData['name'] == "Workbench_block" or blockData['name'] == "Furnace_block" or blockData['name'] == "Chest_block":
             Game.World[(x, y, layer)]['Block'] = Data.Blocks.Air
             del Game.Entities[(x, y, layer)]
@@ -336,6 +348,13 @@ class Player:
                 if (x, y - 1, layer + 1) not in Game.World or Game.World[(x, y - 1, layer + 1)]['Block'] == Data.Blocks.Air:
                     Game.World[(x, y, layer + 1)] = {"Block": "Bed_block_Bottom", "Solid": True}
                     Game.World[(x, y - 1, layer + 1)] = {"Block": "Bed_block_Top", "Solid": True}
+        
+        if itemData['name'] == "Door_item":
+            if layer + 2 < AppManager.GameInfo.MaxLayer:
+                if (x, y, layer + 1) not in Game.World or Game.World[(x, y, layer + 1)]['Block'] == Data.Blocks.Air:
+                    if (x, y, layer + 2) not in Game.World or Game.World[(x, y, layer + 2)]['Block'] == Data.Blocks.Air:
+                        Game.World[(x, y, layer + 1)] = {"Block": "Door_block_Bottom", "Solid": False}
+                        Game.World[(x, y, layer + 2)] = {"Block": "Door_block_Top", "Solid": False}
 
         if itemData['name'] == "Workbench_block_item":
             Game.World[(x, y, layer + 1)] = {"Block": "Workbench_block", "Solid": True}
@@ -647,12 +666,14 @@ class World:
                         if solid:
                             pyxel.rect(world_x - 1, world_y, 1, AppManager.GameInfo.BlockSize, 0)
                         if is_air(bottom) and is_air(bottom_left):
+                            pyxel.rect(world_x - 1, world_y + AppManager.GameInfo.BlockHeight, 1, AppManager.GameInfo.BlockHeight, 0)
                             pyxel.rect(world_x - 1, world_y + AppManager.GameInfo.BlockSize, 1, AppManager.GameInfo.BlockHeight, 0)
 
                     if is_air(right):
                         if solid:
                             pyxel.rect(world_x + AppManager.GameInfo.BlockSize, world_y, 1, AppManager.GameInfo.BlockSize, 0)
                         if is_air(bottom) and is_air(bottom_right):
+                            pyxel.rect(world_x + AppManager.GameInfo.BlockSize, world_y + AppManager.GameInfo.BlockHeight, 1, AppManager.GameInfo.BlockHeight, 0)
                             pyxel.rect(world_x + AppManager.GameInfo.BlockSize, world_y + AppManager.GameInfo.BlockSize, 1, AppManager.GameInfo.BlockHeight, 0)
 
 class Entities:

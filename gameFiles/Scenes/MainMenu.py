@@ -154,8 +154,6 @@ class NewGameScreen:
     ObjectsHierarchy = [
         GameObjects.TextInputField(46, 32, 164, 16, 32, " World Name", lambda text: NewGameScreen.Settings.ChangeWorldName(text), "NEW WORLD"),
         GameObjects.TextInputField(46, 64, 164, 16, 32, " Seed", lambda text: NewGameScreen.Settings.ChangeSeed(text), ""),
-        GameObjects.ButtonSprite(45, 96, 10, 16, 240, 64, 2, lambda: NewGameScreen.Settings.ChangeGameMode(-1)),
-        GameObjects.ButtonSprite(200, 96, 10, 16, 240, 48, 2, lambda: NewGameScreen.Settings.ChangeGameMode(1)),
         GameObjects.ButtonText(72, 192, 112, 16, "Create", lambda: NewGameScreen.LoadNewWorld()),
         GameObjects.ButtonText(72, 216, 112, 16, "Back", lambda: ScreenManager.ChangeScreen("Play")),
     ]
@@ -228,8 +226,6 @@ class NewGameScreen:
 
         for GameObject in NewGameScreen.ObjectsHierarchy + NewGameScreen.DynamicObjects:
             GameObject.draw()
-
-        GameObjects.TextCenter(128, 106, AppManager.GameInfo.GameModes[NewGameScreen.GameMode], 7, 0, Data.GameData.spleen6_font, 6, 12).draw()
 
 class LoadingScreen:
     Started = False

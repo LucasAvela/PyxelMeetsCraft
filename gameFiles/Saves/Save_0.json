@@ -77929,6 +77929,14 @@
         "(9, 22, 11)": {
             "Block": "Air",
             "Solid": true
+        },
+        "(15, 23, 11)": {
+            "Block": "Door_block_Bottom",
+            "Solid": false
+        },
+        "(15, 23, 12)": {
+            "Block": "Door_block_Top",
+            "Solid": false
         }
     },
     "Entities": {
@@ -78058,7 +78066,7 @@
                 },
                 "19": {
                     "Item": "Wood_Log_block_item",
-                    "Amount": 8
+                    "Amount": 5
                 },
                 "20": {
                     "Item": "Stick",
@@ -78114,8 +78122,8 @@
     },
     "Inventory": {
         "0": {
-            "Item": null,
-            "Amount": 0
+            "Item": "Wood_Planks_block_item",
+            "Amount": 6
         },
         "1": {
             "Item": null,
