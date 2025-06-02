@@ -1179,6 +1179,84 @@
                     "Stone_block_item"
                 ]
             ]
+        },
+        {
+            "result": "Chest_block_item",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "craft": [
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    null,
+                    "Wood_Planks_block_item"
+                ],
+                [
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item",
+                    "Wood_Planks_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Furnace_block_item",
+            "amount": 1,
+            "size": [
+                3,
+                3
+            ],
+            "craft": [
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Cobblestone_block_item",
+                    null,
+                    "Cobblestone_block_item"
+                ],
+                [
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item",
+                    "Cobblestone_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Grass_block_item",
+            "amount": 1,
+            "size": [
+                2,
+                1
+            ],
+            "craft": [
+                [
+                    "Dirt_block_item",
+                    "Leaves_block_item"
+                ]
+            ]
+        },
+        {
+            "result": "Grass_block_item",
+            "amount": 1,
+            "size": [
+                2,
+                1
+            ],
+            "craft": [
+                [
+                    "Leaves_block_item",
+                    "Dirt_block_item"
+                ]
+            ]
         }
     ]
 }

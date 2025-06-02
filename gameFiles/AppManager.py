@@ -2,7 +2,7 @@ class Settings:
     WindowTitle = "PyxelCraft"
     ScreenWidth = 256
     ScreenHeight = 256
-    Fps = 60
+    Fps = 64
     Tps = 5
 
 class GameInfo:

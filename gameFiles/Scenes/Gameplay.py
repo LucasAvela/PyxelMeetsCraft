@@ -218,6 +218,10 @@ class Player:
                     if itemSlot.result:
                         if Game.MouseItem["Item"] == itemSlot.Item and Game.MouseItem["Amount"] + itemSlot.Amount <= Data.GameData.item_data[itemSlot.Item]["stack"]:
                             Game.MouseItem["Amount"] += itemSlot.Amount
+                            itemSlot.Storage[itemSlot.i]["Amount"] -= 1
+                            if itemSlot.Storage[itemSlot.i]["Amount"] <= 0:
+                                itemSlot.Storage[itemSlot.i]["Item"] = None
+                                itemSlot.Storage[itemSlot.i]["Amount"] = 0
                             for slot in auxSlots:
                                 if slot.crafting:
                                     slot.Storage[slot.i]["Amount"] -= 1
