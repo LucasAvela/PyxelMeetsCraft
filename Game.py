@@ -18,11 +18,12 @@ class App:
         pyxel.init(
             width  = AppManager.Settings.ScreenWidth, 
             height = AppManager.Settings.ScreenHeight, 
-            title  = AppManager.Settings.WindowTitle, 
+            title  = AppManager.Settings.WindowTitle,
             fps    = AppManager.Settings.Fps
         )
 
         Data.GameData.Start()
+        GameManager.SoundController.PlayMusic(1 if len(Data.GameData.musics) > 1 else 0)
 
         pyxel.run(self.update, self.draw)
         

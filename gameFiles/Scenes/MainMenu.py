@@ -20,6 +20,15 @@ class ScreenManager:
 
         ScreenManager.actualScreen = newScreen
 
+class Options:
+    def ChangeMusic(value):
+        if value == 1:
+            GameManager.SoundController.NextMusic()
+        elif value == -1:
+            GameManager.SoundController.PreviousMusic()
+
+        ScreenManager.ChangeScreen(ScreenManager.actualScreen)
+        
 class MainScreen:
     Started = False
 
@@ -56,17 +65,23 @@ class OptionsScreen:
     Started = False
 
     ObjectsHierarchy = [
-        GameObjects.ButtonText(72, 216, 112, 16, "Back", lambda: ScreenManager.ChangeScreen("Menu"))
+        GameObjects.ButtonText(72, 216, 112, 16, "Back", lambda: ScreenManager.ChangeScreen("Menu")),
+        GameObjects.RectangleCenter(128, 32, 128, 16, 5, border=7),
+        GameObjects.TextCenter(128, 16, "Music", 7, border=0),
+        GameObjects.ButtonSprite(46, 24, 16, 16, 240, 64, 2, lambda: Options.ChangeMusic(-1)),
+        GameObjects.ButtonSprite(200, 24, 16, 16, 240, 48, 2, lambda: Options.ChangeMusic(1)),
     ]
 
     DynamicObjects = []
 
     def Start():
         if not OptionsScreen.Started:
+            OptionsScreen.DynamicObjects.append(GameObjects.TextCenter(128, 32, Data.GameData.musics[GameManager.SoundController.currentMusic][0], 7, border=0, font=Data.GameData.spleen6_font, fontWidth=5, fontHeight=12))
             OptionsScreen.Started = True
 
     def End():
         OptionsScreen.Started = False
+        OptionsScreen.DynamicObjects.clear()
 
     def Update():
         OptionsScreen.Start()
@@ -297,7 +312,7 @@ def Start():
             Status.dither += 0.02
             pyxel.dither(Status.dither)
             return
-        Status.Started
+        Status.Started = True
 
 def Update():
     Start()

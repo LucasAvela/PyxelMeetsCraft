@@ -2,6 +2,25 @@ import pyxel
 
 import gameFiles.Data as Data
 
+class RectangleCenter:
+    def __init__(self, x, y, w, h, color, border=None):
+        self.x, self.y = x, y
+        self.w, self.h = w, h
+        self.color = color
+        self.border = border
+
+    def update(self):
+        pass
+
+    def draw(self):
+        rect_x = self.x - (self.w // 2)
+        rect_y = self.y - (self.h // 2)
+
+        if self.border is not None:
+            pyxel.rect(rect_x - 1, rect_y - 1, self.w + 2, self.h + 2, self.border)
+
+        pyxel.rect(rect_x, rect_y, self.w, self.h, self.color)
+
 class TextCenter:
     def __init__(self, x, y, text, color, border=None, font=Data.GameData.spleen5_font, fontWidth=5, fontHeight=8):
         self.x, self.y = x, y
@@ -10,6 +29,8 @@ class TextCenter:
         self.border = border
 
         self.font = font
+        self.fontWidth = fontWidth
+        self.fontHeight = fontHeight
 
         self.w = len(self.text) * fontWidth
         self.h = fontHeight

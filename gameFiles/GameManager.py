@@ -1,3 +1,4 @@
+import pyxel
 import random
 import numpy
 import json
@@ -10,6 +11,28 @@ class SceneController:
 
     def ChangeScene(newScene):
         SceneController.actualScene = newScene
+
+class SoundController:
+    currentMusic = 0
+
+    def PlayMusic(musicIndex):
+        pyxel.stop()
+        pyxel.sounds[0].set(Data.GameData.musics[musicIndex][1], tones='t', volumes='4', effects='n', speed=45)
+        pyxel.sounds[1].set(Data.GameData.musics[musicIndex][2], tones='t', volumes='4', effects='n', speed=45)
+        pyxel.sounds[2].set(Data.GameData.musics[musicIndex][3], tones='t', volumes='4', effects='n', speed=45)
+        pyxel.sounds[3].set(Data.GameData.musics[musicIndex][4], tones='t', volumes='4', effects='n', speed=45)
+        pyxel.musics[1].set([0], [1], [2], [3])
+
+        SoundController.currentMusic = musicIndex
+        pyxel.playm(1, loop=True)
+
+    def NextMusic():
+        SoundController.currentMusic = (SoundController.currentMusic + 1) % len(Data.GameData.musics)
+        SoundController.PlayMusic(SoundController.currentMusic)
+    
+    def PreviousMusic():
+        SoundController.currentMusic = (SoundController.currentMusic - 1) % len(Data.GameData.musics)
+        SoundController.PlayMusic(SoundController.currentMusic)
 
 class Load:
     Camera = []

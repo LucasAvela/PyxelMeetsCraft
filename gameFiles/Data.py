@@ -112,6 +112,9 @@ class GameData:
     save_1 = None
     save_2 = None
 
+    musics = []
+    musics_names = []
+
     spleen5_font = pyxel.Font('assets/fonts/spleen-5x8.bdf')
     spleen6_font = pyxel.Font('assets/fonts/spleen-6x12.bdf')
 
@@ -149,6 +152,23 @@ class GameData:
         pyxel.images[1].load(0, 0, 'assets/sprites/Sprite_sheet.png')
         pyxel.images[2].load(0, 0, 'assets/sprites/Sprite_sheet_UI.png')
 
+    def Musics():
+        music = ["None", "R", "R", "R", "R"]
+        GameData.musics.append(music)
+        
+        music_folder = "assets/music"
+        music_files = [os.path.join(music_folder, f) for f in os.listdir(music_folder) if os.path.isfile(os.path.join(music_folder, f))]
+
+        if len(music_files) > 0:
+            for music_file in music_files:
+                with open(music_file, 'r') as file:
+                    lines = file.readlines()
+                music = [lines[0], lines[1], lines[2], lines[3], lines[4]]
+                GameData.musics.append(music)
+        
+        for music in GameData.musics:
+            GameData.musics_names.append(music[0])
+
     def Colors():
         pyxel.colors[0]  = 0x000000  # Black
         pyxel.colors[1]  = 0x25335f  # Dark Blue
@@ -171,4 +191,6 @@ class GameData:
         GameData.GameData()
         GameData.SaveFiles()
         GameData.Images()
+        GameData.Musics()
         GameData.Colors()
+        print("Game Data Loaded")
